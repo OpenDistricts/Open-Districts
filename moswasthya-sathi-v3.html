@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024">
+<title>MoSwasthya Sathi v3 — Solar-Clean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — SOLAR-CLEAN INSTITUTIONAL
+═══════════════════════════════════════════ */
+:root {
+  --bg:          #F8FAFC;
+  --surface:     #FFFFFF;
+  --surface-2:   #F1F5F9;
+  --surface-3:   #E2E8F0;
+  --border:      #CBD5E1;
+  --border-mid:  #94A3B8;
+  --text:        #1E293B;
+  --text-mid:    #475569;
+  --text-sub:    #94A3B8;
+
+  --primary:     #2563EB;
+  --primary-lt:  #3B82F6;
+  --primary-dim: rgba(37,99,235,0.08);
+  --primary-bg:  #EFF6FF;
+
+  --danger:      #DC2626;
+  --danger-lt:   #EF4444;
+  --danger-dim:  rgba(220,38,38,0.07);
+  --danger-bg:   #FEF2F2;
+
+  --ok:          #16A34A;
+  --ok-lt:       #22C55E;
+  --ok-dim:      rgba(22,163,74,0.07);
+  --ok-bg:       #F0FDF4;
+
+  --warn:        #D97706;
+  --warn-dim:    rgba(217,119,6,0.07);
+  --warn-bg:     #FFFBEB;
+
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:   0 4px 12px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg:   0 10px 32px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06);
+  --shadow-xl:   0 20px 50px rgba(0,0,0,0.15);
+
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+
+  --mono:  'DM Mono', monospace;
+  --sans:  'DM Sans', sans-serif;
+
+  /* Map polygon fill colours */
+  --fever-fill:   rgba(239,68,68,0.35);
+  --fever-stroke: rgba(220,38,38,0.7);
+  --flu-fill:     rgba(249,115,22,0.30);
+  --flu-stroke:   rgba(234,88,12,0.6);
+  --water-fill:   rgba(37,99,235,0.18);
+  --water-stroke: rgba(37,99,235,0.55);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+
+html, body {
+  width:1024px; height:600px; overflow:hidden;
+  background: var(--bg);
+  font-family: var(--sans);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════
+   ZONE 1 — INFORMATION CANOPY
+═══════════════════════════════════════════ */
+#canopy {
+  height: 52px;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  z-index: 100;
+}
+
+/* Brand */
+#brand {
+  display: flex; align-items: center; gap: 9px;
+  padding-right: 14px;
+  border-right: 1.5px solid var(--border);
+  flex-shrink: 0;
+}
+.brand-mark {
+  width: 32px; height: 32px;
+  background: var(--primary);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.brand-mark svg { width:18px; height:18px; }
+.brand-name-odia {
+  font-size: 13px; font-weight: 700;
+  color: var(--text); line-height:1.1;
+}
+.brand-name-en {
+  font-size: 9px; font-family: var(--mono);
+  color: var(--text-sub);
+  text-transform: uppercase; letter-spacing: 1.2px;
+}
+
+/* Language segmented control */
+#lang-seg {
+  display: flex;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  flex-shrink: 0;
+}
+.lang-seg-btn {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 48px; min-height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  white-space: nowrap;
+  user-select: none;
+}
+.lang-seg-btn.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--primary);
+}
+
+/* Canopy spacer */
+.c-spacer { flex: 1; }
+
+/* Region crumb — clickable */
+#region-crumb {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px;
+  background: var(--primary-bg);
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+#region-crumb:hover { background: #DBEAFE; }
+#region-crumb .rc-label {
+  font-size: 9px; font-family: var(--mono);
+  color: var(--primary); text-transform: uppercase; letter-spacing: 1px;
+}
+#region-crumb .rc-value {
+  font-size: 12px; font-weight: 700; color: var(--primary);
+}
+#region-crumb .rc-chevron {
+  font-size: 10px; color: var(--primary-lt); margin-left: 2px;
+}
+
+/* Connectivity pill */
+#conn-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 11px;
+  border: 1.5px solid;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  transition: all 0.5s;
+}
+#conn-pill.online  { background: var(--ok-bg);   border-color: rgba(22,163,74,0.4); }
+#conn-pill.offline { background: var(--warn-bg); border-color: rgba(217,119,6,0.4); }
+.conn-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  animation: dot-pulse 2.5s infinite;
+}
+#conn-pill.online  .conn-dot { background: var(--ok-lt); }
+#conn-pill.offline .conn-dot { background: var(--warn); animation: none; }
+@keyframes dot-pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.conn-label {
+  font-size: 10px; font-family: var(--mono); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.8px;
+}
+#conn-pill.online  .conn-label { color: var(--ok); }
+#conn-pill.offline .conn-label { color: var(--warn); }
+
+/* ═══════════════════════════════════════════
+   ZONE 2 — INTERACTIVE CORE
+═══════════════════════════════════════════ */
+#core {
+  height: calc(600px - 52px - 34px);
+  display: flex;
+}
+
+/* ── MAP ZONE (61%) ──────────────────────── */
+#map-zone {
+  width: 61%;
+  position: relative;
+  background: var(--surface-2);
+  border-right: 1.5px solid var(--border);
+  overflow: hidden;
+}
+
+/* SVG map canvas */
+#map-svg {
+  width: 100%; height: 100%;
+  display: block;
+}
+
+/* SVG base grid */
+.map-grid-line { stroke: #CBD5E1; stroke-width: 0.5; opacity: 0.6; }
+.map-district-boundary { fill:none; stroke:#94A3B8; stroke-width:1; stroke-dasharray:4,3; opacity:0.5; }
+.map-river { stroke: #93C5FD; stroke-width: 2; fill: none; opacity: 0.6; }
+.map-road  { stroke: #CBD5E1; stroke-width: 1.5; fill: none; opacity: 0.8; }
+
+/* Alert polygons */
+.alert-poly {
+  transition: opacity 0.4s, fill 0.4s;
+  cursor: pointer;
+}
+.alert-poly:hover { opacity: 0.85 !important; }
+.alert-poly.fever { fill: var(--fever-fill); stroke: var(--fever-stroke); stroke-width: 1.5; }
+.alert-poly.flu   { fill: var(--flu-fill);   stroke: var(--flu-stroke);   stroke-width: 1.5; }
+.alert-poly.water { fill: var(--water-fill); stroke: var(--water-stroke); stroke-width: 1.5; }
+
+/* PHC square anchors */
+.phc-anchor {
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.2s;
+  transform-origin: center;
+}
+.phc-anchor rect {
+  fill: var(--ok-lt);
+  stroke: var(--ok);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.phc-anchor text {
+  fill: #fff;
+  font-size: 8px;
+  font-family: var(--mono);
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+.phc-anchor:hover { transform: scale(1.15); }
+
+/* Water infrastructure markers */
+.water-point {
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.water-point circle { fill: var(--primary-lt); stroke: var(--primary); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.water-point text {
+  fill:#fff; font-size:8px; font-family:var(--mono); font-weight:500;
+  text-anchor:middle; dominant-baseline:middle; pointer-events:none;
+}
+
+/* Road block markers */
+.road-block rect { fill:#FDE68A; stroke:var(--warn); stroke-width:1.5; vector-effect:non-scaling-stroke; }
+.road-block text {
+  fill:var(--warn); font-size:7px; font-family:var(--mono); font-weight:700;
+  text-anchor:middle; dominant-baseline:middle; pointer-events:none;
+}
+
+/* HUD overlay */
+#map-hud {
+  position: absolute; top:10px; left:10px;
+  background: rgba(255,255,255,0.93);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(6px);
+  min-width: 148px;
+  transition: all 0.3s;
+}
+.hud-tier {
+  font-size: 8px; font-family: var(--mono); color: var(--text-sub);
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px;
+}
+.hud-name { font-size: 16px; font-weight: 700; color: var(--text); line-height:1.1; }
+.hud-sub  { font-size: 9px; font-family: var(--mono); color: var(--primary); margin-top: 2px; }
+
+/* Skeleton loader */
+#map-skeleton {
+  position: absolute; inset:0; background: var(--surface-2);
+  z-index: 50; display:none; flex-direction:column; gap:10px; padding:18px;
+  pointer-events: none;
+}
+#map-skeleton.visible { display:flex; }
+.sk {
+  background: linear-gradient(90deg, var(--surface-3) 25%, var(--border) 50%, var(--surface-3) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* Map zoom controls */
+#map-zc {
+  position: absolute; right:10px; bottom:74px;
+  display:flex; flex-direction:column; gap:2px; z-index:20;
+}
+.zc {
+  width:38px; height:38px; min-height:38px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; color:var(--text-mid); cursor:pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s; user-select:none;
+  font-family: var(--mono); font-weight:300;
+}
+.zc:hover { border-color: var(--primary); color: var(--primary); }
+.zc:active { transform: scale(0.95); }
+
+/* Timeline */
+#timeline-zone {
+  position: absolute; bottom:0; left:0; right:0;
+  background: rgba(255,255,255,0.96);
+  border-top: 1.5px solid var(--border);
+  padding: 6px 14px 8px;
+  z-index: 20;
+  backdrop-filter: blur(6px);
+}
+.tl-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+.tl-label { font-size:8px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:1.5px; }
+.tl-val   { font-size:9px; font-family:var(--mono); font-weight:600; color:var(--primary); }
+#tl-slider {
+  width:100%; height:8px; -webkit-appearance:none; appearance:none;
+  background: linear-gradient(to right, var(--primary) 40%, var(--surface-3) 40%);
+  border-radius:4px; outline:none; cursor:pointer;
+  border: 1.5px solid var(--border); padding:0;
+}
+#tl-slider::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:22px; height:22px; border-radius:50%;
+  background: var(--surface); border: 2.5px solid var(--primary);
+  cursor:grab; box-shadow: var(--shadow-sm);
+}
+.tl-ticks { display:flex; justify-content:space-between; margin-top:3px; }
+.tl-tick  { font-size:7px; font-family:var(--mono); color:var(--text-sub); }
+
+/* Data frame banner */
+#data-banner {
+  position: absolute; top:10px; right:10px;
+  background: rgba(255,255,255,0.93); border:1.5px solid var(--border);
+  border-radius: var(--radius-md); padding:7px 11px;
+  box-shadow: var(--shadow-sm); z-index:20; display:none;
+  backdrop-filter:blur(6px);
+}
+#data-banner.visible { display:block; }
+.db-year { font-size:18px; font-weight:700; color:var(--text); font-family:var(--mono); line-height:1; }
+.db-sub  { font-size:8px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:1px; margin-top:1px; }
+.db-tag  { font-size:8px; font-family:var(--mono); font-weight:600; padding:2px 7px; border-radius:20px; display:inline-block; margin-top:4px; }
+.db-tag.ok     { background:var(--ok-bg);   color:var(--ok); }
+.db-tag.danger { background:var(--danger-bg); color:var(--danger); }
+
+
+/* ── SIDEBAR (39%) ───────────────────────── */
+#sidebar {
+  width: 39%;
+  display:flex; flex-direction:column;
+  background: var(--surface);
+  border-left: 0;
+}
+
+/* Tab bar */
+#tab-bar {
+  display:flex;
+  border-bottom: 1.5px solid var(--border);
+  background: var(--surface-2);
+  flex-shrink:0;
+}
+.tab {
+  flex:1; padding:10px 0;
+  text-align:center;
+  font-size:10px; font-family:var(--mono);
+  font-weight:500; text-transform:uppercase; letter-spacing:0.8px;
+  color:var(--text-sub);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1.5px;
+  transition:all 0.2s;
+}
+.tab.active { color:var(--primary); border-bottom-color:var(--primary); background:var(--surface); }
+.tab:hover:not(.active) { color:var(--text-mid); }
+
+/* Knowledge toggle */
+#knowledge-toggle {
+  display:flex;
+  padding: 10px 12px 8px;
+  gap: 5px;
+  flex-shrink:0;
+  border-bottom: 1.5px solid var(--border);
+}
+.kt-btn {
+  flex:1; padding:7px 4px;
+  border: 1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  background: var(--surface);
+  font-size:9px; font-family:var(--mono); font-weight:500;
+  color:var(--text-mid); text-transform:uppercase; letter-spacing:0.5px;
+  cursor:pointer; text-align:center; min-height:34px;
+  transition:all 0.2s;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  line-height:1.2;
+}
+.kt-btn .kt-icon { font-size:14px; }
+.kt-btn.active.danger  { background:var(--danger-bg); border-color:var(--danger-lt); color:var(--danger); }
+.kt-btn.active.primary { background:var(--primary-bg); border-color:var(--primary); color:var(--primary); }
+.kt-btn.active.ok      { background:var(--ok-bg);    border-color:var(--ok-lt);    color:var(--ok); }
+.kt-btn:hover:not(.active) { border-color:var(--border-mid); color:var(--text); }
+
+/* Dashboard */
+#dashboard-panel {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:10px 12px; display:flex; flex-direction:column; gap:8px;
+}
+#dashboard-panel::-webkit-scrollbar { width:4px; }
+#dashboard-panel::-webkit-scrollbar-track { background:transparent; }
+#dashboard-panel::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+.section-label {
+  font-size:8px; font-family:var(--mono); color:var(--text-sub);
+  text-transform:uppercase; letter-spacing:1.8px;
+}
+
+/* Stat cards */
+.stat-card {
+  border-radius:var(--radius-md);
+  padding:10px 12px;
+  display:flex; align-items:center; gap:10px;
+  border:1.5px solid;
+  cursor:pointer;
+  transition:all 0.2s;
+  flex-shrink:0; position:relative; overflow:hidden;
+}
+.stat-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
+}
+.stat-card:hover { box-shadow:var(--shadow-sm); transform:translateY(-1px); }
+.stat-card:active { transform:scale(0.99); }
+.stat-card.danger  { background:var(--danger-bg); border-color:rgba(220,38,38,0.2); }
+.stat-card.danger::before  { background:var(--danger); }
+.stat-card.ok      { background:var(--ok-bg);    border-color:rgba(22,163,74,0.2); }
+.stat-card.ok::before      { background:var(--ok); }
+.stat-card.primary { background:var(--primary-bg); border-color:rgba(37,99,235,0.2); }
+.stat-card.primary::before { background:var(--primary); }
+.stat-card.warn    { background:var(--warn-bg);  border-color:rgba(217,119,6,0.2); }
+.stat-card.warn::before    { background:var(--warn); }
+
+.sc-icon { font-size:20px; flex-shrink:0; width:28px; text-align:center; }
+.sc-body { flex:1; min-width:0; }
+.sc-primary { font-size:12px; font-weight:600; color:var(--text); }
+.sc-secondary { font-size:9px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:0.6px; margin-top:1px; }
+.sc-num {
+  font-size:26px; font-weight:700; font-family:var(--mono); flex-shrink:0; line-height:1;
+}
+.stat-card.danger  .sc-num { color:var(--danger); }
+.stat-card.ok      .sc-num { color:var(--ok); }
+.stat-card.primary .sc-num { color:var(--primary); }
+.stat-card.warn    .sc-num { color:var(--warn); }
+
+/* Progress card (vaccination) */
+.progress-card {
+  border-radius:var(--radius-md); padding:10px 12px;
+  border:1.5px solid rgba(217,119,6,0.2);
+  background:var(--warn-bg);
+  flex-shrink:0; position:relative; overflow:hidden;
+}
+.progress-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--warn); }
+.pc-head { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.pc-icon { font-size:18px; }
+.pc-titles { flex:1; }
+.pc-t1 { font-size:12px; font-weight:600; color:var(--text); }
+.pc-t2 { font-size:9px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:0.6px; }
+.pc-date { font-size:10px; font-family:var(--mono); font-weight:600; color:var(--warn); background:rgba(217,119,6,0.1); padding:2px 7px; border-radius:4px; }
+.pc-bar { height:6px; background:var(--surface-3); border-radius:3px; overflow:hidden; }
+.pc-fill { height:100%; background:var(--warn); border-radius:3px; transition:width 0.6s ease; }
+.pc-meta { display:flex; justify-content:space-between; margin-top:4px; }
+.pc-meta span { font-size:8px; font-family:var(--mono); color:var(--text-sub); }
+
+/* Chat panel */
+#chat-panel {
+  flex:1; display:none; flex-direction:column; padding:10px 12px; gap:8px; overflow:hidden;
+}
+#chat-panel.visible { display:flex; }
+
+.chat-intro {
+  font-size:11px; color:var(--text-mid); line-height:1.5;
+  padding-bottom:6px; border-bottom:1.5px solid var(--border);
+}
+.chat-intro strong { color:var(--text); }
+
+.intent-label { font-size:8px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:1.8px; }
+
+/* Intent cards */
+.intent-card {
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:11px 13px;
+  cursor:pointer;
+  background:var(--surface);
+  transition:all 0.2s;
+  display:flex; align-items:center; gap:10px;
+  min-height:54px;
+  box-shadow: var(--shadow-sm);
+}
+.intent-card:hover { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); box-shadow:var(--shadow-md); }
+.intent-card:active { transform:scale(0.99); }
+.ic-icon { font-size:22px; flex-shrink:0; }
+.ic-body { flex:1; }
+.ic-title { font-size:12px; font-weight:600; color:var(--text); line-height:1.2; }
+.ic-sub   { font-size:9px; font-family:var(--mono); color:var(--text-sub); margin-top:2px; }
+.ic-arrow { font-size:14px; color:var(--primary-lt); flex-shrink:0; }
+
+/* Chat result area */
+#chat-result {
+  flex:1; overflow:hidden;
+  background:var(--surface-2); border:1.5px solid var(--border);
+  border-radius:var(--radius-md); padding:10px; display:none;
+}
+#chat-result.visible { display:block; }
+.cr-header { font-size:9px; font-family:var(--mono); color:var(--primary); font-weight:600;
+  text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.cr-body { font-size:11px; color:var(--text-mid); line-height:1.6; }
+
+/* Speak button */
+#speak-section {
+  padding:8px 12px 10px;
+  border-top:1.5px solid var(--border); flex-shrink:0;
+}
+#speak-btn {
+  width:100%; padding:12px 16px;
+  border:2px solid var(--danger);
+  border-radius:var(--radius-md);
+  background:var(--danger);
+  cursor:pointer; display:flex; align-items:center; gap:10px;
+  transition:all 0.2s;
+  position:relative;
+}
+#speak-btn:hover { background:#B91C1C; border-color:#B91C1C; }
+#speak-btn:active { transform:scale(0.99); }
+.sb-mic { font-size:22px; flex-shrink:0; }
+.sb-texts .sb-odia { font-size:14px; font-weight:700; color:#fff; display:block; line-height:1.2; }
+.sb-texts .sb-en   { font-size:8px; font-family:var(--mono); color:rgba(255,255,255,0.75); text-transform:uppercase; letter-spacing:1.2px; }
+
+
+/* ═══════════════════════════════════════════
+   ZONE 3 — PULSE TICKER
+═══════════════════════════════════════════ */
+#ticker {
+  height: 34px;
+  background: var(--text);
+  border-top: 1.5px solid var(--border);
+  display:flex; align-items:center; flex-shrink:0; overflow:hidden;
+}
+#ticker-badge {
+  padding:0 12px; height:100%;
+  background:#FFD60A;
+  font-size:8px; font-family:var(--mono); font-weight:700;
+  color:#1E293B; text-transform:uppercase; letter-spacing:2px;
+  display:flex; align-items:center;
+  border-right:1px solid rgba(0,0,0,0.2);
+  flex-shrink:0;
+}
+#ticker-track { flex:1; overflow:hidden; position:relative; }
+#ticker-track::before, #ticker-track::after {
+  content:''; position:absolute; top:0; bottom:0; width:20px; z-index:4; pointer-events:none;
+}
+#ticker-track::before { left:0; background:linear-gradient(to right,var(--text),transparent); }
+#ticker-track::after  { right:0; background:linear-gradient(to left,var(--text),transparent); }
+.ticker-scroll {
+  display:flex; align-items:center; height:34px;
+  white-space:nowrap;
+  animation:ticker 38s linear infinite;
+}
+@keyframes ticker { 0%{transform:translateX(100%)} 100%{transform:translateX(-100%)} }
+.t-item { display:inline-flex; align-items:center; gap:6px; margin-right:40px; font-size:10px; font-family:var(--mono); }
+.t-item.danger { color:#FCA5A5; }
+.t-item.info   { color:#93C5FD; }
+.t-item.ok     { color:#86EFAC; }
+.t-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.t-item.danger .t-dot { background:#FCA5A5; }
+.t-item.info   .t-dot { background:#93C5FD; }
+.t-item.ok     .t-dot { background:#86EFAC; }
+.t-sep { color:#475569; margin-right:40px; font-family:var(--mono); display:inline-block; }
+
+
+/* ═══════════════════════════════════════════
+   OVERLAY: STATE/DISTRICT SELECTION MODAL
+═══════════════════════════════════════════ */
+#region-modal {
+  position:absolute; inset:52px 0 34px 0;
+  z-index:500;
+  background:rgba(248,250,252,0.97);
+  backdrop-filter:blur(10px);
+  display:none; flex-direction:column;
+}
+#region-modal.visible { display:flex; }
+#rm-header {
+  display:flex; align-items:center; padding:14px 24px;
+  border-bottom:1.5px solid var(--border);
+  gap:12px;
+}
+#rm-title { font-size:14px; font-weight:700; color:var(--text); flex:1; }
+#rm-subtitle { font-size:10px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:1px; }
+#rm-close {
+  width:40px; height:40px;
+  background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; color:var(--text-mid); cursor:pointer;
+  transition:all 0.15s; font-family:var(--mono);
+}
+#rm-close:hover { border-color:var(--danger); color:var(--danger); }
+
+#rm-body {
+  flex:1; display:flex; padding:16px 24px; gap:20px; overflow:hidden;
+}
+
+.rm-state-col { flex:1; display:flex; flex-direction:column; gap:10px; }
+.rm-state-head {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 12px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+}
+.rm-state-name { font-size:13px; font-weight:700; color:var(--text); }
+.rm-state-tag  { font-size:8px; font-family:var(--mono); color:var(--primary); background:var(--primary-bg); padding:2px 7px; border-radius:3px; }
+
+/* SVG district maps */
+.rm-svg { width:100%; flex:1; min-height:0; }
+
+/* District polygon buttons */
+.dist-poly {
+  fill: #E2E8F0;
+  stroke: #94A3B8;
+  stroke-width: 1.5;
+  cursor: pointer;
+  transition: fill 0.2s, opacity 0.3s;
+}
+.dist-poly:hover { fill: #BFDBFE; stroke: var(--primary); }
+.dist-poly.selected { fill: #DBEAFE; stroke: var(--primary); stroke-width: 2.5; }
+.dist-poly.dimmed { opacity:0.3; }
+
+.dist-label {
+  font-size:9px; font-family:var(--mono); font-weight:500;
+  fill:var(--text-mid); text-anchor:middle; dominant-baseline:middle;
+  pointer-events:none;
+  transition: opacity 0.3s;
+}
+.dist-label.dimmed { opacity:0.3; }
+
+.dist-alert-badge {
+  font-size:8px; font-family:var(--mono); font-weight:700;
+  fill:var(--danger); text-anchor:middle; dominant-baseline:middle;
+  pointer-events:none;
+}
+
+/* Alert legend in modal */
+.rm-legend {
+  display:flex; gap:12px; flex-wrap:wrap;
+  padding:8px 12px; background:var(--surface);
+  border:1.5px solid var(--border); border-radius:var(--radius-sm);
+}
+.rl-item { display:flex; align-items:center; gap:5px; font-size:9px; font-family:var(--mono); color:var(--text-mid); }
+.rl-dot  { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+
+
+/* ═══════════════════════════════════════════
+   OVERLAY: SITUATION REPORT DRAWER
+═══════════════════════════════════════════ */
+#sitrep {
+  position:absolute; inset:52px 0 34px 0;
+  z-index:400; display:none; align-items:flex-end;
+  pointer-events:none;
+}
+#sitrep.visible { display:flex; pointer-events:all; }
+#sitrep-bg {
+  position:absolute; inset:0;
+  background:rgba(15,23,42,0.35);
+  backdrop-filter:blur(3px);
+  cursor:pointer;
+}
+#sitrep-panel {
+  position:relative; z-index:1;
+  width:100%; max-height:65%;
+  background:var(--surface);
+  border-top:2px solid var(--primary);
+  border-radius:var(--radius-xl) var(--radius-xl) 0 0;
+  padding:16px 20px 18px;
+  display:flex; flex-direction:column; gap:11px;
+  box-shadow:var(--shadow-xl);
+  animation:slide-up 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes slide-up { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+.srp-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:0 auto -4px; }
+.srp-head { display:flex; align-items:flex-start; gap:12px; }
+.srp-icon-wrap { font-size:28px; }
+.srp-title-group { flex:1; }
+.srp-title { font-size:15px; font-weight:700; color:var(--text); line-height:1.2; }
+.srp-loc   { font-size:9px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:1px; margin-top:3px; }
+.srp-close {
+  width:34px; height:34px; min-width:34px;
+  background:var(--surface-2); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center;
+  font-size:14px; color:var(--text-mid); cursor:pointer;
+  font-family:var(--mono); transition:all 0.15s;
+}
+.srp-close:hover { border-color:var(--danger); color:var(--danger); }
+.srp-source {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 10px; border-radius:20px;
+  background:var(--ok-bg); border:1.5px solid rgba(22,163,74,0.3);
+  font-size:9px; font-family:var(--mono); font-weight:600;
+  color:var(--ok); text-transform:uppercase; letter-spacing:0.8px;
+  align-self:flex-start;
+}
+.srp-body { font-size:12px; color:var(--text-mid); line-height:1.7; }
+.srp-stats { display:flex; gap:8px; }
+.srp-stat {
+  flex:1; padding:9px; text-align:center;
+  background:var(--surface-2); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+}
+.srp-stat .n { font-size:20px; font-family:var(--mono); font-weight:700; }
+.srp-stat .l { font-size:8px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:0.8px; margin-top:2px; }
+.srp-stat.d .n { color:var(--danger); }
+.srp-stat.w .n { color:var(--warn); }
+.srp-stat.g .n { color:var(--ok); }
+#srp-cta {
+  padding:12px; background:var(--primary);
+  border:2px solid var(--primary); border-radius:var(--radius-md);
+  font-size:13px; font-weight:600; font-family:var(--sans); color:#fff;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:all 0.15s; min-height:48px;
+}
+#srp-cta:hover { background:var(--primary-lt); }
+
+/* ═══════════════════════════════════════════
+   OVERLAY: VOICE ACTIVE
+═══════════════════════════════════════════ */
+#voice-ov {
+  position:absolute; inset:0; z-index:600;
+  background:rgba(248,250,252,0.97);
+  backdrop-filter:blur(12px);
+  display:none; flex-direction:column;
+  align-items:center; justify-content:center; gap:18px;
+}
+#voice-ov.visible { display:flex; }
+.wave-row { display:flex; align-items:center; gap:4px; height:56px; }
+.wb {
+  width:5px; border-radius:3px; background:var(--primary);
+  animation:wave 0.9s ease-in-out infinite alternate;
+}
+.wb:nth-child(1){height:16px;animation-delay:0s}
+.wb:nth-child(2){height:36px;animation-delay:0.08s}
+.wb:nth-child(3){height:52px;animation-delay:0.16s}
+.wb:nth-child(4){height:38px;animation-delay:0.24s}
+.wb:nth-child(5){height:56px;animation-delay:0.32s}
+.wb:nth-child(6){height:30px;animation-delay:0.40s}
+.wb:nth-child(7){height:48px;animation-delay:0.48s}
+.wb:nth-child(8){height:22px;animation-delay:0.56s}
+.wb:nth-child(9){height:42px;animation-delay:0.64s}
+.wb:nth-child(10){height:18px;animation-delay:0.72s}
+.wb:nth-child(11){height:34px;animation-delay:0.80s}
+.wb:nth-child(12){height:50px;animation-delay:0.88s}
+@keyframes wave { from{transform:scaleY(0.3)} to{transform:scaleY(1)} }
+.vo-odia { font-size:20px; font-weight:700; color:var(--text); }
+.vo-en   { font-size:10px; font-family:var(--mono); color:var(--text-sub); text-transform:uppercase; letter-spacing:2px; }
+#vo-close {
+  padding:10px 28px;
+  background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-md);
+  font-size:11px; font-family:var(--mono); color:var(--text-mid); cursor:pointer;
+  text-transform:uppercase; letter-spacing:1px; min-height:48px;
+  transition:all 0.15s;
+}
+#vo-close:hover { border-color:var(--danger); color:var(--danger); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     ZONE 1 — INFORMATION CANOPY
+═══════════════════════════════════════════════════ -->
+<header id="canopy">
+
+  <div id="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 1.5C5.41 1.5 2.5 4.41 2.5 8c0 2.37 1.26 4.45 3.14 5.61L9 16.5l3.36-2.89C14.24 12.45 15.5 10.37 15.5 8c0-3.59-2.91-6.5-6.5-6.5z" fill="white" opacity="0.9"/>
+        <circle cx="9" cy="8" r="2.5" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name-odia">ମୋ ସ୍ୱାସ୍ଥ୍ୟ ସାଥୀ</div>
+      <div class="brand-name-en">Community Health Kiosk</div>
+    </div>
+  </div>
+
+  <!-- Segmented language control (3 hardcoded) -->
+  <div id="lang-seg">
+    <div class="lang-seg-btn active" onclick="selectLang(this)">ଓଡ଼ିଆ</div>
+    <div class="lang-seg-btn" onclick="selectLang(this)">मराठी</div>
+    <div class="lang-seg-btn" onclick="selectLang(this)">English</div>
+  </div>
+
+  <div class="c-spacer"></div>
+
+  <!-- Region crumb — opens modal -->
+  <div id="region-crumb" onclick="openRegionModal()">
+    <div>
+      <div class="rc-label">District</div>
+      <div class="rc-value" id="crumb-val">Khordha</div>
+    </div>
+    <span class="rc-chevron">▾</span>
+  </div>
+
+  <div id="conn-pill" class="online">
+    <div class="conn-dot"></div>
+    <span class="conn-label">Cloud Active</span>
+  </div>
+
+</header>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ZONE 2 — INTERACTIVE CORE
+═══════════════════════════════════════════════════ -->
+<main id="core">
+
+  <!-- ── VECTOR MAP ──────────────────────────────── -->
+  <section id="map-zone">
+
+    <!-- Skeleton loader -->
+    <div id="map-skeleton">
+      <div class="sk" style="height:42%;width:100%"></div>
+      <div style="display:flex;gap:8px;flex:1">
+        <div class="sk" style="flex:3"></div>
+        <div class="sk" style="flex:2"></div>
+      </div>
+      <div class="sk" style="height:18%;width:70%"></div>
+    </div>
+
+    <!-- SVG VECTOR MAP CANVAS -->
+    <svg id="map-svg" viewBox="0 0 620 430" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- BACKGROUND FILL -->
+      <rect width="620" height="430" fill="#F1F5F9"/>
+
+      <!-- BASE GRID — monochromatic, no POI clutter -->
+      <defs>
+        <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+          <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#CBD5E1" stroke-width="0.4"/>
+        </pattern>
+        <!-- Fever texture -->
+        <pattern id="fever-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(220,38,38,0.25)" stroke-width="2"/>
+        </pattern>
+        <!-- Water texture -->
+        <pattern id="water-hatch" width="8" height="8" patternUnits="userSpaceOnUse">
+          <circle cx="4" cy="4" r="1" fill="rgba(37,99,235,0.3)"/>
+        </pattern>
+      </defs>
+      <rect width="620" height="430" fill="url(#grid)"/>
+
+      <!-- RIVER / ROAD LINES -->
+      <path class="map-river" d="M 80,60 Q 160,90 200,140 Q 240,190 280,200 Q 320,210 370,250 Q 420,290 480,340"/>
+      <path class="map-road" d="M 0,200 Q 100,195 200,200 Q 300,205 400,200 Q 500,195 620,200"/>
+      <path class="map-road" d="M 310,0 Q 308,100 310,200 Q 312,300 310,430"/>
+      <path class="map-road" d="M 0,320 Q 150,310 310,320 Q 470,330 620,320" stroke-dasharray="5,4"/>
+
+      <!-- DISTRICT BOUNDARIES (dashed) -->
+      <path class="map-district-boundary" d="M 0,200 L 620,200"/>
+      <path class="map-district-boundary" d="M 310,0 L 310,430"/>
+      <path class="map-district-boundary" d="M 180,0 L 180,430"/>
+      <path class="map-district-boundary" d="M 470,0 L 470,430"/>
+      <path class="map-district-boundary" d="M 0,130 L 620,130"/>
+      <path class="map-district-boundary" d="M 0,310 L 620,310"/>
+
+      <!-- ALERT POLYGONS — Disease Trends layer -->
+      <!-- Fever zone (Balianta) -->
+      <polygon id="poly-fever-1" class="alert-poly fever layer-disease"
+        points="80,80 200,70 230,150 180,200 80,190"
+        onclick="openSitrep('fever')"/>
+      <!-- Fever hatch overlay -->
+      <polygon id="poly-fever-1-hatch" class="layer-disease"
+        points="80,80 200,70 230,150 180,200 80,190"
+        fill="url(#fever-hatch)" stroke="none" pointer-events="none" opacity="0.6"/>
+
+      <!-- Flu zone (Cuttack) -->
+      <polygon id="poly-flu-1" class="alert-poly flu layer-disease"
+        points="320,60 460,80 470,180 380,200 310,160"
+        onclick="openSitrep('flu')"/>
+
+      <!-- Water issue zone -->
+      <polygon id="poly-water-1" class="alert-poly water layer-water"
+        points="460,210 580,200 600,310 480,320 450,260"
+        onclick="openSitrep('water')"/>
+      <polygon id="poly-water-1-hatch" class="layer-water"
+        points="460,210 580,200 600,310 480,320 450,260"
+        fill="url(#water-hatch)" stroke="none" pointer-events="none" opacity="0.7"/>
+
+      <!-- PHC SQUARE ANCHORS — Infrastructure layer -->
+      <!-- PHC tiles: 32×32 solid green, non-scaling-stroke -->
+      <g class="phc-anchor layer-infra" onclick="openSitrep('phc')" transform="translate(130,230)">
+        <rect x="-16" y="-16" width="32" height="32" rx="4" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">+PHC</text>
+      </g>
+      <g class="phc-anchor layer-infra" onclick="openSitrep('phc')" transform="translate(280,280)">
+        <rect x="-16" y="-16" width="32" height="32" rx="4" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">+PHC</text>
+      </g>
+      <g class="phc-anchor layer-infra" onclick="openSitrep('phc')" transform="translate(400,340)">
+        <rect x="-16" y="-16" width="32" height="32" rx="4" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">+PHC</text>
+      </g>
+      <g class="phc-anchor layer-infra" onclick="openSitrep('phc')" transform="translate(520,260)">
+        <rect x="-16" y="-16" width="32" height="32" rx="4" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">+PHC</text>
+      </g>
+      <g class="phc-anchor layer-infra" onclick="openSitrep('phc')" transform="translate(200,370)">
+        <rect x="-16" y="-16" width="32" height="32" rx="4" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">+PHC</text>
+      </g>
+
+      <!-- WATER POINTS — Water layer -->
+      <g class="water-point layer-water" onclick="openSitrep('water')" transform="translate(340,360)">
+        <circle cx="0" cy="0" r="12" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">H₂O</text>
+      </g>
+      <g class="water-point layer-water" onclick="openSitrep('water')" transform="translate(560,380)">
+        <circle cx="0" cy="0" r="12" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">H₂O</text>
+      </g>
+      <g class="water-point layer-water" onclick="openSitrep('water')" transform="translate(100,370)">
+        <circle cx="0" cy="0" r="12" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">H₂O</text>
+      </g>
+
+      <!-- ROAD BLOCKS — Infrastructure layer -->
+      <g class="road-block layer-infra" transform="translate(310,200)">
+        <rect x="-18" y="-10" width="36" height="20" rx="3" vector-effect="non-scaling-stroke"/>
+        <text x="0" y="0">⚠ ROAD</text>
+      </g>
+
+      <!-- AREA LABELS (non-interactive) -->
+      <text x="155" y="135" font-size="9" font-family="DM Mono, monospace" fill="#94A3B8" text-anchor="middle" font-weight="500">BALIANTA</text>
+      <text x="380" y="120" font-size="9" font-family="DM Mono, monospace" fill="#94A3B8" text-anchor="middle" font-weight="500">CUTTACK</text>
+      <text x="180" y="330" font-size="9" font-family="DM Mono, monospace" fill="#94A3B8" text-anchor="middle" font-weight="500">GANJAM</text>
+      <text x="510" y="260" font-size="9" font-family="DM Mono, monospace" fill="#94A3B8" text-anchor="middle" font-weight="500">PURI</text>
+
+    </svg>
+
+    <!-- HUD -->
+    <div id="map-hud">
+      <div class="hud-tier" id="hud-tier">District View</div>
+      <div class="hud-name" id="hud-name">Khordha</div>
+      <div class="hud-sub" id="hud-sub">Odisha · 12 PHCs Active</div>
+    </div>
+
+    <!-- Temporal data banner -->
+    <div id="data-banner">
+      <div class="db-year" id="db-year">2023</div>
+      <div class="db-sub">Historical Data Frame</div>
+      <div class="db-tag" id="db-tag">—</div>
+    </div>
+
+    <!-- Zoom controls -->
+    <div id="map-zc">
+      <div class="zc" onclick="zoomIn()">+</div>
+      <div class="zc" onclick="zoomOut()">−</div>
+    </div>
+
+    <!-- Timeline -->
+    <div id="timeline-zone">
+      <div class="tl-header">
+        <span class="tl-label">📅 Neighborhood Memory</span>
+        <span class="tl-val" id="tl-val">2024 — Current</span>
+      </div>
+      <input type="range" id="tl-slider" min="0" max="4" value="4" step="1">
+      <div class="tl-ticks">
+        <span class="tl-tick">2021</span>
+        <span class="tl-tick">2022</span>
+        <span class="tl-tick">2023</span>
+        <span class="tl-tick">2024</span>
+        <span class="tl-tick">Current</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SIDEBAR ───────────────────────────────── -->
+  <aside id="sidebar">
+
+    <div id="tab-bar">
+      <div class="tab active" id="tab-dash"  onclick="switchTab('dash')">📊 Dashboard</div>
+      <div class="tab"        id="tab-mosathi" onclick="switchTab('mosathi')">🤖 MoSathi</div>
+    </div>
+
+    <!-- Knowledge Toggle -->
+    <div id="knowledge-toggle">
+      <div class="kt-btn active danger" id="kt-disease" onclick="setKnowledge('disease')">
+        <span class="kt-icon">🦠</span>Disease Trends
+      </div>
+      <div class="kt-btn" id="kt-water" onclick="setKnowledge('water')">
+        <span class="kt-icon">💧</span>Water Security
+      </div>
+      <div class="kt-btn" id="kt-infra" onclick="setKnowledge('infra')">
+        <span class="kt-icon">🏥</span>Infrastructure
+      </div>
+    </div>
+
+    <!-- DASHBOARD PANEL -->
+    <div id="dashboard-panel">
+
+      <div class="section-label" id="snap-label">Local Snapshot — Khordha</div>
+
+      <div class="stat-card danger" id="sc-alerts" onclick="openSitrep('fever')">
+        <div class="sc-icon">⚠</div>
+        <div class="sc-body">
+          <div class="sc-primary" id="sc1-p">ସ୍ୱାସ୍ଥ୍ୟ ସତର୍କତା</div>
+          <div class="sc-secondary">Active Health Alerts · Tap for Report</div>
+        </div>
+        <div class="sc-num" id="sc1-n">7</div>
+      </div>
+
+      <div class="stat-card ok" id="sc-phc" onclick="openSitrep('phc')">
+        <div class="sc-icon">🏥</div>
+        <div class="sc-body">
+          <div class="sc-primary" id="sc2-p">PHC ସଚଳ ଅଛି</div>
+          <div class="sc-secondary">PHCs Operational · Tap for Details</div>
+        </div>
+        <div class="sc-num" id="sc2-n">12</div>
+      </div>
+
+      <div class="stat-card primary" id="sc-water" onclick="openSitrep('water')">
+        <div class="sc-icon">💧</div>
+        <div class="sc-body">
+          <div class="sc-primary" id="sc3-p">ଜଳ ବିନ୍ଦୁ</div>
+          <div class="sc-secondary">Water Points Active</div>
+        </div>
+        <div class="sc-num" id="sc3-n">24</div>
+      </div>
+
+      <div class="progress-card" id="vax-card">
+        <div class="pc-head">
+          <span class="pc-icon">💉</span>
+          <div class="pc-titles">
+            <div class="pc-t1" id="vax-t1">ଟୀକାକରଣ ଡ୍ରାଇଭ</div>
+            <div class="pc-t2">Vaccination Drive</div>
+          </div>
+          <div class="pc-date" id="vax-date">Feb 27</div>
+        </div>
+        <div class="pc-bar"><div class="pc-fill" id="vax-fill" style="width:73%"></div></div>
+        <div class="pc-meta">
+          <span id="vax-pct">Coverage: 73%</span>
+          <span id="vax-target">Target: 2,400 children</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MOSATHI PANEL -->
+    <div id="mosathi-panel" style="display:none; flex:1; flex-direction:column; padding:10px 12px; gap:8px; overflow:hidden;">
+
+      <div class="chat-intro">
+        <strong>ମୋ ସାଥୀ</strong> — Tap a card below to explore health data, or press the microphone to speak.
+      </div>
+
+      <div class="intent-label">Quick Actions</div>
+
+      <div class="intent-card" onclick="runIntent('disease-history')">
+        <span class="ic-icon">📈</span>
+        <div class="ic-body">
+          <div class="ic-title">Disease History: Khordha (2021–2023)</div>
+          <div class="ic-sub">Sets timeline → 2023 · Renders fever polygons</div>
+        </div>
+        <span class="ic-arrow">→</span>
+      </div>
+
+      <div class="intent-card" onclick="runIntent('nearest-hospitals')">
+        <span class="ic-icon">🏥</span>
+        <div class="ic-body">
+          <div class="ic-title">Show Nearest Operational Hospitals</div>
+          <div class="ic-sub">Activates Infrastructure layer · Highlights PHC tiles</div>
+        </div>
+        <span class="ic-arrow">→</span>
+      </div>
+
+      <div class="intent-card" onclick="runIntent('water-status')">
+        <span class="ic-icon">💧</span>
+        <div class="ic-body">
+          <div class="ic-title">Water Point Status — Today</div>
+          <div class="ic-sub">Isolates water layer · Shows borewell alerts</div>
+        </div>
+        <span class="ic-arrow">→</span>
+      </div>
+
+      <div id="chat-result">
+        <div class="cr-header" id="cr-header">— Result —</div>
+        <div class="cr-body" id="cr-body"></div>
+      </div>
+
+    </div>
+
+    <!-- Speak button — always visible -->
+    <div id="speak-section">
+      <button id="speak-btn" onclick="openVoice()">
+        <span class="sb-mic">🎙</span>
+        <div class="sb-texts">
+          <span class="sb-odia">ମୋ ସାଥୀ ସହ କଥା ହୁଅ</span>
+          <span class="sb-en">Talk to MoSathi · Press & Speak</span>
+        </div>
+      </button>
+    </div>
+
+  </aside>
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ZONE 3 — PULSE TICKER
+═══════════════════════════════════════════════════ -->
+<footer id="ticker">
+  <div id="ticker-badge">Live</div>
+  <div id="ticker-track">
+    <div class="ticker-scroll">
+      <span class="t-item danger"><span class="t-dot"></span>⚠ Fever cluster — Balianta Block — 23 confirmed cases — Khordha PHC on alert</span>
+      <span class="t-sep">·</span>
+      <span class="t-item info"><span class="t-dot"></span>💧 Borewell #7 restored — Tangi — Supply resumed 08:30</span>
+      <span class="t-sep">·</span>
+      <span class="t-item ok"><span class="t-dot"></span>💉 Vaccination camp — Khordha Block — Feb 27, 09:00–16:00</span>
+      <span class="t-sep">·</span>
+      <span class="t-item danger"><span class="t-dot"></span>⚠ NH-16 road block near Bhubaneswar — Diversion via SH-12</span>
+      <span class="t-sep">·</span>
+      <span class="t-item ok"><span class="t-dot"></span>✅ New PHC operational — Bolagarh — Emergency: 104</span>
+      <span class="t-sep">·</span>
+      <span class="t-item info"><span class="t-dot"></span>📋 ASHA worker training — Jatni — Feb 25–26, 08:00</span>
+      <span class="t-sep">·</span>
+      <span class="t-item danger"><span class="t-dot"></span>⚠ Fever cluster — Balianta Block — 23 confirmed cases — Khordha PHC on alert</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════════
+     OVERLAY: STATE + DISTRICT SELECTION MODAL
+═══════════════════════════════════════════════════ -->
+<div id="region-modal">
+  <div id="rm-header">
+    <div>
+      <div id="rm-title">Select Your District</div>
+      <div id="rm-subtitle">Tap a district polygon to load its health data</div>
+    </div>
+    <div id="rm-close" onclick="closeRegionModal()">✕</div>
+  </div>
+
+  <div id="rm-body">
+
+    <!-- ODISHA column -->
+    <div class="rm-state-col">
+      <div class="rm-state-head">
+        <div class="rm-state-name">Odisha</div>
+        <div class="rm-state-tag">ଓଡ଼ିଶା · 30 Districts</div>
+      </div>
+      <svg class="rm-svg" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="260" fill="#F8FAFC"/>
+        <!-- Odisha abstract shape + 5 active districts as polygons -->
+
+        <!-- Khordha (active, central-south) -->
+        <polygon id="od-khordha" class="dist-poly selected"
+          points="120,140 180,135 195,175 170,200 115,195"
+          onclick="selectDistrict('od','Khordha','Odisha',7,12,24)"/>
+        <text class="dist-label" x="155" y="168">Khordha</text>
+        <text class="dist-alert-badge" x="192" y="148">7⚠</text>
+
+        <!-- Cuttack (north of Khordha) -->
+        <polygon id="od-cuttack" class="dist-poly"
+          points="130,80 210,75 220,140 180,135 120,140 115,100"
+          onclick="selectDistrict('od','Cuttack','Odisha',5,9,18)"/>
+        <text class="dist-label" x="165" y="110">Cuttack</text>
+
+        <!-- Ganjam (south) -->
+        <polygon id="od-ganjam" class="dist-poly"
+          points="90,195 170,200 165,250 100,255 80,230"
+          onclick="selectDistrict('od','Ganjam','Odisha',6,8,20)"/>
+        <text class="dist-label" x="130" y="225">Ganjam</text>
+
+        <!-- Puri (east) -->
+        <polygon id="od-puri" class="dist-poly"
+          points="195,175 250,165 260,230 200,245 170,200"
+          onclick="selectDistrict('od','Puri','Odisha',3,7,15)"/>
+        <text class="dist-label" x="222" y="205">Puri</text>
+
+        <!-- Balangir (west) -->
+        <polygon id="od-balangir" class="dist-poly"
+          points="40,100 115,100 120,140 115,195 50,190 30,150"
+          onclick="selectDistrict('od','Balangir','Odisha',4,6,12)"/>
+        <text class="dist-label" x="78" y="148">Balangir</text>
+
+        <!-- outer border suggestion -->
+        <polygon points="30,50 220,45 265,100 260,240 200,255 100,260 40,240 15,150"
+          fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </svg>
+
+      <!-- Legend -->
+      <div class="rm-legend">
+        <div class="rl-item"><div class="rl-dot" style="background:#DBEAFE;border:1.5px solid var(--primary)"></div>Selected</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#E2E8F0;border:1px solid #94A3B8"></div>Available</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#FEF2F2;border:1px solid var(--danger)"></div>High Alert</div>
+      </div>
+    </div>
+
+    <!-- MAHARASHTRA column -->
+    <div class="rm-state-col">
+      <div class="rm-state-head">
+        <div class="rm-state-name">Maharashtra</div>
+        <div class="rm-state-tag">महाराष्ट्र · 36 Districts</div>
+      </div>
+      <svg class="rm-svg" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="260" fill="#F8FAFC"/>
+
+        <!-- Pune (central) -->
+        <polygon id="mh-pune" class="dist-poly"
+          points="110,130 185,125 195,175 165,205 105,195"
+          onclick="selectDistrict('mh','Pune','Maharashtra',5,11,22)"/>
+        <text class="dist-label" x="152" y="162">Pune</text>
+
+        <!-- Mumbai (west-coast) -->
+        <polygon id="mh-mumbai" class="dist-poly"
+          points="50,100 110,130 105,195 55,195 40,150"
+          onclick="selectDistrict('mh','Mumbai','Maharashtra',9,18,40)"/>
+        <text class="dist-label" x="78" y="157">Mumbai</text>
+        <text class="dist-alert-badge" x="55" y="112">9⚠</text>
+
+        <!-- Nagpur (east) -->
+        <polygon id="mh-nagpur" class="dist-poly"
+          points="195,60 265,65 270,145 195,140 185,125 190,80"
+          onclick="selectDistrict('mh','Nagpur','Maharashtra',3,14,28)"/>
+        <text class="dist-label" x="228" y="103">Nagpur</text>
+
+        <!-- Nashik (north) -->
+        <polygon id="mh-nashik" class="dist-poly"
+          points="80,40 190,40 190,80 185,125 110,130 70,100"
+          onclick="selectDistrict('mh','Nashik','Maharashtra',4,8,16)"/>
+        <text class="dist-label" x="135" y="82">Nashik</text>
+
+        <!-- Aurangabad (central-north) -->
+        <polygon id="mh-aurangabad" class="dist-poly"
+          points="185,125 195,140 270,145 255,200 165,205 195,175"
+          onclick="selectDistrict('mh','Aurangabad','Maharashtra',6,10,20)"/>
+        <text class="dist-label" x="220" y="168">Aurangabad</text>
+
+        <polygon points="35,80 195,40 275,65 272,200 165,215 55,200 25,140"
+          fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </svg>
+
+      <div class="rm-legend">
+        <div class="rl-item"><div class="rl-dot" style="background:#DBEAFE;border:1.5px solid var(--primary)"></div>Selected</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#E2E8F0;border:1px solid #94A3B8"></div>Available</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#FEF2F2;border:1px solid var(--danger)"></div>High Alert</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     OVERLAY: SITUATION REPORT DRAWER
+═══════════════════════════════════════════════════ -->
+<div id="sitrep">
+  <div id="sitrep-bg" onclick="closeSitrep()"></div>
+  <div id="sitrep-panel">
+    <div class="srp-handle"></div>
+    <div class="srp-head">
+      <div class="srp-icon-wrap" id="srp-icon">⚠</div>
+      <div class="srp-title-group">
+        <div class="srp-title" id="srp-title">Fever Outbreak — Balianta Block</div>
+        <div class="srp-loc" id="srp-loc">Khordha District · Odisha · Updated Today 08:45</div>
+      </div>
+      <div class="srp-close" onclick="closeSitrep()">✕</div>
+    </div>
+    <div class="srp-source">✓ Verified · ICMR / State Health Dept</div>
+    <div class="srp-body" id="srp-body">
+      23 confirmed cases of seasonal fever reported in Balianta Block. Khordha District PHC has been notified and mobile health teams dispatched. Community members are advised to use ORS and visit the nearest PHC if symptoms persist beyond 48 hours.
+    </div>
+    <div class="srp-stats">
+      <div class="srp-stat d"><div class="n" id="srs-1">23</div><div class="l" id="srs-1l">Cases</div></div>
+      <div class="srp-stat w"><div class="n" id="srs-2">4</div><div class="l" id="srs-2l">Wards Affected</div></div>
+      <div class="srp-stat g"><div class="n" id="srs-3">2</div><div class="l" id="srs-3l">Teams Deployed</div></div>
+    </div>
+    <button id="srp-cta" onclick="closeSitrep()">📞 Call Helpline — 104</button>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     OVERLAY: VOICE ACTIVE
+═══════════════════════════════════════════════════ -->
+<div id="voice-ov">
+  <div class="wave-row">
+    <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+    <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+    <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+    <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+  </div>
+  <div class="vo-odia">ଶୁଣୁଅଛି... ଆପଣ କ'ଣ ଚାହୁଁଛନ୍ତି?</div>
+  <div class="vo-en">Listening... What do you need?</div>
+  <div id="vo-close" onclick="closeVoice()">✕ Tap to dismiss</div>
+</div>
+
+
+<script>
+// ═══════════════════════════════════════════
+// DATA FRAMES — Temporal Slider
+// ═══════════════════════════════════════════
+const dataFrames = [
+  {
+    label: '2021 — Baseline',
+    year: '2021',
+    tag: 'ok', tagText: 'Good Coverage',
+    alerts: 3, phc: 10, water: 20,
+    vaxPct: 45, vaxDate: 'Mar 15', vaxTarget: '1,800 children',
+    showDisease: false, showWater: false, showInfra: true,
+    hudSub: 'Odisha · High PHC Density Phase',
+    featurePulse: 'phc',
+  },
+  {
+    label: '2022 — Vaccination Drive',
+    year: '2022',
+    tag: 'ok', tagText: 'Vax Drive Active',
+    alerts: 2, phc: 12, water: 22,
+    vaxPct: 82, vaxDate: 'Apr 10', vaxTarget: '2,200 children',
+    showDisease: false, showWater: false, showInfra: true,
+    hudSub: 'Odisha · Vaccination Drive Peak',
+    featurePulse: 'phc',
+  },
+  {
+    label: '2023 — Swine Flu Peak',
+    year: '2023',
+    tag: 'danger', tagText: 'Swine Flu Alert',
+    alerts: 14, phc: 9, water: 18,
+    vaxPct: 58, vaxDate: 'Jun 20', vaxTarget: '2,000 children',
+    showDisease: true, showWater: false, showInfra: false,
+    hudSub: 'Odisha · Swine Flu Outbreak',
+    featurePulse: 'fever',
+  },
+  {
+    label: '2024 — Recovery',
+    year: '2024',
+    tag: 'ok', tagText: 'Recovering',
+    alerts: 6, phc: 11, water: 23,
+    vaxPct: 69, vaxDate: 'Oct 05', vaxTarget: '2,300 children',
+    showDisease: false, showWater: true, showInfra: true,
+    hudSub: 'Odisha · Post-outbreak Recovery',
+    featurePulse: 'water',
+  },
+  {
+    label: 'Current — 2025–26',
+    year: 'Current',
+    tag: 'ok', tagText: 'Live Data',
+    alerts: 7, phc: 12, water: 24,
+    vaxPct: 73, vaxDate: 'Feb 27', vaxTarget: '2,400 children',
+    showDisease: true, showWater: true, showInfra: true,
+    hudSub: 'Odisha · 12 PHCs Active',
+    featurePulse: null,
+  },
+];
+
+let currentFrame = 4; // start at Current
+let currentKnowledge = 'disease';
+let currentDistrict = { name:'Khordha', state:'Odisha', alerts:7, phc:12, water:24 };
+let skeletonTimer;
+
+// ═══════════════════════════════════════════
+// APPLY DATA FRAME
+// ═══════════════════════════════════════════
+function applyFrame(idx) {
+  const f = dataFrames[idx];
+  currentFrame = idx;
+
+  // Timeline label
+  document.getElementById('tl-val').textContent = f.label;
+  const pct = (idx / 4) * 100;
+  const slider = document.getElementById('tl-slider');
+  slider.style.background = `linear-gradient(to right, var(--primary) ${pct}%, var(--surface-3) ${pct}%)`;
+
+  // Stat cards
+  document.getElementById('sc1-n').textContent = f.alerts;
+  document.getElementById('sc2-n').textContent = f.phc;
+  document.getElementById('sc3-n').textContent = f.water;
+
+  // Vax card
+  document.getElementById('vax-fill').style.width = f.vaxPct + '%';
+  document.getElementById('vax-pct').textContent = `Coverage: ${f.vaxPct}%`;
+  document.getElementById('vax-date').textContent = f.vaxDate;
+  document.getElementById('vax-target').textContent = `Target: ${f.vaxTarget}`;
+
+  // HUD
+  document.getElementById('hud-sub').textContent = f.hudSub;
+
+  // Data banner
+  const banner = document.getElementById('data-banner');
+  if (idx < 4) {
+    banner.classList.add('visible');
+    document.getElementById('db-year').textContent = f.year;
+    const tag = document.getElementById('db-tag');
+    tag.textContent = f.tagText;
+    tag.className = `db-tag ${f.tag}`;
+  } else {
+    banner.classList.remove('visible');
+  }
+
+  // Map layer visibility based on frame
+  applyLayersForFrame(f);
+
+  // Skeleton flash
+  flashSkeleton();
+}
+
+function applyLayersForFrame(f) {
+  const diseaseEls = document.querySelectorAll('.layer-disease');
+  const waterEls   = document.querySelectorAll('.layer-water');
+  const infraEls   = document.querySelectorAll('.layer-infra');
+
+  const showD = currentKnowledge === 'disease' && f.showDisease;
+  const showW = currentKnowledge === 'water'   && f.showWater;
+  const showI = currentKnowledge === 'infra'   && f.showInfra;
+  const showAll = currentKnowledge === 'disease' || true; // in "all" mode
+
+  diseaseEls.forEach(el => el.style.opacity = (currentKnowledge==='disease'&&f.showDisease)||(currentKnowledge==='infra'&&false)||(currentKnowledge==='water'&&false) ? '1' : currentKnowledge==='disease'?'0.15':'0.08' );
+  waterEls.forEach(el   => el.style.opacity = currentKnowledge==='water' ? '1' : '0.2');
+  infraEls.forEach(el   => el.style.opacity = currentKnowledge==='infra' ? '1' : '0.3');
+
+  // Simpler: just show/hide by knowledge state
+  applyKnowledgeLayers();
+}
+
+// ═══════════════════════════════════════════
+// KNOWLEDGE TOGGLE
+// ═══════════════════════════════════════════
+function setKnowledge(type) {
+  currentKnowledge = type;
+  const btns = document.querySelectorAll('.kt-btn');
+  btns.forEach(b => { b.classList.remove('active','danger','primary','ok'); });
+
+  const map = { disease:['kt-disease','danger'], water:['kt-water','primary'], infra:['kt-infra','ok'] };
+  const [id, cls] = map[type];
+  document.getElementById(id).classList.add('active', cls);
+
+  applyKnowledgeLayers();
+  flashSkeleton();
+}
+
+function applyKnowledgeLayers() {
+  const f = dataFrames[currentFrame];
+  const disease = document.querySelectorAll('.layer-disease');
+  const water   = document.querySelectorAll('.layer-water');
+  const infra   = document.querySelectorAll('.layer-infra');
+
+  // Disease layer: show if knowledge=disease AND frame has disease data
+  disease.forEach(el => {
+    el.style.opacity = (currentKnowledge === 'disease' && f.showDisease) ? '1' :
+                       currentKnowledge === 'disease' ? '0.12' : '0.08';
+    el.style.transition = 'opacity 0.4s';
+  });
+
+  water.forEach(el => {
+    el.style.opacity = currentKnowledge === 'water' ? '1' : '0.15';
+    el.style.transition = 'opacity 0.4s';
+  });
+
+  infra.forEach(el => {
+    el.style.opacity = currentKnowledge === 'infra' ? '1' : '0.3';
+    el.style.transition = 'opacity 0.4s';
+  });
+}
+
+// ═══════════════════════════════════════════
+// TIMELINE SLIDER
+// ═══════════════════════════════════════════
+document.getElementById('tl-slider').addEventListener('input', function() {
+  applyFrame(parseInt(this.value));
+});
+
+// ═══════════════════════════════════════════
+// LANGUAGE SEGMENTED CONTROL
+// ═══════════════════════════════════════════
+function selectLang(el) {
+  document.querySelectorAll('.lang-seg-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════
+function switchTab(t) {
+  ['dash','mosathi'].forEach(id => {
+    document.getElementById('tab-'+id).classList.remove('active');
+  });
+  document.getElementById('tab-'+t).classList.add('active');
+
+  const dp = document.getElementById('dashboard-panel');
+  const mp = document.getElementById('mosathi-panel');
+
+  if (t === 'dash') {
+    dp.style.display = 'flex';
+    mp.style.display = 'none';
+  } else {
+    dp.style.display = 'none';
+    mp.style.display = 'flex';
+    document.getElementById('chat-result').classList.remove('visible');
+  }
+}
+
+// ═══════════════════════════════════════════
+// INTENT CARDS
+// ═══════════════════════════════════════════
+function runIntent(id) {
+  const cr = document.getElementById('chat-result');
+  const crH = document.getElementById('cr-header');
+  const crB = document.getElementById('cr-body');
+
+  cr.classList.add('visible');
+
+  if (id === 'disease-history') {
+    // Animate timeline to 2023
+    const slider = document.getElementById('tl-slider');
+    slider.value = 2;
+    applyFrame(2);
+    setKnowledge('disease');
+    document.getElementById('kt-disease').click();
+    crH.textContent = '📈 Disease History: Khordha (2023)';
+    crB.textContent = 'Timeline set to 2023 — Swine Flu peak. 14 active alerts detected. Fever polygons rendered over Balianta and Cuttack blocks. PHC count reduced to 9 operational centers during this period.';
+  } else if (id === 'nearest-hospitals') {
+    setKnowledge('infra');
+    document.getElementById('kt-infra').click();
+    crH.textContent = '🏥 Nearest Operational PHCs';
+    crB.textContent = 'Infrastructure layer activated. 12 PHC tiles highlighted. Nearest: Balianta PHC — 2.1 km. Tangi PHC — 4.8 km. Bolagarh PHC — 6.3 km. Call 104 for emergency referral.';
+    // Reset to current frame
+    document.getElementById('tl-slider').value = 4;
+    applyFrame(4);
+  } else if (id === 'water-status') {
+    setKnowledge('water');
+    document.getElementById('kt-water').click();
+    crH.textContent = '💧 Water Point Status — Today';
+    crB.textContent = '24 of 27 water points active. Borewell #7 (Tangi) restored this morning. 3 points in Balianta under maintenance — alternate tanker supply arranged. No contamination reports.';
+    document.getElementById('tl-slider').value = 4;
+    applyFrame(4);
+  }
+
+  flashSkeleton();
+}
+
+// ═══════════════════════════════════════════
+// REGION MODAL — District selection
+// ═══════════════════════════════════════════
+function openRegionModal() {
+  document.getElementById('region-modal').classList.add('visible');
+}
+function closeRegionModal() {
+  document.getElementById('region-modal').classList.remove('visible');
+}
+
+let selectedPolyId = 'od-khordha';
+
+function selectDistrict(state, name, stateName, alerts, phc, water) {
+  // Remove dimming from all polys in this state
+  const prefix = state + '-';
+  document.querySelectorAll('.dist-poly').forEach(p => {
+    if (p.id.startsWith(prefix)) {
+      p.classList.remove('selected','dimmed');
+      p.classList.add('dimmed');
+    }
+  });
+  document.querySelectorAll('.dist-label').forEach(t => {
+    const sibling = t.previousElementSibling;
+    if (sibling && sibling.id && sibling.id.startsWith(prefix)) t.classList.add('dimmed');
+    else t.classList.remove('dimmed');
+  });
+
+  const target = document.getElementById(`${state}-${name.toLowerCase()}`);
+  if (target) {
+    target.classList.remove('dimmed');
+    target.classList.add('selected');
+    selectedPolyId = target.id;
+  }
+
+  // Update all the data
+  currentDistrict = { name, state: stateName, alerts, phc, water };
+  document.getElementById('crumb-val').textContent = name;
+  document.getElementById('hud-name').textContent = name;
+  document.getElementById('snap-label').textContent = `Local Snapshot — ${name}`;
+  document.getElementById('sc1-n').textContent = alerts;
+  document.getElementById('sc2-n').textContent = phc;
+  document.getElementById('sc3-n').textContent = water;
+  document.getElementById('hud-sub').textContent = `${stateName} · ${phc} PHCs Active`;
+
+  // Close after brief delay (let user see selection)
+  setTimeout(closeRegionModal, 600);
+  flashSkeleton();
+}
+
+// ═══════════════════════════════════════════
+// SITUATION REPORT DRAWER
+// ═══════════════════════════════════════════
+const sitrepData = {
+  fever: {
+    icon:'🦠', title:'Fever Outbreak — Balianta Block',
+    loc: () => `${currentDistrict.name} · ${currentDistrict.state} · Updated Today 08:45`,
+    body:'23 confirmed cases of seasonal fever reported in Balianta Block. Khordha District PHC has been notified. Mobile health teams deployed. Residents advised to use ORS, maintain hygiene, and visit nearest PHC if symptoms persist beyond 48 hours.',
+    s:[['23','Cases'],['4','Wards'],['2','Teams']], cls:['d','w','g'],
+    cta:'📞 Call PHC Balianta — 104'
+  },
+  flu: {
+    icon:'🤒', title:'Swine Flu Alert — Cuttack Block',
+    loc: () => `${currentDistrict.name} · ${currentDistrict.state} · Updated Yesterday`,
+    body:'Elevated H1N1 activity detected in Cuttack block. 8 confirmed cases, 3 hospitalized. District surveillance teams conducting contact tracing. Antiviral medication available at designated PHCs.',
+    s:[['8','Cases'],['3','Hospitalized'],['1','PHC Alert']], cls:['d','d','w'],
+    cta:'📞 Call Surveillance Unit — 1800-11-1234'
+  },
+  water: {
+    icon:'💧', title:'Water Infrastructure — Active Status',
+    loc: () => `${currentDistrict.name} · ${currentDistrict.state}`,
+    body:'24 of 27 borewell and supply points active. Borewell #7 in Tangi restored at 08:30. 3 borewells in Balianta block under scheduled maintenance — alternate tanker supply arranged. No contamination reports filed.',
+    s:[['24','Active'],['3','Maintenance'],['0','Contaminated']], cls:['g','w','g'],
+    cta:'📋 Report Water Issue — 1916'
+  },
+  phc: {
+    icon:'🏥', title:'PHC Operational Status',
+    loc: () => `${currentDistrict.name} · ${currentDistrict.state}`,
+    body: () => `${currentDistrict.phc} of ${currentDistrict.phc + 2} PHCs are fully operational across ${currentDistrict.name}. 2 PHCs running on reduced hours. Emergency helpline 104 active 24/7. Nearest PHC: 2.1 km from this kiosk.`,
+    s: () => [[currentDistrict.phc+'','Active'],[2,'Reduced Hours'],['104','Emergency']], cls:['g','w','g'],
+    cta:'📞 Find Nearest PHC — 104'
+  },
+};
+
+function openSitrep(type) {
+  const d = sitrepData[type] || sitrepData.fever;
+  document.getElementById('srp-icon').textContent = d.icon;
+  document.getElementById('srp-title').textContent = d.title;
+  document.getElementById('srp-loc').textContent = typeof d.loc === 'function' ? d.loc() : d.loc;
+  document.getElementById('srp-body').textContent = typeof d.body === 'function' ? d.body() : d.body;
+  document.getElementById('srp-cta').textContent = d.cta;
+
+  const stats = typeof d.s === 'function' ? d.s() : d.s;
+  ['srs-1','srs-2','srs-3'].forEach((id, i) => {
+    document.getElementById(id).textContent = stats[i][0];
+    document.getElementById(id+'l').textContent = stats[i][1];
+    document.getElementById(id).parentElement.className = `srp-stat ${d.cls[i]}`;
+  });
+
+  document.getElementById('sitrep').classList.add('visible');
+}
+function closeSitrep() {
+  document.getElementById('sitrep').classList.remove('visible');
+}
+
+// ═══════════════════════════════════════════
+// VOICE
+// ═══════════════════════════════════════════
+let voiceTimer;
+function openVoice() {
+  document.getElementById('voice-ov').classList.add('visible');
+  voiceTimer = setTimeout(closeVoice, 8000);
+}
+function closeVoice() {
+  clearTimeout(voiceTimer);
+  document.getElementById('voice-ov').classList.remove('visible');
+}
+document.getElementById('voice-ov').addEventListener('click', closeVoice);
+
+// ═══════════════════════════════════════════
+// SKELETON LOADER
+// ═══════════════════════════════════════════
+function flashSkeleton() {
+  clearTimeout(skeletonTimer);
+  const sk = document.getElementById('map-skeleton');
+  sk.classList.add('visible');
+  skeletonTimer = setTimeout(() => sk.classList.remove('visible'), 550);
+}
+
+// ═══════════════════════════════════════════
+// ZOOM (mock — translates SVG viewBox)
+// ═══════════════════════════════════════════
+let vbX=0, vbY=0, vbW=620, vbH=430;
+function zoomIn() {
+  if (vbW <= 200) return;
+  const cx = vbX + vbW/2, cy = vbY + vbH/2;
+  vbW *= 0.7; vbH *= 0.7;
+  vbX = cx - vbW/2; vbY = cy - vbH/2;
+  document.getElementById('map-svg').setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${vbH}`);
+  flashSkeleton();
+}
+function zoomOut() {
+  if (vbW >= 900) return;
+  const cx = vbX + vbW/2, cy = vbY + vbH/2;
+  vbW /= 0.7; vbH /= 0.7;
+  vbX = cx - vbW/2; vbY = cy - vbH/2;
+  vbX = Math.max(-50, vbX); vbY = Math.max(-30, vbY);
+  document.getElementById('map-svg').setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${vbH}`);
+  flashSkeleton();
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+applyFrame(4);
+applyKnowledgeLayers();
+</script>
+</body>
+</html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024">
+<title>MoSwasthya Sathi – Kiosk UI Wireframe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@400;700&family=Tiro+Devanagari+Hindi&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red:    #E63946;
+    --blue:   #1D6FA4;
+    --green:  #2A9D5C;
+    --yellow: #FFD60A;
+    --black:  #0D0D0D;
+    --dark:   #111827;
+    --mid:    #1F2D3D;
+    --panel:  #162030;
+    --muted:  #3A4F65;
+    --text:   #E8EFF7;
+    --sub:    #8CA3BA;
+    --accent: #38BDF8;
+    --pulse:  rgba(230,57,70,0.25);
+  }
+
+  body {
+    width: 1024px;
+    height: 600px;
+    background: var(--dark);
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── ZONE 1: INFORMATION CANOPY (top 10%) ─────────────────────────── */
+  #canopy {
+    height: 60px;
+    background: var(--mid);
+    border-bottom: 2px solid var(--muted);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  #branding {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    flex: 0 0 auto;
+  }
+  #branding .odia {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+  #branding .english {
+    font-size: 10px;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .canopy-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* Language Toggle */
+  #lang-toggle {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .lang-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: var(--accent);
+    color: var(--black);
+    border-color: var(--accent);
+  }
+  .lang-btn.inactive {
+    background: transparent;
+    color: var(--sub);
+    border-color: var(--muted);
+  }
+
+  /* District Selector */
+  #district-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--panel);
+    border: 1.5px solid var(--muted);
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  #district-selector .label {
+    font-size: 10px;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  #district-selector .value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  #district-selector .arrow {
+    font-size: 10px;
+    color: var(--sub);
+    margin-left: 4px;
+  }
+
+  /* Spacer */
+  .canopy-spacer { flex: 1; }
+
+  /* Connectivity Badge */
+  #connectivity {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(42,157,92,0.15);
+    border: 1.5px solid var(--green);
+    border-radius: 20px;
+    padding: 4px 12px;
+    flex-shrink: 0;
+  }
+  #connectivity .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  #connectivity .badge-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Time indicator */
+  #time-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--sub);
+    flex-shrink: 0;
+  }
+
+
+  /* ── ZONE 2: INTERACTIVE CORE (middle 80%) ─────────────────────────── */
+  #core {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  /* ── ZONE 2A: MAP (60%) ─────────────────────────────────────────────── */
+  #map-zone {
+    width: 60%;
+    position: relative;
+    background: #0A1628;
+    border-right: 2px solid var(--muted);
+    overflow: hidden;
+  }
+
+  /* Fake map base with grid */
+  #map-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px),
+      radial-gradient(ellipse at 40% 50%, rgba(29,111,164,0.12) 0%, transparent 60%),
+      #0A1628;
+    background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%;
+  }
+
+  /* Heatmap blobs */
+  .heatmap-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(28px);
+    opacity: 0.45;
+    animation: pulse-blob 3s ease-in-out infinite alternate;
+  }
+  @keyframes pulse-blob { from{opacity:0.35;transform:scale(1)} to{opacity:0.6;transform:scale(1.08)} }
+
+  .blob-red   { background: var(--red);   }
+  .blob-amber { background: #F97316;      }
+  .blob-green { background: var(--green); }
+  .blob-blue  { background: var(--blue);  }
+
+  /* Fake "roads" */
+  .road {
+    position: absolute;
+    background: rgba(56,189,248,0.12);
+    border-radius: 2px;
+  }
+
+  /* Map pins */
+  .map-pin {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transform: translate(-50%, -100%);
+    z-index: 5;
+  }
+  .pin-icon {
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    border: 2px solid;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+  }
+  .pin-tail {
+    width: 2px; height: 8px;
+    margin-top: -1px;
+  }
+  .pin-label {
+    font-size: 8px;
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 6px rgba(0,0,0,0.9);
+    white-space: nowrap;
+  }
+
+  .pin-phc .pin-icon  { background: rgba(42,157,92,0.9); border-color: #4ADE80; color: #fff; }
+  .pin-phc .pin-tail  { background: #4ADE80; }
+  .pin-phc .pin-label { color: #4ADE80; }
+
+  .pin-water .pin-icon  { background: rgba(29,111,164,0.9); border-color: var(--accent); color: #fff; }
+  .pin-water .pin-tail  { background: var(--accent); }
+  .pin-water .pin-label { color: var(--accent); }
+
+  .pin-alert .pin-icon  { background: rgba(230,57,70,0.9); border-color: #FF6B6B; color: #fff; animation: pin-pulse 1.5s ease-in-out infinite; }
+  .pin-alert .pin-tail  { background: #FF6B6B; }
+  .pin-alert .pin-label { color: #FF6B6B; }
+  @keyframes pin-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(230,57,70,0.5)} 50%{box-shadow:0 0 0 8px rgba(230,57,70,0)} }
+
+  /* Map label overlay */
+  #map-label {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: rgba(13,20,33,0.85);
+    border: 1px solid var(--muted);
+    border-radius: 8px;
+    padding: 6px 10px;
+    backdrop-filter: blur(6px);
+    z-index: 10;
+  }
+  #map-label .district-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  #map-label .map-subtitle {
+    font-size: 9px;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* Map legend */
+  #map-legend {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(13,20,33,0.85);
+    border: 1px solid var(--muted);
+    border-radius: 8px;
+    padding: 8px 10px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    backdrop-filter: blur(6px);
+  }
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    color: var(--sub);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Map zoom controls */
+  #map-controls {
+    position: absolute;
+    right: 10px;
+    bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 10;
+  }
+  .map-ctrl-btn {
+    width: 36px; height: 36px;
+    background: rgba(31,45,61,0.95);
+    border: 1.5px solid var(--muted);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 300;
+    font-family: monospace;
+    line-height: 1;
+  }
+
+  /* Timeline slider */
+  #timeline-zone {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(13,20,33,0.95);
+    border-top: 1.5px solid var(--muted);
+    padding: 8px 14px 10px;
+    z-index: 10;
+  }
+  #timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  #timeline-header .tl-label {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  #timeline-header .tl-value {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+  }
+  #timeline-slider {
+    width: 100%;
+    height: 12px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(to right, var(--accent) 60%, var(--muted) 60%);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+  }
+  #timeline-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--dark);
+    box-shadow: 0 0 0 2px var(--accent);
+    cursor: grab;
+  }
+  .timeline-ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3px;
+  }
+  .tl-tick {
+    font-size: 8px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+
+  /* ── ZONE 2B: SIDEBAR (40%) ──────────────────────────────────────────── */
+  #sidebar {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    overflow: hidden;
+  }
+
+  /* Tab bar */
+  #tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--muted);
+    flex-shrink: 0;
+  }
+  .tab {
+    flex: 1;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: var(--sub);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: rgba(56,189,248,0.05);
+  }
+
+  /* Dashboard panel */
+  #dashboard-panel {
+    flex: 1;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  .panel-section-title {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    margin-bottom: 2px;
+  }
+
+  /* Stat cards */
+  .stat-card {
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1.5px solid;
+    flex-shrink: 0;
+  }
+  .stat-card.red   { background: rgba(230,57,70,0.1);  border-color: rgba(230,57,70,0.4); }
+  .stat-card.green { background: rgba(42,157,92,0.1);  border-color: rgba(42,157,92,0.4); }
+  .stat-card.blue  { background: rgba(29,111,164,0.1); border-color: rgba(29,111,164,0.4); }
+
+  .stat-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    width: 36px;
+    text-align: center;
+    line-height: 1;
+  }
+  .stat-body { flex: 1; min-width: 0; }
+  .stat-odia {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stat-english {
+    font-size: 9px;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1px;
+    font-family: 'Space Mono', monospace;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    flex-shrink: 0;
+  }
+  .stat-card.red   .stat-value { color: var(--red); }
+  .stat-card.green .stat-value { color: #4ADE80; }
+  .stat-card.blue  .stat-value { color: var(--accent); }
+
+  /* Vaccination card */
+  #vax-card {
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: rgba(255,214,10,0.08);
+    border: 1.5px solid rgba(255,214,10,0.35);
+    flex-shrink: 0;
+  }
+  .vax-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .vax-icon { font-size: 18px; }
+  .vax-title-odia { font-size: 12px; font-weight: 700; color: var(--yellow); }
+  .vax-title-en   { font-size: 9px; color: var(--sub); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+  .vax-date-badge {
+    margin-left: auto;
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .vax-progress-bar {
+    height: 6px;
+    background: var(--muted);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .vax-fill {
+    height: 100%;
+    background: var(--yellow);
+    border-radius: 3px;
+    width: 73%;
+  }
+  .vax-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3px;
+    font-size: 8px;
+    color: var(--sub);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Speak button */
+  #speak-section {
+    padding: 10px 12px 12px;
+    flex-shrink: 0;
+    border-top: 1.5px solid var(--muted);
+  }
+  #speak-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--red);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 0 0 rgba(230,57,70,0.5);
+    animation: speak-pulse 2s ease-in-out infinite;
+  }
+  @keyframes speak-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(230,57,70,0.6); }
+    70%  { box-shadow: 0 0 0 14px rgba(230,57,70,0); }
+    100% { box-shadow: 0 0 0 0 rgba(230,57,70,0); }
+  }
+  .speak-mic {
+    font-size: 24px;
+    line-height: 1;
+  }
+  .speak-text-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .speak-odia {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .speak-english {
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+
+  /* ── ZONE 3: PULSE TICKER (bottom 10%) ───────────────────────────────── */
+  #ticker {
+    height: 36px;
+    background: var(--black);
+    border-top: 2px solid rgba(255,214,10,0.5);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+  }
+  #ticker-label {
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 9px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    z-index: 5;
+    border-right: 2px solid rgba(0,0,0,0.3);
+  }
+  #ticker-track {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+  }
+  #ticker-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    white-space: nowrap;
+    animation: ticker-scroll 30s linear infinite;
+  }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 48px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 400;
+  }
+  .ticker-item.alert { color: var(--yellow); }
+  .ticker-item.info  { color: #93C5FD; }
+  .ticker-item.ok    { color: #6EE7B7; }
+  .ticker-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ticker-item.alert .ticker-dot { background: var(--yellow); }
+  .ticker-item.info  .ticker-dot { background: #60A5FA; }
+  .ticker-item.ok    .ticker-dot { background: #34D399; }
+  .ticker-sep {
+    color: var(--muted);
+    font-size: 14px;
+    margin-right: 48px;
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Structural annotation overlays */
+  .zone-badge {
+    position: absolute;
+    font-size: 8px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Map decorative "fake district outline" */
+  .district-outline {
+    position: absolute;
+    border: 1.5px dashed rgba(56,189,248,0.2);
+    border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+    pointer-events: none;
+  }
+
+  /* Scrolling ticker shadow edges */
+  #ticker-track::before, #ticker-track::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 30px;
+    z-index: 4;
+    pointer-events: none;
+  }
+  #ticker-track::before { left: 0;  background: linear-gradient(to right, var(--black), transparent); }
+  #ticker-track::after  { right: 0; background: linear-gradient(to left, var(--black), transparent); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ZONE 1: INFORMATION CANOPY                                 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<header id="canopy">
+
+  <div id="branding">
+    <span class="odia">ମୋ ସ୍ୱାସ୍ଥ୍ୟ ସାଥୀ</span>
+    <span class="english">MoSwasthya Sathi · Community Health Kiosk</span>
+  </div>
+
+  <div class="canopy-divider"></div>
+
+  <div id="lang-toggle">
+    <div class="lang-btn active">ଓ&nbsp;ଡ଼</div>
+    <div class="lang-btn inactive">EN</div>
+  </div>
+
+  <div class="canopy-divider"></div>
+
+  <div id="district-selector">
+    <div>
+      <div class="label">District</div>
+      <div class="value">Khordha</div>
+    </div>
+    <span class="arrow">▾</span>
+  </div>
+
+  <div class="canopy-spacer"></div>
+
+  <div id="time-display">SUN 22 FEB 2026 · 10:47</div>
+
+  <div class="canopy-divider"></div>
+
+  <div id="connectivity">
+    <div class="dot"></div>
+    <span class="badge-text">Cloud Active</span>
+  </div>
+
+</header>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ZONE 2: INTERACTIVE CORE                                   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<main id="core">
+
+  <!-- ── ZONE 2A: MAP ─────────────────────────────────────────── -->
+  <section id="map-zone">
+    <div id="map-bg"></div>
+
+    <!-- Fake district boundary -->
+    <div class="district-outline" style="top:15%;left:10%;width:75%;height:65%;"></div>
+
+    <!-- Heatmap blobs – colour = risk type -->
+    <!-- RED zone: health alert hotspot -->
+    <div class="heatmap-blob blob-red"   style="width:180px;height:180px;top:18%;left:15%;animation-delay:0s;"></div>
+    <!-- AMBER zone: secondary alert -->
+    <div class="heatmap-blob blob-amber" style="width:130px;height:130px;top:40%;left:55%;animation-delay:1.2s;"></div>
+    <!-- GREEN zones: active PHC coverage -->
+    <div class="heatmap-blob blob-green" style="width:110px;height:110px;top:25%;left:52%;animation-delay:0.6s;opacity:0.3;"></div>
+    <div class="heatmap-blob blob-green" style="width:90px;height:90px;top:55%;left:22%;animation-delay:1.8s;opacity:0.3;"></div>
+    <!-- BLUE zone: water infrastructure -->
+    <div class="heatmap-blob blob-blue"  style="width:100px;height:100px;top:50%;left:68%;animation-delay:0.9s;opacity:0.3;"></div>
+
+    <!-- Fake roads -->
+    <div class="road" style="top:48%;left:0;width:100%;height:4px;transform:rotate(-3deg);"></div>
+    <div class="road" style="top:0;left:38%;width:4px;height:100%;transform:rotate(5deg);"></div>
+
+    <!-- MAP PINS ──────────────────────────────── -->
+
+    <!-- PHC (Green) -->
+    <div class="map-pin pin-phc" style="left:35%;top:44%">
+      <div class="pin-icon">+ PHC</div>
+      <div class="pin-tail"></div>
+      <div class="pin-label">Balianta PHC</div>
+    </div>
+
+    <div class="map-pin pin-phc" style="left:62%;top:58%">
+      <div class="pin-icon">+ PHC</div>
+      <div class="pin-tail"></div>
+      <div class="pin-label">Tangi PHC</div>
+    </div>
+
+    <!-- Water Points (Blue) -->
+    <div class="map-pin pin-water" style="left:72%;top:55%">
+      <div class="pin-icon">≈ H₂O</div>
+      <div class="pin-tail"></div>
+      <div class="pin-label">Water Point</div>
+    </div>
+
+    <div class="map-pin pin-water" style="left:24%;top:62%">
+      <div class="pin-icon">≈ H₂O</div>
+      <div class="pin-tail"></div>
+      <div class="pin-label">Borewell #4</div>
+    </div>
+
+    <!-- Alert (Red – pulsing) -->
+    <div class="map-pin pin-alert" style="left:22%;top:32%">
+      <div class="pin-icon">⚠ ALERT</div>
+      <div class="pin-tail"></div>
+      <div class="pin-label">Fever Cluster</div>
+    </div>
+
+    <div class="map-pin pin-alert" style="left:58%;top:45%">
+      <div class="pin-icon">⚠ ALERT</div>
+      <div class="pin-tail"></div>
+      <div class="pin-label">Road Blocked</div>
+    </div>
+
+    <!-- District name overlay -->
+    <div id="map-label">
+      <div class="district-name">Khordha District</div>
+      <div class="map-subtitle">Neighborhood Intelligence View</div>
+    </div>
+
+    <!-- Legend -->
+    <div id="map-legend">
+      <div class="legend-row"><div class="legend-dot" style="background:var(--red)"></div>Health Alert</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#F97316"></div>High Risk Zone</div>
+      <div class="legend-row"><div class="legend-dot" style="background:var(--green)"></div>PHC Coverage</div>
+      <div class="legend-row"><div class="legend-dot" style="background:var(--blue)"></div>Water / Road</div>
+    </div>
+
+    <!-- Zoom buttons -->
+    <div id="map-controls">
+      <div class="map-ctrl-btn">+</div>
+      <div class="map-ctrl-btn">−</div>
+    </div>
+
+    <!-- Timeline -->
+    <div id="timeline-zone">
+      <div id="timeline-header">
+        <span class="tl-label">📅 Neighborhood Memory</span>
+        <span class="tl-value">Jun 2025</span>
+      </div>
+      <input type="range" id="timeline-slider" min="0" max="100" value="60">
+      <div class="timeline-ticks">
+        <span class="tl-tick">Jan 2025</span>
+        <span class="tl-tick">Apr</span>
+        <span class="tl-tick">Jul</span>
+        <span class="tl-tick">Oct</span>
+        <span class="tl-tick">Jan 2026</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── ZONE 2B: SIDEBAR ────────────────────────────────────── -->
+  <aside id="sidebar">
+
+    <!-- Tab bar -->
+    <div id="tab-bar">
+      <div class="tab active">📊 Dashboard</div>
+      <div class="tab">💬 MoSathi Chat</div>
+    </div>
+
+    <!-- Dashboard content -->
+    <div id="dashboard-panel">
+
+      <div class="panel-section-title">Local Snapshot — Khordha</div>
+
+      <!-- STAT 1: Health Alerts (RED) -->
+      <div class="stat-card red">
+        <div class="stat-icon">🏥</div>
+        <div class="stat-body">
+          <div class="stat-odia">ସ୍ୱାସ୍ଥ୍ୟ ସତର୍କତା</div>
+          <div class="stat-english">Active Health Alerts</div>
+        </div>
+        <div class="stat-value">7</div>
+      </div>
+
+      <!-- STAT 2: PHCs Active (GREEN) -->
+      <div class="stat-card green">
+        <div class="stat-icon">💉</div>
+        <div class="stat-body">
+          <div class="stat-odia">PHC ସଚଳ ଅଛି</div>
+          <div class="stat-english">PHCs Operational</div>
+        </div>
+        <div class="stat-value">12</div>
+      </div>
+
+      <!-- STAT 3: Water Points (BLUE) -->
+      <div class="stat-card blue">
+        <div class="stat-icon">💧</div>
+        <div class="stat-body">
+          <div class="stat-odia">ଜଳ ବିନ୍ଦୁ</div>
+          <div class="stat-english">Water Points Active</div>
+        </div>
+        <div class="stat-value">24</div>
+      </div>
+
+      <!-- Vaccination Drive -->
+      <div id="vax-card">
+        <div class="vax-header">
+          <span class="vax-icon">💉</span>
+          <div>
+            <div class="vax-title-odia">ଟୀକାକରଣ ଡ୍ରାଇଭ</div>
+            <div class="vax-title-en">Vaccination Drive</div>
+          </div>
+          <div class="vax-date-badge">Feb 27</div>
+        </div>
+        <div class="vax-progress-bar"><div class="vax-fill"></div></div>
+        <div class="vax-meta">
+          <span>Coverage: 73%</span>
+          <span>Target: 2,400 children</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- "Talk to MoSathi" CTA -->
+    <div id="speak-section">
+      <button id="speak-btn">
+        <span class="speak-mic">🎙</span>
+        <div class="speak-text-stack">
+          <span class="speak-odia">ମୋ ସାଥୀ ସହ କଥା ହୁଅ</span>
+          <span class="speak-english">Talk to MoSathi</span>
+        </div>
+      </button>
+    </div>
+
+  </aside>
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ZONE 3: NEIGHBORHOOD PULSE TICKER                          -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<footer id="ticker">
+  <div id="ticker-label">LIVE</div>
+  <div id="ticker-track">
+    <div id="ticker-content">
+      <span class="ticker-item alert"><span class="ticker-dot"></span>⚠ Fever outbreak cluster reported — Balianta Block — 23 cases confirmed</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item info"><span class="ticker-dot"></span>💧 Borewell #7 repaired — Tangi — Water supply restored</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item ok"><span class="ticker-dot"></span>💉 Vaccination camp — Khordha Block — Feb 27, 09:00–16:00</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item alert"><span class="ticker-dot"></span>⚠ NH-16 road blocked near Bhubaneswar — Diversion via SH-12</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item info"><span class="ticker-dot"></span>📋 ASHA worker training — Jatni — Feb 25-26 — All workers report 08:00</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item ok"><span class="ticker-dot"></span>✅ New PHC operational — Bolagarh — 6 days/week — Emergency: +91-9437-XXXXXX</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item alert"><span class="ticker-dot"></span>⚠ Fever outbreak cluster reported — Balianta Block — 23 cases confirmed</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item info"><span class="ticker-dot"></span>💧 Borewell #7 repaired — Tangi — Water supply restored</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item ok"><span class="ticker-dot"></span>💉 Vaccination camp — Khordha Block — Feb 27, 09:00–16:00</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const d = `${days[now.getDay()]} ${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    document.getElementById('time-display').textContent = `${d} · ${t}`;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // Timeline slider label
+  const slider = document.getElementById('timeline-slider');
+  const tlValue = document.querySelector('.tl-value');
+  const months = ['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026'];
+  slider.addEventListener('input', () => {
+    const idx = Math.round(slider.value / 100 * (months.length - 1));
+    tlValue.textContent = months[idx];
+    const pct = slider.value;
+    slider.style.background = `linear-gradient(to right, var(--accent) ${pct}%, var(--muted) ${pct}%)`;
+  });
+
+  // Tab switching
+  document.querySelectorAll('.tab').forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // Speak button interaction
+  document.getElementById('speak-btn').addEventListener('click', () => {
+    document.getElementById('speak-btn').style.background = '#B91C1C';
+    setTimeout(() => document.getElementById('speak-btn').style.background = 'var(--red)', 300);
+  });
+</script>
+</body>
+</html>
