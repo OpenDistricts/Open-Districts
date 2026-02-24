@@ -5,31 +5,31 @@
 <meta name="viewport" content="width=1024">
 <title>MoSwasthya Sathi – Kiosk UI Wireframe</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@400;700&family=Tiro+Devanagari+Hindi&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@400;700&family=Tiro+Devanagari+Hindi&family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@400;500;600;700&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --red:    #E63946;
-    --blue:   #1D6FA4;
-    --green:  #2A9D5C;
-    --yellow: #FFD60A;
-    --black:  #0D0D0D;
-    --dark:   #111827;
-    --mid:    #1F2D3D;
-    --panel:  #162030;
-    --muted:  #3A4F65;
-    --text:   #E8EFF7;
-    --sub:    #8CA3BA;
-    --accent: #38BDF8;
-    --pulse:  rgba(230,57,70,0.25);
+    :root {
+    --red:    #DC2626; /* accessible red */
+    --blue:   #2563EB; /* accessible blue */
+    --green:  #059669; /* accessible emerald */
+    --yellow: #D97706; /* accessible amber */
+    --black:  #1F2937; /* slate 800 */
+    --dark:   #F8F9FA; /* calm off-white canvas */
+    --mid:    #FFFFFF; /* white panels */
+    --panel:  #FFFFFF; /* white panels */
+    --muted:  #E5E7EB; /* light gray borders */
+    --text:   #111827; /* dark text */
+    --sub:    #4B5563; /* medium gray text */
+    --accent: #2563EB; /* primary brand color */
+    --pulse:  rgba(220,38,38,0.15);
   }
 
   body {
     width: 1024px;
     height: 600px;
     background: var(--dark);
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: 'Atkinson Hyperlegible', sans-serif;
     color: var(--text);
     display: flex;
     flex-direction: column;
@@ -67,7 +67,7 @@
     color: var(--sub);
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
   }
 
   .canopy-divider {
@@ -85,7 +85,7 @@
   }
   .lang-btn {
     padding: 5px 12px;
-    border-radius: 6px;
+    border-radius: 16px;
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
@@ -94,7 +94,7 @@
   }
   .lang-btn.active {
     background: var(--accent);
-    color: var(--black);
+    color: #FFFFFF;
     border-color: var(--accent);
   }
   .lang-btn.inactive {
@@ -109,7 +109,7 @@
     align-items: center;
     gap: 6px;
     background: var(--panel);
-    border: 1.5px solid var(--muted);
+    border: 2px solid var(--muted);
     border-radius: 8px;
     padding: 6px 12px;
     cursor: pointer;
@@ -149,7 +149,7 @@
   #connectivity .dot {
     width: 7px; height: 7px;
     border-radius: 50%;
-    background: var(--green);
+    background: #34D399;
     animation: blink 2s infinite;
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -157,12 +157,12 @@
     font-size: 11px;
     font-weight: 600;
     color: var(--green);
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
   }
 
   /* Time indicator */
   #time-display {
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     font-size: 12px;
     color: var(--sub);
     flex-shrink: 0;
@@ -180,8 +180,8 @@
   #map-zone {
     width: 60%;
     position: relative;
-    background: #0A1628;
-    border-right: 2px solid var(--muted);
+    background: var(--dark);
+    border-right: 1px solid var(--muted);
     overflow: hidden;
   }
 
@@ -190,10 +190,10 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px),
-      radial-gradient(ellipse at 40% 50%, rgba(29,111,164,0.12) 0%, transparent 60%),
-      #0A1628;
+      linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px),
+      radial-gradient(ellipse at 40% 50%, rgba(37,99,235,0.08) 0%, transparent 60%),
+      var(--dark);
     background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%;
   }
 
@@ -209,13 +209,13 @@
 
   .blob-red   { background: var(--red);   }
   .blob-amber { background: #F97316;      }
-  .blob-green { background: var(--green); }
-  .blob-blue  { background: var(--blue);  }
+  .blob-green { background: #34D399; }
+  .blob-blue  { background: #60A5FA;  }
 
   /* Fake "roads" */
   .road {
     position: absolute;
-    background: rgba(56,189,248,0.12);
+    background: rgba(37,99,235,0.15);
     border-radius: 2px;
   }
 
@@ -231,15 +231,15 @@
   }
   .pin-icon {
     padding: 5px 8px;
-    border-radius: 6px;
+    border-radius: 16px;
     font-size: 10px;
     font-weight: 700;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     border: 2px solid;
     line-height: 1;
     text-align: center;
     white-space: nowrap;
-    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
   }
   .pin-tail {
     width: 2px; height: 8px;
@@ -250,30 +250,30 @@
     font-weight: 600;
     margin-top: 2px;
     letter-spacing: 0.5px;
-    text-shadow: 0 0 6px rgba(0,0,0,0.9);
+    text-shadow: 0 1px 2px rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.9);
     white-space: nowrap;
   }
 
-  .pin-phc .pin-icon  { background: rgba(42,157,92,0.9); border-color: #4ADE80; color: #fff; }
+  .pin-phc .pin-icon  { background: rgba(42,157,92,0.9); border-color: var(--green); color: #fff; }
   .pin-phc .pin-tail  { background: #4ADE80; }
-  .pin-phc .pin-label { color: #4ADE80; }
+  .pin-phc .pin-label { color: var(--green); }
 
-  .pin-water .pin-icon  { background: rgba(29,111,164,0.9); border-color: var(--accent); color: #fff; }
+  .pin-water .pin-icon  { background: rgba(43,108,176,0.95); border-color: var(--accent); color: #FFF; }
   .pin-water .pin-tail  { background: var(--accent); }
   .pin-water .pin-label { color: var(--accent); }
 
-  .pin-alert .pin-icon  { background: rgba(230,57,70,0.9); border-color: #FF6B6B; color: #fff; animation: pin-pulse 1.5s ease-in-out infinite; }
+  .pin-alert .pin-icon  { background: rgba(230,57,70,0.9); border-color: var(--red); color: #fff; animation: pin-pulse 1.5s ease-in-out infinite; }
   .pin-alert .pin-tail  { background: #FF6B6B; }
-  .pin-alert .pin-label { color: #FF6B6B; }
+  .pin-alert .pin-label { color: var(--red); }
   @keyframes pin-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(230,57,70,0.5)} 50%{box-shadow:0 0 0 8px rgba(230,57,70,0)} }
 
   /* Map label overlay */
   #map-label {
     position: absolute;
     top: 10px; left: 10px;
-    background: rgba(13,20,33,0.85);
-    border: 1px solid var(--muted);
-    border-radius: 8px;
+    background: rgba(255,255,255,0.98);
+    border: 2px solid var(--muted); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 16px;
     padding: 6px 10px;
     backdrop-filter: blur(6px);
     z-index: 10;
@@ -282,7 +282,7 @@
     font-size: 12px;
     font-weight: 700;
     color: var(--accent);
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
   }
@@ -297,9 +297,9 @@
   #map-legend {
     position: absolute;
     top: 10px; right: 10px;
-    background: rgba(13,20,33,0.85);
-    border: 1px solid var(--muted);
-    border-radius: 8px;
+    background: rgba(255,255,255,0.98);
+    border: 2px solid var(--muted); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 16px;
     padding: 8px 10px;
     z-index: 10;
     display: flex;
@@ -313,7 +313,7 @@
     gap: 6px;
     font-size: 9px;
     color: var(--sub);
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.8px;
   }
@@ -335,9 +335,9 @@
   }
   .map-ctrl-btn {
     width: 36px; height: 36px;
-    background: rgba(31,45,61,0.95);
-    border: 1.5px solid var(--muted);
-    border-radius: 6px;
+    background: rgba(255,255,255,0.98);
+    border: 2px solid var(--muted); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -353,7 +353,7 @@
   #timeline-zone {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    background: rgba(13,20,33,0.95);
+    background: rgba(255,255,255,0.98);
     border-top: 1.5px solid var(--muted);
     padding: 8px 14px 10px;
     z-index: 10;
@@ -366,7 +366,7 @@
   }
   #timeline-header .tl-label {
     font-size: 9px;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     color: var(--sub);
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -375,7 +375,7 @@
     font-size: 10px;
     font-weight: 700;
     color: var(--accent);
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
   }
   #timeline-slider {
     width: 100%;
@@ -383,7 +383,7 @@
     -webkit-appearance: none;
     appearance: none;
     background: linear-gradient(to right, var(--accent) 60%, var(--muted) 60%);
-    border-radius: 6px;
+    border-radius: 16px;
     outline: none;
     cursor: pointer;
   }
@@ -404,7 +404,7 @@
   .tl-tick {
     font-size: 8px;
     color: var(--muted);
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
   }
 
 
@@ -429,7 +429,7 @@
     text-align: center;
     font-size: 11px;
     font-weight: 600;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
@@ -456,7 +456,7 @@
 
   .panel-section-title {
     font-size: 9px;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     color: var(--sub);
     text-transform: uppercase;
     letter-spacing: 1.8px;
@@ -465,17 +465,19 @@
 
   /* Stat cards */
   .stat-card {
-    border-radius: 10px;
-    padding: 10px 12px;
+    background: var(--panel);
+    border-radius: 12px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
     gap: 12px;
-    border: 1.5px solid;
+    border: 2px solid var(--muted);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     flex-shrink: 0;
   }
-  .stat-card.red   { background: rgba(230,57,70,0.1);  border-color: rgba(230,57,70,0.4); }
-  .stat-card.green { background: rgba(42,157,92,0.1);  border-color: rgba(42,157,92,0.4); }
-  .stat-card.blue  { background: rgba(29,111,164,0.1); border-color: rgba(29,111,164,0.4); }
+  .stat-card.red { border-left: 6px solid var(--red); }
+  .stat-card.green { border-left: 6px solid var(--green); }
+  .stat-card.blue { border-left: 6px solid var(--accent); }
 
   .stat-icon {
     font-size: 22px;
@@ -499,24 +501,26 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-top: 1px;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
   }
   .stat-value {
     font-size: 22px;
     font-weight: 700;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     flex-shrink: 0;
   }
-  .stat-card.red   .stat-value { color: var(--red); }
-  .stat-card.green .stat-value { color: #4ADE80; }
-  .stat-card.blue  .stat-value { color: var(--accent); }
+  .stat-card.red { border-left: 6px solid var(--red); }
+  .stat-card.green { border-left: 6px solid var(--green); }
+  .stat-card.blue { border-left: 6px solid var(--accent); }
 
   /* Vaccination card */
   #vax-card {
-    border-radius: 10px;
-    padding: 10px 12px;
-    background: rgba(255,214,10,0.08);
-    border: 1.5px solid rgba(255,214,10,0.35);
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: var(--panel);
+    border: 2px solid var(--muted);
+    border-left: 6px solid var(--yellow);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     flex-shrink: 0;
   }
   .vax-header {
@@ -527,14 +531,14 @@
   }
   .vax-icon { font-size: 18px; }
   .vax-title-odia { font-size: 12px; font-weight: 700; color: var(--yellow); }
-  .vax-title-en   { font-size: 9px; color: var(--sub); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+  .vax-title-en   { font-size: 9px; color: var(--sub); font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
   .vax-date-badge {
     margin-left: auto;
-    background: var(--yellow);
+    background: #F87171;
     color: var(--black);
     font-size: 10px;
     font-weight: 700;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     padding: 3px 8px;
     border-radius: 4px;
   }
@@ -546,7 +550,7 @@
   }
   .vax-fill {
     height: 100%;
-    background: var(--yellow);
+    background: #F87171;
     border-radius: 3px;
     width: 73%;
   }
@@ -556,7 +560,7 @@
     margin-top: 3px;
     font-size: 8px;
     color: var(--sub);
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
   }
 
   /* Speak button */
@@ -567,19 +571,18 @@
   }
   #speak-btn {
     width: 100%;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: 16px;
     background: var(--red);
+    color: #FFFFFF;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 0 0 rgba(230,57,70,0.5);
-    animation: speak-pulse 2s ease-in-out infinite;
+    gap: 12px;
+    box-shadow: 0 4px 6px rgba(220,38,38,0.25);
+    transition: transform 0.1s;
   }
   @keyframes speak-pulse {
     0%   { box-shadow: 0 0 0 0 rgba(230,57,70,0.6); }
@@ -603,8 +606,8 @@
   }
   .speak-english {
     font-size: 9px;
-    color: rgba(255,255,255,0.7);
-    font-family: 'Space Mono', monospace;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Outfit', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1.5px;
   }
@@ -613,8 +616,8 @@
   /* ── ZONE 3: PULSE TICKER (bottom 10%) ───────────────────────────────── */
   #ticker {
     height: 36px;
-    background: var(--black);
-    border-top: 2px solid rgba(255,214,10,0.5);
+    background: #1A202C;
+    border-top: 2px solid var(--muted);
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -622,11 +625,11 @@
     position: relative;
   }
   #ticker-label {
-    background: var(--yellow);
+    background: #F87171;
     color: var(--black);
     font-size: 9px;
     font-weight: 700;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     padding: 0 10px;
@@ -660,18 +663,20 @@
     gap: 8px;
     margin-right: 48px;
     font-size: 11px;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     font-weight: 400;
   }
-  .ticker-item.alert { color: var(--yellow); }
-  .ticker-item.info  { color: #93C5FD; }
-  .ticker-item.ok    { color: #6EE7B7; }
+  .ticker-item.alert { color: #FECACA; } /* light red */
+  .ticker-item.info  { color: #BFDBFE; } /* light blue */
+  .ticker-item.ok    { color: #A7F3D0; } /* light green */
+  .ticker-item       { color: #F3F4F6; } /* base text */
+  .ticker-sep        { color: #6B7280; } /* subtle separators */
   .ticker-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
     flex-shrink: 0;
   }
-  .ticker-item.alert .ticker-dot { background: var(--yellow); }
+  .ticker-item.alert .ticker-dot { background: #F87171; }
   .ticker-item.info  .ticker-dot { background: #60A5FA; }
   .ticker-item.ok    .ticker-dot { background: #34D399; }
   .ticker-sep {
@@ -679,14 +684,14 @@
     font-size: 14px;
     margin-right: 48px;
     display: inline-block;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
   }
 
   /* Structural annotation overlays */
   .zone-badge {
     position: absolute;
     font-size: 8px;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Outfit', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
     opacity: 0.4;
@@ -711,8 +716,8 @@
     z-index: 4;
     pointer-events: none;
   }
-  #ticker-track::before { left: 0;  background: linear-gradient(to right, var(--black), transparent); }
-  #ticker-track::after  { right: 0; background: linear-gradient(to left, var(--black), transparent); }
+  #ticker-track::before { left: 0;  background: linear-gradient(to right, #1A202C, transparent); }
+  #ticker-track::after  { right: 0; background: linear-gradient(to left, #1A202C, transparent); }
 </style>
 </head>
 <body>
@@ -835,7 +840,7 @@
     <!-- Legend -->
     <div id="map-legend">
       <div class="legend-row"><div class="legend-dot" style="background:var(--red)"></div>Health Alert</div>
-      <div class="legend-row"><div class="legend-dot" style="background:#F97316"></div>High Risk Zone</div>
+      <div class="legend-row"><div class="legend-dot" style="background:var(--yellow)"></div>High Risk Zone</div>
       <div class="legend-row"><div class="legend-dot" style="background:var(--green)"></div>PHC Coverage</div>
       <div class="legend-row"><div class="legend-dot" style="background:var(--blue)"></div>Water / Road</div>
     </div>

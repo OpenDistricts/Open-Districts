@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoSwasthya Sathi Prototypes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@400;500;600&display=swap');
+
+        :root {
+            --bg-color: #FDFBF7;
+            --text-main: #1F2937;
+            --text-muted: #4B5563;
+            --card-bg: #FFFFFF;
+            --accent: #2B6CB0;
+            --border: #E5E7EB;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            margin: 0;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.6;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.05);
+            border-color: var(--accent);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        .card-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            flex-grow: 1;
+            margin-bottom: 24px;
+            line-height: 1.5;
+            margin-top: 0;
+        }
+
+        .card-button {
+            display: inline-block;
+            background-color: var(--bg-color);
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: fit-content;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .card:hover .card-button {
+            background-color: var(--accent);
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>MoSwasthya Sathi</h1>
+        <p>Interactive prototypes for the community health kiosk interface. Select a version below to view it.</p>
+    </header>
+
+    <div class="container">
+        <!-- V1 Card -->
+        <a href="moswasthya-sathi-v1.html" class="card">
+            <div class="card-header">
+                <h2 class="card-title">Version 1</h2>
+            </div>
+            <p class="card-desc">Initial kiosk UI wireframe featuring a top canopy, map overview, and neighborhood
+                memory timeline.</p>
+            <span class="card-button">View V1</span>
+        </a>
+
+        <!-- V2 Card -->
+        <a href="moswasthya-sathi-v2.html" class="card">
+            <div class="card-header">
+                <h2 class="card-title">Version 2</h2>
+            </div>
+            <p class="card-desc">Expanded interface with new components and deeper exploration of localized healthcare
+                data.</p>
+            <span class="card-button">View V2</span>
+        </a>
+
+        <!-- V3 Card -->
+        <a href="moswasthya-sathi-v3.html" class="card">
+            <div class="card-header">
+                <h2 class="card-title">Version 3</h2>
+            </div>
+            <p class="card-desc">Further refined UI and features, focusing on regional metrics, reporting accessibility
+                and presentation.</p>
+            <span class="card-button">View V3</span>
+        </a>
+    </div>
+
+</body>
+
+</html>
