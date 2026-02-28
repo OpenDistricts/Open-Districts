@@ -107,9 +107,9 @@ button:focus-visible {
   left: 0;
   right: 0;
   bottom: 60px;
-  /* 60px = time axis */
   width: 100vw;
-  /* Leaflet container. Width NEVER changes. */
+  z-index: 10;
+  /* Trap Leaflet's internal z-indexes (400+) */
 }
 
 /* Leaflet tile desaturation */
@@ -131,6 +131,13 @@ button:focus-visible {
   transition: transform 200ms ease-out;
   display: flex;
   flex-direction: column;
+  /* overflow:hidden removed — #tl-sliver must protrude at right:-24px */
+  overflow: visible;
+}
+
+/* Clip overflow only on the internal scrollable area, not the entire panel */
+#tl-header,
+#tl-scroll {
   overflow: hidden;
 }
 
@@ -430,41 +437,7 @@ button:focus-visible {
   border-color: var(--ink-mid);
 }
 
-/* Collapse sliver — visible when panel is hidden */
-#tl-sliver {
-  position: absolute;
-  left: -1px;
-  /* peek out */
-  top: 0;
-  bottom: 0;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--white);
-  border-right: 1.5px solid rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms;
-  z-index: 1;
-}
 
-/* The spine line shows in the sliver as breadcrumb */
-#tl-sliver::before {
-  content: "";
-  position: absolute;
-  left: 11px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--rule);
-}
-
-#timeline-panel.hidden #tl-sliver {
-  opacity: 1;
-  pointer-events: auto;
-}
 
 /* Scroll area */
 #tl-scroll {
@@ -848,8 +821,8 @@ button:focus-visible {
 #map.env-active .env-rain {
   opacity: 1;
   background: repeating-linear-gradient(175deg,
-      transparent 0px, transparent 8px,
-      rgba(150, 180, 210, 0.08) 8px, rgba(150, 180, 210, 0.08) 9px);
+      transparent 0px, transparent 6px,
+      rgba(130, 170, 210, 0.28) 6px, rgba(130, 170, 210, 0.28) 7.5px);
   animation: rain-fall 0.8s linear infinite;
   /* 1.25 Hz — compliant */
   z-index: 4;
@@ -867,8 +840,8 @@ button:focus-visible {
 
 #map.env-active .env-haze {
   opacity: 1;
-  background: radial-gradient(ellipse 80% 60% at 70% 30%,
-      rgba(200, 185, 140, 0.18) 0%, transparent 70%);
+  background: radial-gradient(ellipse 90% 70% at 65% 35%,
+      rgba(190, 170, 110, 0.45) 0%, rgba(180, 160, 100, 0.15) 50%, transparent 75%);
   animation: haze-shift 5s ease-in-out infinite alternate;
   /* 0.1 Hz — compliant */
   z-index: 3;

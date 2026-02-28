@@ -15,10 +15,14 @@ let _ctx;
 export function init(ctx) {
     _ctx = ctx;
 
-    document.getElementById("tb-ai-btn").addEventListener("click", () => _open());
+    // GUIDED AI button — symmetric toggle (opens when closed, closes when open)
+    document.getElementById("tb-ai-btn").addEventListener("click", () => {
+        const panel = document.getElementById("ai-panel");
+        panel.classList.contains("open") ? _close() : _open();
+    });
+
+    // Close button — always closes
     document.getElementById("ai-close-btn").addEventListener("click", () => _close());
-    document.getElementById("ai-sliver").addEventListener("click", () => _close());
-    document.getElementById("ai-sliver").addEventListener("keydown", e => { if (e.key === "Enter") _close(); });
 
     document.querySelectorAll(".intent-card").forEach(card => {
         card.addEventListener("click", () => _showResult(card.getAttribute("data-intent")));

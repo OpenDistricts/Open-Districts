@@ -30,6 +30,10 @@
   ═══════════════════════════════════════════════════════════════════════ -->
     <header id="topbar">
 
+        <!-- 0. Timeline toggle (always visible — symmetric open/close) -->
+        <button id="tb-timeline-btn" class="tb-btn" aria-label="Toggle timeline panel" aria-expanded="true">&#9776;
+            TIMELINE</button>
+
         <!-- 1. Logo -->
         <span id="tb-logo">OpenDistricts</span>
 
@@ -104,9 +108,6 @@
                 aria-expanded="true">&#8249;</button>
         </div>
 
-        <!-- Collapse sliver — visible when panel is hidden, tap to re-expand -->
-        <div id="tl-sliver" aria-label="Expand timeline" role="button" tabindex="0"></div>
-
         <!-- Spine scroll area -->
         <div id="tl-scroll" role="list" aria-label="Events list">
             <div class="tl-spine" id="tl-spine">
@@ -122,8 +123,7 @@
   ═══════════════════════════════════════════════════════════════════════ -->
     <aside id="ai-panel" aria-label="Guided Intelligence panel">
 
-        <!-- Collapse sliver (left side of panel, always visible when open) -->
-        <div id="ai-sliver" aria-label="Collapse AI panel" role="button" tabindex="0">&#8250;</div>
+
 
         <!-- Panel header -->
         <div id="ai-header">

@@ -167,20 +167,34 @@ function _sevLabel(s) {
 // ── Collapse ──────────────────────────────────────────────────────
 function _initCollapse() {
     const panel = document.getElementById("timeline-panel");
-    const collapseBtn = document.getElementById("tl-collapse-btn");
-    const sliver = document.getElementById("tl-sliver");
+    const topBarBtn = document.getElementById("tb-timeline-btn");
+    const inPanelBtn = document.getElementById("tl-collapse-btn");
 
-    const toggle = () => {
-        _ctx.state.manuallyCollapsed = !_ctx.state.manuallyCollapsed;
-        panel.classList.toggle("hidden", _ctx.state.manuallyCollapsed);
-        collapseBtn.setAttribute("aria-expanded", String(!_ctx.state.manuallyCollapsed));
-        _ctx.emit("timeline:collapseChanged", { collapsed: _ctx.state.manuallyCollapsed });
+    const open = () => {
+        _ctx.state.manuallyCollapsed = false;
+        panel.classList.remove("hidden");
+        topBarBtn?.setAttribute("aria-expanded", "true");
+        inPanelBtn?.setAttribute("aria-expanded", "true");
+        _ctx.emit("timeline:collapseChanged", { collapsed: false });
     };
 
-    collapseBtn.addEventListener("click", toggle);
-    sliver.addEventListener("click", toggle);
-    sliver.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") toggle(); });
+    const close = () => {
+        _ctx.state.manuallyCollapsed = true;
+        panel.classList.add("hidden");
+        topBarBtn?.setAttribute("aria-expanded", "false");
+        inPanelBtn?.setAttribute("aria-expanded", "false");
+        _ctx.emit("timeline:collapseChanged", { collapsed: true });
+    };
+
+    // Top-bar button: always visible — symmetric toggle
+    topBarBtn?.addEventListener("click", () => {
+        _ctx.state.manuallyCollapsed ? open() : close();
+    });
+
+    // In-panel header button: acts as close-only (panel visible when this is reachable)
+    inPanelBtn?.addEventListener("click", close);
 }
+
 
 // ── Blank spine tap → clear focus ────────────────────────────────
 function _initSpineTap() {
