@@ -459,11 +459,12 @@ function _showStatsPanel(district) {
     // Generate pseudo-population based on name string length for demo realism
     popEl.textContent = Math.floor(10 + (district.name.length * 2.3)) + " Lakh";
 
-    alertsEl.textContent = district.activeAlertCount;
-    if (district.activeAlertCount === 0) {
+    if (!district.dataPoints || district.dataPoints === 0) {
+        alertsEl.textContent = "No Data";
         alertsEl.classList.remove("danger-text");
-        alertsEl.style.color = "var(--ok)";
+        alertsEl.style.color = "rgba(255,255,255,0.4)";
     } else {
+        alertsEl.textContent = district.dataPoints;
         alertsEl.classList.add("danger-text");
         alertsEl.style.color = "";
     }

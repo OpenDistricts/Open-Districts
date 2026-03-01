@@ -295,7 +295,7 @@ export const MOCK_REGIONS = {
     // Surat tehsils
     "surat": [
         { id: "surat-city", name: "Surat City" },
-        { id: "choryasi", name: "Choryasi" },
+        { id: "chorasi", name: "Choryasi" },
         { id: "olpad", name: "Olpad" },
         { id: "bardoli", name: "Bardoli" },
         { id: "kamrej", name: "Kamrej" },

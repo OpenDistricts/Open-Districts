@@ -28,7 +28,7 @@ function _initLeaflet() {
         zoomControl: false,
         doubleClickZoom: false,
         minZoom: 10,
-        maxZoom: 15,
+        maxZoom: 19,
         scrollWheelZoom: true,
         zoomSnap: 0.25,
         zoomDelta: 0.5,
@@ -83,8 +83,12 @@ export async function loadDistrictGeo(district, events) {
     _map.fitBounds(bounds, { padding: [20, 20] });
 
     // Prevent zooming out past the district or panning away to other states
-    _map.setMaxBounds(bounds.pad(0.05));
-    _map.setMinZoom(_map.getBoundsZoom(bounds, false) - 0.5);
+    const padBounds = bounds.pad(0.05);
+    _map.setMaxBounds(padBounds);
+
+    // Set minZoom exactly to the level that fits the padded bounds 
+    // without subtracting extra zoom levels to keep the map strictly caged.
+    _map.setMinZoom(_map.getBoundsZoom(padBounds, false));
 
     // Try to load GeoJSON — falls back to mock grid in geo-service
     const geoData = await _ctx.ds.getGeoJSON(district.geoJsonUrl);

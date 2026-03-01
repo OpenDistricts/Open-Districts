@@ -23,7 +23,7 @@ export async function loadGeoJSON(url) {
 
     // Hardcoded regex for files known to safely exist on disk.
     // Prevents throwing standard 404s in the browser devtools console!
-    const KNOWN_GEOJSON_PATTERN = /india-states(-simplified)?\.geojson|\/geo\/[A-Z]{2}\.geojson|\/HR\/gurugram\.geojson/;
+    const KNOWN_GEOJSON_PATTERN = /india-states(-simplified)?\.geojson|\/geo\/[A-Z]{2}(\/.*)?\.geojson/;
     if (!KNOWN_GEOJSON_PATTERN.test(url)) {
         console.info(`[GeoService] Auto-stubbing geometry grid for unresolved file: ${url}`);
         const mock = _getMockGeometry(url);

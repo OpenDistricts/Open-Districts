@@ -879,7 +879,7 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  z-index: 20;
+  z-index: 1000;
 }
 
 .zoom-btn {
