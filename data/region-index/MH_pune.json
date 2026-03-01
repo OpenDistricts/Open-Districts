@@ -1,0 +1,115 @@
+{
+  "districtId": "pune",
+  "stateId": "MH",
+  "regions": [
+    {
+      "id": "pune-city",
+      "name": "Pune City",
+      "aliases": [
+        "Shivajinagar",
+        "Aundh",
+        "Kalyani Nagar",
+        "Yerawada",
+        "Kothrud",
+        "Peth areas",
+        "Deccan",
+        "Hadapsar",
+        "Viman Nagar",
+        "Baner"
+      ],
+      "centroid": {
+        "lat": 18.5204,
+        "lng": 73.8567
+      }
+    },
+    {
+      "id": "haveli",
+      "name": "Haveli",
+      "aliases": [
+        "Pimpri-Chinchwad",
+        "Katraj",
+        "Loni Kalbhor",
+        "Lohegaon",
+        "Wagholi",
+        "Khadakwasla",
+        "Dhayari",
+        "Undri",
+        "Akurdi",
+        "Nigdi"
+      ],
+      "centroid": {
+        "lat": 18.5,
+        "lng": 73.9
+      }
+    },
+    {
+      "id": "mawal",
+      "name": "Mawal",
+      "aliases": [
+        "Lonavala",
+        "Talegaon",
+        "Dehu Road",
+        "Kanhe",
+        "Kamshet"
+      ],
+      "centroid": {
+        "lat": 18.75,
+        "lng": 73.5
+      }
+    },
+    {
+      "id": "mulshi",
+      "name": "Mulshi",
+      "aliases": [
+        "Hinjewadi",
+        "Pirangut",
+        "Paud",
+        "Lavasa",
+        "Davaje"
+      ],
+      "centroid": {
+        "lat": 18.5,
+        "lng": 73.6
+      }
+    },
+    {
+      "id": "daund",
+      "name": "Daund",
+      "aliases": [
+        "Kurkumbh",
+        "Patas",
+        "Kashti Section"
+      ],
+      "centroid": {
+        "lat": 18.4684,
+        "lng": 74.5878
+      }
+    },
+    {
+      "id": "shirur",
+      "name": "Shirur",
+      "aliases": [
+        "Ranjangaon",
+        "Shikrapur",
+        "Sanaswadi"
+      ],
+      "centroid": {
+        "lat": 18.8266,
+        "lng": 74.3756
+      }
+    },
+    {
+      "id": "khed",
+      "name": "Khed",
+      "aliases": [
+        "Chakan",
+        "Rajgurunagar",
+        "Alandy"
+      ],
+      "centroid": {
+        "lat": 18.85,
+        "lng": 73.9
+      }
+    }
+  ]
+}

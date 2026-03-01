@@ -366,6 +366,361 @@ export const MOCK_EVENTS = [
       alertLevel: "orange",
       impact: "Highway pile-ups"
     }
-  }
+  },
 
+  {
+  id: "evt_MH_pune_20260301_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "haveli",
+  category: "emergency",
+  title: "Dump Site Fire Hospitalizes Five",
+  summary: "A massive fire at a garbage dump on the Mula-Mutha river bed led to the hospitalization of five students with breathing issues in Loni Kalbhor.",
+  timestamp: "2026-03-01T01:36:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.4875,
+    lng: 74.0194
+  },
+  location: {
+    block: "Loni Kalbhor"
+  },
+  source: "The Times of India",
+  verified: true,
+  meta: {
+    hospitalizedCount: 5,
+    incidentType: "Fire"
+  }
+},
+  {
+  id: "evt_MH_pune_20260301_002",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: null,
+  category: "safety",
+  title: "Propylene Tanker Overturns on Expressway",
+  summary: "An inflammable gas tanker overturned near Khopoli, resulting in a 33-hour traffic halt on the Mumbai-Pune Expressway.",
+  timestamp: "2026-03-01T08:00:00Z",
+  expiresAt: "2026-03-02T17:00:00Z",
+  geoPoint: {
+    lat: 18.7881,
+    lng: 73.3444
+  },
+  location: {
+    block: "Khopoli Stretch, Expressway"
+  },
+  source: "Hindustan Times",
+  verified: true,
+  meta: {
+    disruptionDurationHours: 33,
+    chemical: "Propylene"
+  }
+},
+  {
+  id: "evt_MH_pune_20260225_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "pune-city",
+  category: "infrastructure",
+  title: "Construction Stop Notices Issued",
+  summary: "PMC issued stop-work notices to 220 construction sites for failing to implement air pollution control measures across city areas.",
+  timestamp: "2026-02-25T05:04:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.5204,
+    lng: 73.8567
+  },
+  location: {
+    block: "Pune City (Various)"
+  },
+  source: "The Indian Express",
+  verified: true,
+  meta: {
+    noticesIssued: 220,
+    complianceRate: "87%"
+  }
+},
+  {
+  id: "evt_MH_pune_20260224_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "haveli",
+  category: "safety",
+  title: "Fatal Crash Near Katraj Tunnel",
+  summary: "A truck driver died and several passengers were injured after a truck carrying iron pipes collided with a bus at Katraj Ghat.",
+  timestamp: "2026-02-23T22:30:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.4312,
+    lng: 73.8561
+  },
+  location: {
+    block: "Katraj Ghat (Jambhulwadi)"
+  },
+  source: "The Bridge Chronicle",
+  verified: true,
+  meta: {
+    fatalities: 1,
+    injured: 5
+  }
+},
+  {
+  id: "evt_MH_pune_20260223_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "pune-city",
+  category: "weather",
+  title: "Second Highest February Minimum Temp",
+  summary: "Shivajinagar recorded a minimum temperature of 19.2\u00b0C, the second-highest for February since 2015.",
+  timestamp: "2026-02-22T23:08:00Z",
+  expiresAt: "2026-02-28T18:00:00Z",
+  geoPoint: {
+    lat: 18.5312,
+    lng: 73.8445
+  },
+  location: {
+    block: "Shivajinagar"
+  },
+  source: "Hindustan Times",
+  verified: true,
+  meta: {
+    temperatureCelsius: 19.2,
+    departureFromNormal: 5.8
+  }
+},
+  {
+  id: "evt_MH_pune_20260222_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: null,
+  category: "health",
+  title: "High Chikungunya Infection Rates",
+  summary: "Pune district logged the highest chikungunya infections and second-highest dengue cases in Maharashtra for the 2025 season.",
+  timestamp: "2026-02-22T08:00:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.5204,
+    lng: 73.8567
+  },
+  location: {
+    block: "Pune District"
+  },
+  source: "The Times of India",
+  verified: true,
+  meta: {
+    chikungunyaCases: 22,
+    dengueCases: 44
+  }
+},
+  {
+  id: "evt_MH_pune_20260215_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "pune-city",
+  category: "infrastructure",
+  title: "Mula Mutha Riverfront Stretch Opened",
+  summary: "The Pune Municipal Corporation opened a 1.5 km rejuvenated stretch of the riverfront in Yerawada-Kalyani Nagar.",
+  timestamp: "2026-02-15T04:30:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.5362,
+    lng: 73.894
+  },
+  location: {
+    block: "Yerawada-Kalyani Nagar"
+  },
+  source: "Times Property",
+  verified: true,
+  meta: {
+    stretchLengthKm: 1.5
+  }
+},
+  {
+  id: "evt_MH_pune_20260210_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "pune-city",
+  category: "infrastructure",
+  title: "MHADA Lottery Results Declared",
+  summary: "Results for the Pune MHADA housing lottery were officially declared for thousands of affordable units.",
+  timestamp: "2026-02-10T05:00:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.5284,
+    lng: 73.8744
+  },
+  location: {
+    block: "MHADA Pune Office"
+  },
+  source: "Times Property",
+  verified: true,
+  meta: {
+    event: "Lottery Draw"
+  }
+},
+  {
+  id: "evt_MH_pune_20260204_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: null,
+  category: "mobility",
+  title: "Gas Tanker Overturns Near Tunnel",
+  summary: "A gas tanker overturned near Aadoshi tunnel, causing a 50km traffic jam on the Mumbai-Pune Expressway for 20 hours.",
+  timestamp: "2026-02-04T11:30:00Z",
+  expiresAt: "2026-02-05T08:00:00Z",
+  geoPoint: {
+    lat: 18.7667,
+    lng: 73.3833
+  },
+  location: {
+    block: "Aadoshi Tunnel"
+  },
+  source: "News18 Marathi",
+  verified: true,
+  meta: {
+    jamLengthKm: 50,
+    blockageHours: 20
+  }
+},
+  {
+  id: "evt_MH_pune_20260202_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "pune-city",
+  category: "safety",
+  title: "Three Fatalities in Road Accidents",
+  summary: "Three people died in separate road accidents involving a PMPML bus and trucks in Aundh and Nagar Road.",
+  timestamp: "2026-02-02T04:00:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.5135,
+    lng: 73.8122
+  },
+  location: {
+    block: "Uttamnagar, Aundh, Nagar Road"
+  },
+  source: "The Bridge Chronicle",
+  verified: true,
+  meta: {
+    fatalities: 3
+  }
+},
+  {
+  id: "evt_MH_pune_20260126_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "pune-city",
+  category: "safety",
+  title: "Pune Road Fatalities Surge",
+  summary: "Police data reveals a crisis with 290 road deaths in the past year, primarily affecting pedestrians and bikers in Pune City.",
+  timestamp: "2026-01-26T05:30:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.5204,
+    lng: 73.8567
+  },
+  location: {
+    block: "Pune City"
+  },
+  source: "The Bridge Chronicle",
+  verified: true,
+  meta: {
+    annualFatalities: 290,
+    seriousAccidents: 633
+  }
+},
+  {
+  id: "evt_MH_pune_20260125_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "daund",
+  category: "mobility",
+  title: "High Speed Train Trials Conducted",
+  summary: "High-speed train trials were successfully conducted on the Daund-Kashti section of the Pune division.",
+  timestamp: "2026-01-25T07:00:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.4684,
+    lng: 74.5878
+  },
+  location: {
+    block: "Daund-Kashti Section"
+  },
+  source: "Times Property",
+  verified: true,
+  meta: {
+    trialType: "High Speed"
+  }
+},
+  {
+  id: "evt_MH_pune_20260120_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: null,
+  category: "infrastructure",
+  title: "Outer Ring Road Work Progresses",
+  summary: "Major groundwork for the Pune Outer Ring Road has been completed in the Sangrun and Davaje segments.",
+  timestamp: "2026-01-20T08:00:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.4233,
+    lng: 73.7431
+  },
+  location: {
+    block: "Sangrun and Davaje"
+  },
+  source: "Times Property",
+  verified: true,
+  meta: {
+    project: "Outer Ring Road",
+    status: "Construction Underway"
+  }
+},
+  {
+  id: "evt_MH_pune_20260119_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "mawal",
+  category: "mobility",
+  title: "Talegaon Bridge Closure Alert",
+  summary: "A bridge between Talegaon and Dehu Road was closed for maintenance, causing local traffic diversions.",
+  timestamp: "2026-01-19T02:00:00Z",
+  expiresAt: "2026-01-25T18:30:00Z",
+  geoPoint: {
+    lat: 18.7325,
+    lng: 73.6766
+  },
+  location: {
+    block: "Talegaon-Dehu Road"
+  },
+  source: "Times Property",
+  verified: true,
+  meta: {
+    status: "Closed"
+  }
+},
+  {
+  id: "evt_MH_pune_20260102_001",
+  stateId: "MH",
+  districtId: "pune",
+  regionId: "haveli",
+  category: "infrastructure",
+  title: "Airport Infrastructure Stress Warning",
+  summary: "Authorities project 10 lakh additional flyers in 2026, leading to urgent calls for expanded space at Lohegaon Airport.",
+  timestamp: "2026-01-02T15:12:00Z",
+  expiresAt: null,
+  geoPoint: {
+    lat: 18.5822,
+    lng: 73.9197
+  },
+  location: {
+    block: "Lohegaon (Pune Airport)"
+  },
+  source: "The Times of India",
+  verified: true,
+  meta: {
+    projectedGrowth: "10 Lakh Flyers",
+    capacityStress: true
+  }
+}
 ];

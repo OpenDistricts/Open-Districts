@@ -139,6 +139,15 @@ const _rawDistricts = [
         boundingBox: { north: 21.43, south: 21.05, east: 73.20, west: 72.63 },
         population: 6081322,
         dataPoints: 15
+    },
+    {
+        id: "pune",
+        stateId: "MH",
+        name: "Pune",
+        nameLocal: "",
+        geoJsonUrl: "/data/geo/MH/pune.geojson",
+        boundingBox: { north: 19.42, south: 18.18, east: 74.60, west: 73.50 },
+        population: 9429408
     }
 ];
 
@@ -168,5 +177,35 @@ export const MOCK_REGIONS = {
         { id: "bardoli", name: "Bardoli" },
         { id: "kamrej", name: "Kamrej" },
         { id: "palsana", name: "Palsana" }
+    ],
+    pune: [
+        {
+            id: "pune-city",
+            name: "Pune City"
+        },
+        {
+            id: "haveli",
+            name: "Haveli"
+        },
+        {
+            id: "mawal",
+            name: "Mawal"
+        },
+        {
+            id: "mulshi",
+            name: "Mulshi"
+        },
+        {
+            id: "daund",
+            name: "Daund"
+        },
+        {
+            id: "shirur",
+            name: "Shirur"
+        },
+        {
+            id: "khed",
+            name: "Khed"
+        }
     ]
 };
