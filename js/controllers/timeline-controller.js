@@ -8,6 +8,7 @@ import { formatCardTime } from "../services/time-processor.js";
 
 // ── Internal cache ────────────────────────────────────────────────
 const _regionCache = {};
+let _geoData = null;
 
 // ── Module-level context ref (set at init) ────────────────────────
 let _ctx;
@@ -77,6 +78,10 @@ export async function prefetchRegions(districtId) {
     regions.forEach(r => { _regionCache[r.id] = r; });
 }
 
+export function setGeoData(geoData) {
+    _geoData = geoData;
+}
+
 // ═══════════════════════════════════════════════════════════════════
 // PRIVATE — internal helpers
 // ═══════════════════════════════════════════════════════════════════
@@ -139,6 +144,23 @@ function _buildDetailRows(ev) {
 }
 
 function _buildThumb(regionId) {
+    if (_geoData && _geoData.features && window.d3 && regionId) {
+        const feature = _geoData.features.find(f => {
+            const id = f.properties?.id ?? f.id ?? "";
+            return id === regionId;
+        });
+
+        if (feature) {
+            const projection = d3.geoMercator().fitSize([28, 24], feature);
+            const pathGen = d3.geoPath().projection(projection);
+            const pathStr = pathGen(feature);
+
+            return `<svg viewBox="0 0 28 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="${pathStr}" fill="var(--bg)" stroke="var(--rule)" stroke-width="1.2"/>
+  </svg>`;
+        }
+    }
+
     const hash = regionId ? regionId.split("").reduce((a, c) => a + c.charCodeAt(0), 0) : 42;
     const cx = 14, cy = 12, sides = 5 + (hash % 3);
     const pts = [];

@@ -242,31 +242,42 @@
 
         <div id="hs-inner">
 
-            <!-- Tier 1: State grid -->
+            <!-- Tier 1: State map and search -->
             <div id="hs-tier1">
                 <div id="hs-header">
                     <h2 id="hs-title">Select Your District</h2>
                     <button id="hs-close" class="hs-close-btn" aria-label="Close district selector">&#10005;</button>
                 </div>
 
-                <div id="hs-search-wrap">
-                    <input type="text" id="hs-search" placeholder="Search state..." autocomplete="off"
-                        aria-label="Search state">
-                </div>
+                <div id="hs-tier1-body">
+                    <!-- Left: India Minimap SVG Container -->
+                    <div id="hs-india-map">
+                        <svg id="hs-india-svg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Paths injected by JS -->
+                        </svg>
+                    </div>
 
-                <div id="hs-state-grid" role="list">
-                    <!-- State cells injected by JS -->
-                </div>
+                    <!-- Right: Search and Stats Bar -->
+                    <div id="hs-right-panel">
+                        <div id="hs-search-wrap">
+                            <input type="text" id="hs-search" placeholder="Search state..." autocomplete="off"
+                                aria-label="Search state">
+                        </div>
 
-                <!-- Decorative India outline — non-interactive -->
-                <div id="hs-india-wrap" aria-hidden="true">
-                    <svg id="hs-india-svg" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Simplified India outline → decorative only -->
-                        <path d="M55,6 L68,4 L82,10 L90,22 L95,35 L100,52 L98,68 L90,80 L95,90 L88,104
-                     L80,115 L74,128 L68,136 L64,130 L58,118 L50,108 L42,95 L38,82 L30,72
-                     L20,60 L18,48 L22,36 L30,24 L42,14 Z" fill="none" stroke="rgba(255,255,255,0.15)"
-                            stroke-width="1.5" stroke-linejoin="round" />
-                    </svg>
+                        <!-- Stats Bar (Hidden until state selected) -->
+                        <div id="hs-state-stats-bar" class="hidden" role="region" aria-label="State Stats">
+                            <h3 id="hs-state-stats-name"></h3>
+                            <div class="hs-stat-row">
+                                <span>Population</span>
+                                <strong id="hs-state-stats-pop">-</strong>
+                            </div>
+                            <div class="hs-stat-row">
+                                <span>Active Alerts</span>
+                                <strong id="hs-state-stats-alerts" class="danger-text">-</strong>
+                            </div>
+                            <div id="hs-state-stats-action">Double-click map to enter</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -278,15 +289,28 @@
                     <button id="hs-t2-close" class="hs-close-btn" aria-label="Close">&#10005;</button>
                 </div>
                 <div id="hs-t2-body">
-                    <!-- Left: SVG district map -->
+                    <!-- Central: SVG district map -->
                     <div id="hs-district-map-wrap">
                         <svg id="hs-district-svg" viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
                             <!-- District polygons injected by JS -->
                         </svg>
                     </div>
-                    <!-- Right: list mirror -->
-                    <div id="hs-district-list" role="list">
-                        <!-- District rows injected by JS -->
+                    <!-- Right: Sliding stats bar -->
+                    <div id="hs-district-stats" role="region" aria-label="District Stats">
+                        <div id="hs-stats-content">
+                            <h3 id="hs-stats-name"></h3>
+                            <div id="hs-stats-data">
+                                <div class="hs-stat-row">
+                                    <span>Population</span>
+                                    <strong id="hs-stats-pop">-</strong>
+                                </div>
+                                <div class="hs-stat-row">
+                                    <span>Active Alerts</span>
+                                    <strong id="hs-stats-alerts" class="danger-text">-</strong>
+                                </div>
+                            </div>
+                            <div id="hs-stats-action">Double click map to enter</div>
+                        </div>
                     </div>
                 </div>
             </div>

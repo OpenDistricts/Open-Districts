@@ -138,6 +138,14 @@ export const DataService = {
         return loadGeoJSON(`./data/geo/${stateId}.geojson`);
     },
 
+    /**
+     * Load GeoJSON for the entire country minimap
+     * @returns {Promise<GeoJSON.FeatureCollection>}
+     */
+    async getAllStatesGeoJSON() {
+        return loadGeoJSON(`./data/geo/india-states-simplified.geojson`);
+    },
+
     // ── Time Series ────────────────────────────────────────────────────────────
 
     /**

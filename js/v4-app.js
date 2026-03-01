@@ -145,11 +145,13 @@ async function loadDistrict(districtId, stateId) {
     AppState.isHistorical = false;
     AppState.connectionStatus = "live"; // Phase 2 fix: always "live" in mock
 
-    const [district, events, timeBuckets, translation] = await Promise.all([
-        DataService.getDistrictById(districtId),
+    const district = await DataService.getDistrictById(districtId);
+
+    const [events, timeBuckets, translation, geoData] = await Promise.all([
         DataService.getEventsForDistrict(districtId),
         DataService.getTimeSeries(districtId),
         DataService.getTranslation(AppState.locale),
+        DataService.getGeoJSON(district.geoJsonUrl),
     ]);
 
     AppState.currentDistrict = district;
@@ -160,6 +162,7 @@ async function loadDistrict(districtId, stateId) {
     // Update all controllers
     _renderTopBarDistrict(district);
     TimelineCtrl.renderPanelHeader(district.name);
+    TimelineCtrl.setGeoData(geoData);
     TimelineCtrl.renderTimeline(events);
     TimeCtrl.renderTimeAxis(timeBuckets);
     TimeCtrl.renderBadge(false);

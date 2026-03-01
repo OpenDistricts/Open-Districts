@@ -28,9 +28,22 @@ export function init(ctx) {
     // State search filter
     document.getElementById("hs-search").addEventListener("input", e => {
         const q = e.target.value.toLowerCase().trim();
-        document.querySelectorAll(".state-cell").forEach(cell => {
-            const name = cell.querySelector(".state-name").textContent.toLowerCase();
-            cell.classList.toggle("hidden", q.length > 0 && !name.includes(q));
+        document.querySelectorAll(".india-state-path").forEach(path => {
+            const name = path.getAttribute("data-state-name").toLowerCase();
+            const label = document.getElementById(`lbl-${path.getAttribute("data-state-id")}`);
+
+            if (q.length === 0) {
+                path.classList.remove("search-match", "search-dim");
+                if (label) label.style.opacity = "";
+            } else if (name.includes(q)) {
+                path.classList.add("search-match");
+                path.classList.remove("search-dim");
+                if (label) label.style.opacity = "1";
+            } else {
+                path.classList.remove("search-match");
+                path.classList.add("search-dim");
+                if (label) label.style.opacity = "0.1";
+            }
         });
     });
 }
@@ -47,12 +60,13 @@ export async function open() {
     document.getElementById("hs-tier1").style.display = "";
     document.getElementById("hs-tier2").classList.add("hidden");
     document.getElementById("hs-search").value = "";
+    document.getElementById("hs-state-stats-bar").classList.add("hidden");
 
     if (_allStates.length === 0) {
         _allStates = await _ctx.ds.getAllStates();
     }
 
-    _renderStateGrid(_allStates);
+    _renderIndiaMinimap(_allStates);
 }
 
 export function close() {
@@ -65,24 +79,133 @@ export function close() {
 // PRIVATE
 // ═══════════════════════════════════════════════════════════════════
 
-function _renderStateGrid(states) {
-    const grid = document.getElementById("hs-state-grid");
-    grid.innerHTML = "";
+// Scoped variable for single vs double click tracking
+let _stateClickTimer = null;
+let _lastClickedStateId = null;
 
-    states.forEach(state => {
-        const cell = document.createElement("div");
-        cell.className = "state-cell" + (state.id === _ctx.state.currentStateId ? " active" : "");
-        cell.setAttribute("role", "listitem");
-        cell.setAttribute("tabindex", "0");
-        cell.innerHTML = `
-      <div class="state-name">${state.name}</div>
-      ${state.activeAlertCount > 0
-                ? `<div class="state-alert-badge"><div class="state-alert-dot"></div>${state.activeAlertCount} alerts</div>`
-                : ""}`;
-        cell.addEventListener("click", () => _loadTierTwo(state));
-        cell.addEventListener("keydown", e => { if (e.key === "Enter") _loadTierTwo(state); });
-        grid.appendChild(cell);
+async function _renderIndiaMinimap(states) {
+    const svg = document.getElementById("hs-india-svg");
+    if (svg.children.length > 0) return; // avoid re-rendering entire D3 map if already done
+
+    // Clear once and load geojson
+    svg.innerHTML = "";
+    const geoData = await _ctx.ds.getAllStatesGeoJSON();
+    if (!geoData || !geoData.features || !window.d3) return;
+
+    const W = 800, H = 800;
+    const projection = d3.geoMercator().fitSize([W, H], geoData);
+    const pathGen = d3.geoPath().projection(projection);
+
+    geoData.features.forEach(feature => {
+        const stateId = feature.properties.id;
+        if (!stateId) return; // Skip unrecognized geometry
+
+        const matchedState = states.find(s => s.id === stateId);
+        const stateName = feature.properties.name || stateId;
+
+        const pathStr = pathGen(feature);
+        const centroid = pathGen.centroid(feature);
+
+        // Path
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathStr);
+        path.classList.add("india-state-path");
+        path.setAttribute("data-state-id", stateId);
+        path.setAttribute("data-state-name", stateName);
+
+        if (!matchedState) {
+            path.classList.add("unsupported"); // Mark no-data states
+        }
+
+        // Mouse interactions for glow
+        path.addEventListener("mouseenter", () => {
+            path.classList.add("hovered");
+            const lbl = document.getElementById(`lbl-${stateId}`);
+            if (lbl) lbl.classList.add("active");
+        });
+        path.addEventListener("mouseleave", () => {
+            path.classList.remove("hovered");
+            const lbl = document.getElementById(`lbl-${stateId}`);
+            if (lbl) lbl.classList.remove("active");
+        });
+
+        // Click logic
+        path.addEventListener("click", () => {
+            if (_lastClickedStateId === stateId) {
+                // Double click
+                clearTimeout(_stateClickTimer);
+                _lastClickedStateId = null;
+                if (matchedState) _loadTierTwo(matchedState);
+            } else {
+                // Single click
+                _lastClickedStateId = stateId;
+
+                // Active styles
+                svg.querySelectorAll('.india-state-path').forEach(p => p.classList.remove('selected'));
+                svg.querySelectorAll('.state-label').forEach(l => l.classList.remove('active'));
+
+                path.classList.add('selected');
+                const lbl = document.getElementById(`lbl-${stateId}`);
+                if (lbl) lbl.classList.add("active");
+
+                if (matchedState) _showStateStats(matchedState);
+
+                clearTimeout(_stateClickTimer);
+                _stateClickTimer = setTimeout(() => {
+                    _lastClickedStateId = null;
+                }, 400); // 400ms tolerance
+            }
+        });
+
+        svg.appendChild(path);
+
+        // Label
+        if (stateName && centroid && !isNaN(centroid[0]) && !isNaN(centroid[1])) {
+            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", centroid[0]);
+            text.setAttribute("y", centroid[1]);
+            text.id = `lbl-${stateId}`;
+            text.classList.add("state-label");
+            text.textContent = stateName; // using full name
+            svg.appendChild(text);
+        }
     });
+}
+
+function _showStateStats(state) {
+    const bar = document.getElementById("hs-state-stats-bar");
+    bar.classList.remove("hidden");
+
+    // reset transition
+    bar.style.transition = 'none';
+    bar.classList.add("slide-out");
+    void bar.offsetWidth; // flush CSS
+    bar.style.transition = '';
+    bar.classList.remove("slide-out");
+
+    document.getElementById("hs-state-stats-name").textContent = state.name;
+    document.getElementById("hs-state-stats-pop").textContent =
+        Math.floor(100 + (state.name.length * 15)) + " Lakh";
+
+    const alertsEl = document.getElementById("hs-state-stats-alerts");
+    alertsEl.textContent = state.activeAlertCount;
+    if (state.activeAlertCount === 0) {
+        alertsEl.classList.remove("danger-text");
+        alertsEl.style.color = "var(--ok)";
+    } else {
+        alertsEl.classList.add("danger-text");
+        alertsEl.style.color = "";
+    }
+
+    // Setup button for explicit navigation
+    const actionContainer = document.getElementById("hs-state-stats-action");
+    // clear and append to ensure fresh binding
+    actionContainer.innerHTML = `
+        <button id="hs-stats-enter-state-btn" class="hs-enter-btn">View Districts</button>
+    `;
+    document.getElementById("hs-stats-enter-state-btn").onclick = () => {
+        _loadTierTwo(state);
+    };
 }
 
 async function _loadTierTwo(state) {
@@ -100,39 +223,29 @@ async function _loadTierTwo(state) {
         console.warn(`[Hierarchy] No GeoJSON found for state ${state.id}`, e);
     }
 
-    _renderListMirror(districts);
     _renderSVGMap(districts, stateGeo);
 }
 
-function _renderListMirror(districts) {
-    const list = document.getElementById("hs-district-list");
-    list.innerHTML = "";
-
-    districts.forEach(district => {
-        const row = document.createElement("div");
-        row.className = "dist-list-row" + (district.id === _ctx.state.currentDistrictId ? " active" : "");
-        row.setAttribute("role", "listitem");
-        row.setAttribute("tabindex", "0");
-        row.innerHTML = `
-      <span class="dist-list-name">${district.name}</span>
-      ${district.activeAlertCount > 0
-                ? `<span class="dist-list-alert">${district.activeAlertCount}</span>`
-                : ""}`;
-        row.addEventListener("click", () => _selectDistrict(district));
-        row.addEventListener("keydown", e => { if (e.key === "Enter") _selectDistrict(district); });
-        list.appendChild(row);
-    });
-}
 function _renderSVGMap(districts, stateGeo) {
     const svg = document.getElementById("hs-district-svg");
     svg.innerHTML = "";
 
+    // Hide stats initially on fresh render
+    const statsPanel = document.getElementById("hs-district-stats");
+    statsPanel.classList.remove("open");
+
     const W = 400, H = 380;
+
+    // Scoped state for handling single vs double clicks
+    let clickTimer = null;
+    let lastClickedId = null;
 
     if (window.d3 && stateGeo && stateGeo.features && stateGeo.features.length > 0) {
         // Create projection mapped to SVG center
         const projection = d3.geoMercator().fitSize([W, H], stateGeo);
         const pathGen = d3.geoPath().projection(projection);
+
+        svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
 
         // Draw ALL features from the GeoJSON to form the complete state map
         stateGeo.features.forEach(feature => {
@@ -149,7 +262,6 @@ function _renderSVGMap(districts, stateGeo) {
 
             if (matchedDistrict) {
                 if (matchedDistrict.id === _ctx.state.currentDistrictId) path.classList.add("active");
-                path.addEventListener("click", () => _selectDistrict(matchedDistrict));
 
                 // District name
                 let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -172,8 +284,39 @@ function _renderSVGMap(districts, stateGeo) {
                     dot.setAttribute("pointer-events", "none");
                     svg.appendChild(dot);
                 }
+
+                // Double click handler logic
+                path.addEventListener("click", () => {
+                    if (lastClickedId === matchedDistrict.id) {
+                        // It's a double click!
+                        clearTimeout(clickTimer);
+                        lastClickedId = null;
+                        _selectDistrict(matchedDistrict);
+                    } else {
+                        // It's a single click! Select and open stats
+                        lastClickedId = matchedDistrict.id;
+
+                        // Clear visual actives
+                        svg.querySelectorAll('.hdist-poly').forEach(p => p.classList.remove('active'));
+                        svg.querySelectorAll('.hdist-lbl').forEach(l => l.classList.remove('active'));
+
+                        // Highlight current
+                        path.classList.add('active');
+                        text.classList.add('active');
+
+                        // Slide in stats panel
+                        _showStatsPanel(matchedDistrict);
+
+                        // Reset click tracking after window expires
+                        clearTimeout(clickTimer);
+                        clickTimer = setTimeout(() => {
+                            lastClickedId = null;
+                        }, 400); // 400ms double click tolerance
+                    }
+                });
             } else {
-                path.style.opacity = "0.2"; // Dim districts we have no mock data for
+                path.style.opacity = "0.5"; // Dim districts we have no mock data for (0.5 so it's still visible)
+                path.style.cursor = "default";
             }
 
             // Append path before text/dots so they layer on top
@@ -204,7 +347,29 @@ function _renderSVGMap(districts, stateGeo) {
         rect.setAttribute("rx", "3");
         rect.classList.add("dist-poly"); // old class
         if (district.id === _ctx.state.currentDistrictId) rect.classList.add("active");
-        rect.addEventListener("click", () => _selectDistrict(district));
+
+        // Interaction logic mapping identical to D3 double click
+        rect.addEventListener("click", () => {
+            if (lastClickedId === district.id) {
+                clearTimeout(clickTimer);
+                lastClickedId = null;
+                _selectDistrict(district);
+            } else {
+                lastClickedId = district.id;
+
+                svg.querySelectorAll('.dist-poly').forEach(p => p.classList.remove('active'));
+                rect.classList.add('active');
+
+                // We dont have real SVG path strings here, fallback panel shape rendering
+                _showStatsPanel(district, null);
+
+                clearTimeout(clickTimer);
+                clickTimer = setTimeout(() => {
+                    lastClickedId = null;
+                }, 400);
+            }
+        });
+
         svg.appendChild(rect);
 
         // District name — centered within cell
@@ -229,6 +394,34 @@ function _renderSVGMap(districts, stateGeo) {
             svg.appendChild(dotFallback);
         }
     });
+}
+
+function _showStatsPanel(district) {
+    const statsPanel = document.getElementById("hs-district-stats");
+    const nameEl = document.getElementById("hs-stats-name");
+    const popEl = document.getElementById("hs-stats-pop");
+    const alertsEl = document.getElementById("hs-stats-alerts");
+    const actionEl = document.getElementById("hs-stats-action");
+
+    // Enable CSS transition slide-push
+    statsPanel.classList.add("open");
+
+    // Populate data
+    nameEl.textContent = district.name;
+    // Generate pseudo-population based on name string length for demo realism
+    popEl.textContent = Math.floor(10 + (district.name.length * 2.3)) + " Lakh";
+
+    alertsEl.textContent = district.activeAlertCount;
+    if (district.activeAlertCount === 0) {
+        alertsEl.classList.remove("danger-text");
+        alertsEl.style.color = "var(--ok)";
+    } else {
+        alertsEl.classList.add("danger-text");
+        alertsEl.style.color = "";
+    }
+
+    // Action binding (also triggering select logic)
+    actionEl.onclick = () => _selectDistrict(district);
 }
 
 function _selectDistrict(district) {
