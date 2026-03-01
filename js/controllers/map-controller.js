@@ -199,16 +199,18 @@ export async function loadDistrictGeo(district, events) {
 
     const punchData = unifiedDistrict ? { type: "FeatureCollection", features: [unifiedDistrict] } : geoData;
 
-    L.geoJSON(punchData, {
-        onEachFeature: (feature, layer) => {
-            if (layer instanceof L.Polygon) {
-                const latlngs = layer.getLatLngs();
-                if (feature.geometry.type === "Polygon") {
-                    maskCoordinates.push(latlngs[0]);
-                } else if (feature.geometry.type === "MultiPolygon") {
-                    latlngs.forEach(polygon => maskCoordinates.push(polygon[0]));
-                }
-            }
+    // Direct GeoJSON coordinate extraction (more robust than Leaflet Layer inspection)
+    const swap = (arr) => {
+        if (typeof arr[0] === 'number') return [arr[1], arr[0]];
+        return arr.map(swap);
+    };
+
+    punchData.features.forEach(f => {
+        if (!f.geometry) return;
+        if (f.geometry.type === "Polygon") {
+            maskCoordinates.push(swap(f.geometry.coordinates)[0]);
+        } else if (f.geometry.type === "MultiPolygon") {
+            swap(f.geometry.coordinates).forEach(poly => maskCoordinates.push(poly[0]));
         }
     });
 
@@ -261,34 +263,42 @@ export async function loadDistrictGeo(district, events) {
     // Point markers
     const group = L.featureGroup();
     events.forEach(ev => {
-        if (!ev.geoPoint) return;
         const opts = categoryMarkerOptions(ev.category);
 
-        let marker;
-        if (ev.impactScale === "LOCAL") {
-            // Draw a circle for local events (e.g. 2000m radius)
-            marker = L.circle([ev.geoPoint.lat, ev.geoPoint.lng], {
-                color: opts.color,
-                fillColor: opts.fillColor,
-                fillOpacity: opts.fillOpacity * 0.5,
-                weight: opts.weight,
-                radius: 2000
-            });
-        } else {
-            // Point or Wide uses a small circleMarker for the exact point
-            marker = L.circleMarker([ev.geoPoint.lat, ev.geoPoint.lng], opts);
+        const createMarker = (latLng, isCluster = false) => {
+            let marker;
+            if (ev.impactScale === "LOCAL" && ev.meta?.radiusMetres && !isCluster) {
+                // Draw a precise data-driven circle for local events
+                marker = L.circle(latLng, {
+                    color: opts.color,
+                    fillColor: opts.fillColor,
+                    fillOpacity: opts.fillOpacity * 0.5,
+                    weight: opts.weight,
+                    radius: ev.meta.radiusMetres
+                });
+            } else {
+                // Point, Wide, or Cluster uses a standard circleMarker
+                marker = L.circleMarker(latLng, opts);
+            }
+
+            marker.bindTooltip(ev.title, { sticky: true });
+            marker.on("click", () => _ctx.emit("map:regionClick", { eventId: ev.id }));
+
+            // Attach properties for animation arbitration
+            marker.eventId = ev.id;
+            marker.category = ev.category;
+            marker.impactScale = ev.impactScale;
+            marker.isClusterPoint = isCluster;
+
+            group.addLayer(marker);
+        };
+
+        // Render clusters if present, otherwise render the single event center
+        if (ev.meta?.clusterPoints && ev.meta.clusterPoints.length > 0) {
+            ev.meta.clusterPoints.forEach(pt => createMarker([pt.lat, pt.lng], true));
+        } else if (ev.geoPoint) {
+            createMarker([ev.geoPoint.lat, ev.geoPoint.lng], false);
         }
-
-        marker.bindTooltip(ev.title, { sticky: true });
-        marker.on("click", () => _ctx.emit("map:regionClick", { eventId: ev.id }));
-
-        // Attach properties for animation arbitration
-        marker.eventId = ev.id;
-        marker.category = ev.category;
-        marker.impactScale = ev.impactScale;
-        marker.isClusterPoint = ev.meta?.clusterPoints?.length > 1; // Flag for cluster points
-
-        group.addLayer(marker);
     });
     _markersLayer = group.addTo(_map);
 
@@ -312,18 +322,34 @@ export function syncFocus(focusedEventId, events) {
     }
 
     const ev = events.find(e => e.id === focusedEventId);
-    if (!ev) return;
+    if (!ev) {
+        // Resetting focus
+        _regionLayerMap.forEach((layer, regionId) => {
+            const entry = categoryMap[regionId];
+            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
+            layer.setStyle(categoryPolygonStyle(cat, false, false));
+        });
+        if (_markersLayer) {
+            _markersLayer.eachLayer(layer => {
+                const markerEv = events.find(e => e.id === layer.eventId);
+                if (markerEv) {
+                    const opts = categoryMarkerOptions(markerEv.category, false);
+                    layer.setStyle(opts);
+                }
+            });
+        }
+        setTimeout(runArbitration, 100);
+        return;
+    }
 
     // Fly to event
     const targetLayer = ev.regionId ? _regionLayerMap.get(ev.regionId) : null;
 
     if (ev.meta?.clusterPoints && ev.meta.clusterPoints.length > 0) {
-        // Collect all lat/lngs to form a bounds
         const bounds = L.latLngBounds(ev.meta.clusterPoints.map(pt => [pt.lat, pt.lng]));
         _map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
     }
     else if (ev.impactScale === "LOCAL" && ev.meta?.radiusMetres && ev.geoPoint) {
-        // Create temporary circle just to get accurate bounds
         const tempCircle = L.circle([ev.geoPoint.lat, ev.geoPoint.lng], { radius: ev.meta.radiusMetres });
         _map.fitBounds(tempCircle.getBounds(), { padding: [30, 30] });
     }
@@ -334,23 +360,36 @@ export function syncFocus(focusedEventId, events) {
         _map.fitBounds(targetLayer.getBounds(), { padding: [30, 30] });
     }
 
-    // Style update
+    // Style update: Dim everything else
     _regionLayerMap.forEach((layer, regionId) => {
         const entry = categoryMap[regionId];
         let cat = "none";
         let isFocusedPoly = false;
+        let isDimmed = true;
 
         if (ev.impactScale === "WIDE" && regionId === ev.regionId) {
             cat = ev.category;
             isFocusedPoly = true;
+            isDimmed = false;
         } else if (entry && entry.impactScale === "WIDE") {
             cat = entry.category;
         }
 
-        layer.setStyle(categoryPolygonStyle(cat, isFocusedPoly));
+        layer.setStyle(categoryPolygonStyle(cat, isFocusedPoly, isDimmed));
     });
 
-    // Arbitration (delay slightly to let fitBounds complete, or it will find wrong items in view)
+    if (_markersLayer) {
+        _markersLayer.eachLayer(layer => {
+            const isFocused = layer.eventId === focusedEventId;
+            const markerEv = events.find(e => e.id === layer.eventId);
+            if (markerEv) {
+                const opts = categoryMarkerOptions(markerEv.category, !isFocused);
+                layer.setStyle(opts);
+            }
+        });
+    }
+
+    // Arbitration (delay slightly to let fitBounds complete)
     setTimeout(runArbitration, 100);
 }
 
@@ -464,11 +503,8 @@ export function runArbitration() {
                 path.style.animationPlayState = "paused";
             }
         } else {
-            // District View: animate the winner category. 
-            // If the winner is a cluster, we animate ALL points of that same winner event.
-            const winnerEventId = visibleItems[0]?.eventId;
-            const animate = eventId === winnerEventId && tier === 1;
-            path.style.animationPlayState = animate ? "running" : "paused";
+            // District View: No animations for now, explicitly requested.
+            path.style.animationPlayState = "paused";
         }
     });
 }

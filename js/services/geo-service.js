@@ -91,20 +91,32 @@ export function categoryTier(category) {
 /**
  * Build a Leaflet circle marker options object for an event's geoPoint.
  * @param {string} category  event.category
+ * @param {boolean} dimmed    Whether this marker should be dimmed (not focused)
  * @returns {Object}  Leaflet CircleMarker options
  */
-export function categoryMarkerOptions(category) {
+export function categoryMarkerOptions(category, dimmed = false) {
     const h = CAT_HUES[category] ?? CAT_HUES.safety;
     // Tier-1: largest dot; Tier-2: medium; Tier-3: small
     const tier = CAT_TIER[category] ?? 3;
-    const radius = tier === 1 ? 11 : tier === 2 ? 8 : 6;
-    const fillOpacity = tier === 1 ? 0.82 : tier === 2 ? 0.70 : 0.56;
+
+    let radius = tier === 1 ? 11 : tier === 2 ? 8 : 6;
+    let fillOpacity = tier === 1 ? 0.82 : tier === 2 ? 0.70 : 0.56;
+    let opacity = 1.0;
+
+    if (dimmed) {
+        radius *= 0.7; // Shrink slightly
+        fillOpacity *= 0.15;
+        opacity = 0.15;
+    }
+
     return {
         color: h.hex,
         fillColor: h.hex,
         radius,
         weight: tier === 1 ? 2 : 1.5,
-        fillOpacity
+        fillOpacity,
+        opacity,
+        interactive: !dimmed // Disable clicks on dimmed items
     };
 }
 
@@ -114,17 +126,18 @@ export function categoryMarkerOptions(category) {
  *
  * @param {string}  category  event.category
  * @param {boolean} focused   Whether this polygon is currently focused
+ * @param {boolean} dimmed    Whether this polygon should be dimmed (other event is focused)
  * @returns {Object}  Leaflet PathOptions
  */
-export function categoryPolygonStyle(category, focused = false) {
-    if (category === "none" || !category) {
+export function categoryPolygonStyle(category, focused = false, dimmed = false) {
+    if (category === "none" || !category || dimmed) {
         return {
             color: "transparent",
             fillColor: "transparent",
             fillOpacity: 0,
             weight: 0,
             opacity: 0,
-            interactive: false
+            interactive: !dimmed // still interactive if just 'none', but not if dimmed
         };
     }
     const h = CAT_HUES[category] ?? CAT_HUES.safety;
