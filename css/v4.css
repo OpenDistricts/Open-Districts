@@ -1602,6 +1602,42 @@ button:focus-visible {
   pointer-events: none;
 }
 
+/* Authentic GeoJSON map styling */
+.hdist-poly {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 0.5;
+  cursor: pointer;
+  transition: fill 120ms, stroke 120ms, stroke-width 120ms;
+}
+
+.hdist-poly.active,
+.hdist-poly:hover {
+  fill: rgba(31, 111, 235, 0.20);
+  stroke: #1F6FEB;
+  stroke-width: 1.5;
+}
+
+.hdist-lbl {
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: 500;
+  fill: rgba(255, 255, 255, 0.5);
+  transition: fill 120ms, font-weight 120ms;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.hdist-lbl.active {
+  fill: #fff;
+  font-weight: 700;
+}
+
+.hdist-alert-dot {
+  fill: var(--danger);
+  stroke: #0a0e17;
+  stroke-width: 1.5px;
+}
+
 /* List mirror */
 #hs-district-list {
   width: 190px;

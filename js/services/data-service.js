@@ -10,7 +10,6 @@
 import { MOCK_EVENTS } from "../../data/mock-events.js";
 import { MOCK_DISTRICTS, MOCK_STATES, MOCK_REGIONS } from "../../data/mock-districts.js";
 import { MOCK_TRANSLATIONS } from "../../data/mock-translations.js";
-import { generateStressEvents } from "../../data/mock-stress.js";
 import { computeTimeSeries, detectResolution } from "./time-processor.js";
 import { loadGeoJSON } from "./geo-service.js";
 
@@ -48,7 +47,7 @@ export const DataService = {
      * @returns {Promise<Event[]>}
      */
     async getEventsForDistrict(districtId, dateRange) {
-        let baseEvents = districtId === "stress" ? generateStressEvents() : MOCK_EVENTS.filter(e => e.districtId === districtId);
+        let baseEvents = MOCK_EVENTS.filter(e => e.districtId === districtId);
 
         const filtered = baseEvents
             .filter(e => {
@@ -128,6 +127,15 @@ export const DataService = {
      */
     async getGeoJSON(geoJsonUrl) {
         return loadGeoJSON(geoJsonUrl);
+    },
+
+    /**
+     * Load GeoJSON for a complete state (for minimap rendering).
+     * @param {string} stateId
+     * @returns {Promise<GeoJSON.FeatureCollection>}
+     */
+    async getStateGeoJSON(stateId) {
+        return loadGeoJSON(`./data/geo/${stateId}.geojson`);
     },
 
     // ── Time Series ────────────────────────────────────────────────────────────

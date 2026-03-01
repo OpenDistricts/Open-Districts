@@ -93,8 +93,15 @@ async function _loadTierTwo(state) {
     document.getElementById("hs-t2-state-name").textContent = state.name;
 
     const districts = await _ctx.ds.getDistrictsForState(state.id);
+    let stateGeo = null;
+    try {
+        stateGeo = await _ctx.ds.getStateGeoJSON(state.id);
+    } catch (e) {
+        console.warn(`[Hierarchy] No GeoJSON found for state ${state.id}`, e);
+    }
+
     _renderListMirror(districts);
-    _renderSVGMap(districts);
+    _renderSVGMap(districts, stateGeo);
 }
 
 function _renderListMirror(districts) {
@@ -116,12 +123,66 @@ function _renderListMirror(districts) {
         list.appendChild(row);
     });
 }
-
-function _renderSVGMap(districts) {
+function _renderSVGMap(districts, stateGeo) {
     const svg = document.getElementById("hs-district-svg");
     svg.innerHTML = "";
 
     const W = 400, H = 380;
+
+    if (window.d3 && stateGeo && stateGeo.features && stateGeo.features.length > 0) {
+        // Create projection mapped to SVG center
+        const projection = d3.geoMercator().fitSize([W, H], stateGeo);
+        const pathGen = d3.geoPath().projection(projection);
+
+        // Draw ALL features from the GeoJSON to form the complete state map
+        stateGeo.features.forEach(feature => {
+            const name = feature.properties.NAME_2 || feature.properties.dtname || "";
+            const pathStr = pathGen(feature);
+            const centroid = pathGen.centroid(feature);
+
+            // Does this geo feature map to one of our active mock districts?
+            const matchedDistrict = districts.find(d => name.toLowerCase().includes(d.name.toLowerCase()));
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathStr);
+            path.classList.add("hdist-poly");
+
+            if (matchedDistrict) {
+                if (matchedDistrict.id === _ctx.state.currentDistrictId) path.classList.add("active");
+                path.addEventListener("click", () => _selectDistrict(matchedDistrict));
+
+                // District name
+                let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", centroid[0]);
+                text.setAttribute("y", centroid[1]);
+                text.setAttribute("text-anchor", "middle");
+                text.classList.add("hdist-lbl");
+                if (matchedDistrict.id === _ctx.state.currentDistrictId) text.classList.add("active");
+                text.textContent = matchedDistrict.name;
+                text.setAttribute("pointer-events", "none");
+                svg.appendChild(text);
+
+                // Alert dot (dynamically offsetting from center)
+                if (matchedDistrict.activeAlertCount > 0) {
+                    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    dot.setAttribute("cx", centroid[0] + 15);
+                    dot.setAttribute("cy", centroid[1] - 15);
+                    dot.setAttribute("r", "4");
+                    dot.classList.add("hdist-alert-dot");
+                    dot.setAttribute("pointer-events", "none");
+                    svg.appendChild(dot);
+                }
+            } else {
+                path.style.opacity = "0.2"; // Dim districts we have no mock data for
+            }
+
+            // Append path before text/dots so they layer on top
+            svg.insertBefore(path, svg.firstChild);
+        });
+        return;
+    }
+
+    // GRID FALLBACK
     const cols = Math.ceil(Math.sqrt(districts.length));
     const rows = Math.ceil(districts.length / cols);
     const cellW = W / cols;
@@ -141,31 +202,31 @@ function _renderSVGMap(districts) {
         rect.setAttribute("x", x); rect.setAttribute("y", y);
         rect.setAttribute("width", w); rect.setAttribute("height", h);
         rect.setAttribute("rx", "3");
-        rect.classList.add("dist-poly");
+        rect.classList.add("dist-poly"); // old class
         if (district.id === _ctx.state.currentDistrictId) rect.classList.add("active");
         rect.addEventListener("click", () => _selectDistrict(district));
         svg.appendChild(rect);
 
         // District name — centered within cell
-        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        text.setAttribute("x", x + w / 2);
-        text.setAttribute("y", y + h / 2 - 4);
-        text.setAttribute("text-anchor", "middle");
-        text.setAttribute("font-size", Math.min(10, Math.floor(cellH * 0.22)));
-        text.setAttribute("font-family", "DM Mono, monospace");
-        text.setAttribute("fill", "rgba(255,255,255,0.85)");
-        text.setAttribute("pointer-events", "none");
-        text.textContent = district.name;
-        svg.appendChild(text);
+        const textFallback = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        textFallback.setAttribute("x", x + w / 2);
+        textFallback.setAttribute("y", y + h / 2 - 4);
+        textFallback.setAttribute("text-anchor", "middle");
+        textFallback.setAttribute("font-size", Math.min(10, Math.floor(cellH * 0.22)));
+        textFallback.setAttribute("font-family", "DM Mono, monospace");
+        textFallback.setAttribute("fill", "rgba(255,255,255,0.85)");
+        textFallback.setAttribute("pointer-events", "none");
+        textFallback.textContent = district.name;
+        svg.appendChild(textFallback);
 
         // Alert dot (top-right corner)
         if (district.activeAlertCount > 0) {
-            const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            dot.setAttribute("cx", x + w - 7); dot.setAttribute("cy", y + 7);
-            dot.setAttribute("r", "4.5");
-            dot.classList.add("dist-alert-dot");
-            dot.setAttribute("pointer-events", "none");
-            svg.appendChild(dot);
+            const dotFallback = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            dotFallback.setAttribute("cx", x + w - 7); dotFallback.setAttribute("cy", y + 7);
+            dotFallback.setAttribute("r", "4.5");
+            dotFallback.classList.add("dist-alert-dot");
+            dotFallback.setAttribute("pointer-events", "none");
+            svg.appendChild(dotFallback);
         }
     });
 }

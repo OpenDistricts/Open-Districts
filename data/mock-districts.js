@@ -9,7 +9,7 @@ export const MOCK_STATES = [
         name: "Odisha",
         nameLocal: "ଓଡ଼ିଶା",
         geoJsonUrl: "/data/geo/OD/state-outline.geojson",
-        districts: ["khordha", "cuttack", "puri", "ganjam", "balangir", "stress"],
+        districts: ["khordha", "cuttack", "puri", "ganjam", "balangir", "mayurbhanj", "koraput", "sambalpur", "sundargarh"],
         activeAlertCount: 34
     },
     {
@@ -134,14 +134,44 @@ export const MOCK_DISTRICTS = [
         activeAlertCount: 4
     },
     {
-        id: "stress",
+        id: "mayurbhanj",
         stateId: "OD",
-        name: "Performance Stress Test",
-        nameLocal: "ପରୀକ୍ଷା",
-        geoJsonUrl: "404-fallback-trigger",
-        boundingBox: { north: 21.0, south: 19.5, east: 86.5, west: 85.0 },
-        population: 9999999,
-        activeAlertCount: 144
+        name: "Mayurbhanj",
+        nameLocal: "ମୟୂରଭଞ୍ଜ",
+        geoJsonUrl: "/data/geo/OD/mayurbhanj.geojson",
+        boundingBox: { north: 22.3, south: 21.2, east: 86.8, west: 85.6 },
+        population: 2519738,
+        activeAlertCount: 2
+    },
+    {
+        id: "koraput",
+        stateId: "OD",
+        name: "Koraput",
+        nameLocal: "କୋରାପୁଟ",
+        geoJsonUrl: "/data/geo/OD/koraput.geojson",
+        boundingBox: { north: 19.3, south: 18.2, east: 83.2, west: 82.1 },
+        population: 1379647,
+        activeAlertCount: 5
+    },
+    {
+        id: "sambalpur",
+        stateId: "OD",
+        name: "Sambalpur",
+        nameLocal: "ସମ୍ବଲପୁର",
+        geoJsonUrl: "/data/geo/OD/sambalpur.geojson",
+        boundingBox: { north: 21.8, south: 20.7, east: 84.4, west: 83.3 },
+        population: 1041099,
+        activeAlertCount: 1
+    },
+    {
+        id: "sundargarh",
+        stateId: "OD",
+        name: "Sundargarh",
+        nameLocal: "ସୁନ୍ଦରଗଡ଼",
+        geoJsonUrl: "/data/geo/OD/sundargarh.geojson",
+        boundingBox: { north: 22.4, south: 21.6, east: 85.2, west: 83.5 },
+        population: 2093437,
+        activeAlertCount: 3
     },
 
     // Maharashtra
