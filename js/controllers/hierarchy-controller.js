@@ -142,8 +142,8 @@ async function _renderIndiaMinimap(states) {
         path.setAttribute("data-state-id", stateId);
         path.setAttribute("data-state-name", geoName);
 
-        // A state is unsupported if we have no districts for it
-        const isSupported = matchedState && matchedState.districts && matchedState.districts.length > 0;
+        // A state is unsupported if we have no events for it
+        const isSupported = matchedState && matchedState.dataPoints > 0;
         if (!isSupported) {
             path.classList.add("unsupported"); // Mark no-data states
         } else {
