@@ -184,17 +184,26 @@ function _showStateStats(state) {
     bar.classList.remove("slide-out");
 
     document.getElementById("hs-state-stats-name").textContent = state.name;
-    document.getElementById("hs-state-stats-pop").textContent =
-        Math.floor(100 + (state.name.length * 15)) + " Lakh";
-
     const alertsEl = document.getElementById("hs-state-stats-alerts");
-    alertsEl.textContent = state.activeAlertCount;
-    if (state.activeAlertCount === 0) {
-        alertsEl.classList.remove("danger-text");
-        alertsEl.style.color = "var(--ok)";
+    const popEl = document.getElementById("hs-state-stats-pop");
+
+    const hasData = state.districts && state.districts.length > 0;
+
+    if (hasData) {
+        popEl.textContent = Math.floor(100 + (state.name.length * 15)) + " Lakh";
+        alertsEl.textContent = state.activeAlertCount;
+        if (state.activeAlertCount === 0) {
+            alertsEl.classList.remove("danger-text");
+            alertsEl.style.color = "var(--ok)";
+        } else {
+            alertsEl.classList.add("danger-text");
+            alertsEl.style.color = "";
+        }
     } else {
-        alertsEl.classList.add("danger-text");
-        alertsEl.style.color = "";
+        popEl.textContent = "Data Not Found";
+        alertsEl.textContent = "Data Not Found";
+        alertsEl.classList.remove("danger-text");
+        alertsEl.style.color = "rgba(255,255,255,0.4)";
     }
 
     // Setup button for explicit navigation
@@ -420,8 +429,9 @@ function _showStatsPanel(district) {
         alertsEl.style.color = "";
     }
 
-    // Action binding (also triggering select logic)
-    actionEl.onclick = () => _selectDistrict(district);
+    // Inject "View Map" button — also bound to same _selectDistrict action
+    actionEl.innerHTML = `<button class="hs-district-action-btn">View Map</button>`;
+    actionEl.querySelector("button").onclick = () => _selectDistrict(district);
 }
 
 function _selectDistrict(district) {

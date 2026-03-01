@@ -75,7 +75,34 @@ export const MOCK_STATES = [
         geoJsonUrl: "/data/geo/MP/state-outline.geojson",
         districts: ["bhopal", "indore", "gwalior", "jabalpur", "ujjain"],
         activeAlertCount: 17
-    }
+    },
+    { id: "AN", name: "Andaman and Nicobar", nameLocal: "అండమాన్ మరియు నికోబార్", geoJsonUrl: "/data/geo/AN/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "AP", name: "Andhra Pradesh", nameLocal: "ఆంధ్రప్రదేశ్", geoJsonUrl: "/data/geo/AP/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "AR", name: "Arunachal Pradesh", nameLocal: "అరుణాచల్ ప్రదేశ్", geoJsonUrl: "/data/geo/AR/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "AS", name: "Assam", nameLocal: "అసోం", geoJsonUrl: "/data/geo/AS/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "BR", name: "Bihar", nameLocal: "बिहार", geoJsonUrl: "/data/geo/BR/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "CH", name: "Chandigarh", nameLocal: "चंडीगढ़", geoJsonUrl: "/data/geo/CH/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "CT", name: "Chhattisgarh", nameLocal: "छत्तीसगढ़", geoJsonUrl: "/data/geo/CT/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "DN", name: "Dadra and Nagar Haveli", nameLocal: "दादरा और नगर हवेली", geoJsonUrl: "/data/geo/DN/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "DD", name: "Daman and Diu", nameLocal: "दमन और दीव", geoJsonUrl: "/data/geo/DD/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "DL", name: "Delhi", nameLocal: "दिल्ली", geoJsonUrl: "/data/geo/DL/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "GA", name: "Goa", nameLocal: "गोवा", geoJsonUrl: "/data/geo/GA/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "HR", name: "Haryana", nameLocal: "हरियाणा", geoJsonUrl: "/data/geo/HR/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "HP", name: "Himachal Pradesh", nameLocal: "हिमाचल प्रदेश", geoJsonUrl: "/data/geo/HP/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "JK", name: "Jammu and Kashmir", nameLocal: "जम्मू और कश्मीर", geoJsonUrl: "/data/geo/JK/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "JH", name: "Jharkhand", nameLocal: "झारखंड", geoJsonUrl: "/data/geo/JH/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "KL", name: "Kerala", nameLocal: "കേരളം", geoJsonUrl: "/data/geo/KL/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "LD", name: "Lakshadweep", nameLocal: "ലക്ഷദ്വീപ്", geoJsonUrl: "/data/geo/LD/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "MN", name: "Manipur", nameLocal: "मणिपुर", geoJsonUrl: "/data/geo/MN/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "ML", name: "Meghalaya", nameLocal: "मेघालय", geoJsonUrl: "/data/geo/ML/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "MZ", name: "Mizoram", nameLocal: "मिज़ोरम", geoJsonUrl: "/data/geo/MZ/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "NL", name: "Nagaland", nameLocal: "नागालैंड", geoJsonUrl: "/data/geo/NL/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "PY", name: "Puducherry", nameLocal: "पुदुच्चेरी", geoJsonUrl: "/data/geo/PY/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "PB", name: "Punjab", nameLocal: "पंजाब", geoJsonUrl: "/data/geo/PB/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "SK", name: "Sikkim", nameLocal: "सिक्किम", geoJsonUrl: "/data/geo/SK/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "TR", name: "Tripura", nameLocal: "త్రిపుర", geoJsonUrl: "/data/geo/TR/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "TS", name: "Telangana", nameLocal: "తెలంగాణ", geoJsonUrl: "/data/geo/TS/state-outline.geojson", districts: [], activeAlertCount: 0 },
+    { id: "UT", name: "Uttaranchal", nameLocal: "उत्तरांचल", geoJsonUrl: "/data/geo/UT/state-outline.geojson", districts: [], activeAlertCount: 0 }
 ];
 
 // ── DISTRICTS ─────────────────────────────────────────────────────────────────

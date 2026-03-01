@@ -108,6 +108,7 @@ function setMode(newMode) {
     if (AppState.mode === newMode) return;
     AppState.mode = newMode;
     _renderModeToggle();
+    document.body.classList.toggle("live-active", newMode === "live");
     MapCtrl.syncModeClass(newMode, AppState.isHistorical, AppState.connectionStatus, AppState.envOverlaysEnabled);
     MapCtrl.runArbitration();
 }
@@ -168,6 +169,12 @@ async function loadDistrict(districtId, stateId) {
     TimeCtrl.renderBadge(false);
     _renderSyncDot();
     AICtrl.reset();
+    // ── FIX-3: Reset env overlay throttle on district change (DEV-05) ─
+    AppState.envOverlaysEnabled = true;
+    AppState.consecutiveSlowFrames = 0;
+    console.log('[APP] Env overlays reset for new district:', districtId);
+    // ─────────────────────────────────────────────────────────────────
+
     MapCtrl.syncModeClass(AppState.mode, false, "live", AppState.envOverlaysEnabled);
 
     // Load geo (async — non-blocking to timeline)

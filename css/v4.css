@@ -32,17 +32,41 @@
   --font-display: 'Syne', sans-serif;
   --font-data: 'DM Mono', monospace;
 
-  /* Severity fills */
-  --fill-critical: rgba(207, 34, 46, 0.18);
-  --fill-elevated: rgba(154, 103, 0, 0.14);
-  --fill-info: rgba(31, 111, 235, 0.10);
-  --fill-clear: rgba(26, 127, 55, 0.04);
+  /* Incident type fills — shades only, no primary hues */
+  --fill-health: rgba(185, 28, 48, 0.16);
+  /* crimson-rose     */
+  --fill-infrastructure: rgba(146, 92, 12, 0.14);
+  /* amber-ochre      */
+  --fill-mobility: rgba(55, 65, 160, 0.12);
+  /* slate-indigo     */
+  --fill-safety: rgba(20, 108, 100, 0.12);
+  /* teal-cyan        */
+  --fill-weather: rgba(96, 50, 168, 0.12);
+  /* violet-mauve     */
+  --fill-emergency: rgba(168, 22, 38, 0.20);
+  /* deep-scarlet     */
 
-  /* Border colours by severity */
-  --border-critical: rgba(207, 34, 46, 0.55);
-  --border-elevated: rgba(154, 103, 0, 0.45);
-  --border-info: rgba(31, 111, 235, 0.38);
-  --border-clear: rgba(26, 127, 55, 0.25);
+  /* Incident type border colours */
+  --border-health: rgba(185, 28, 48, 0.52);
+  --border-infrastructure: rgba(146, 92, 12, 0.44);
+  --border-mobility: rgba(55, 65, 160, 0.38);
+  --border-safety: rgba(20, 108, 100, 0.36);
+  --border-weather: rgba(96, 50, 168, 0.38);
+  --border-emergency: rgba(168, 22, 38, 0.56);
+
+  /* Incident type solid hues (for text/badges — muted shades) */
+  --hue-health: #B91C30;
+  /* crimson-rose     */
+  --hue-infrastructure: #925C0C;
+  /* amber-ochre      */
+  --hue-mobility: #3741A0;
+  /* slate-indigo     */
+  --hue-safety: #146C64;
+  /* teal-cyan        */
+  --hue-weather: #603294;
+  /* violet-mauve     */
+  --hue-emergency: #A81626;
+  /* deep-scarlet     */
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -540,20 +564,28 @@ button:focus-visible {
   z-index: 2;
 }
 
-.tl-card.sev-critical::before {
-  border-color: var(--danger);
+.tl-card.cat-health::before {
+  border-color: var(--hue-health);
 }
 
-.tl-card.sev-elevated::before {
-  border-color: var(--warn);
+.tl-card.cat-infrastructure::before {
+  border-color: var(--hue-infrastructure);
 }
 
-.tl-card.sev-info::before {
-  border-color: var(--primary);
+.tl-card.cat-mobility::before {
+  border-color: var(--hue-mobility);
 }
 
-.tl-card.sev-clear::before {
-  border-color: var(--ok);
+.tl-card.cat-safety::before {
+  border-color: var(--hue-safety);
+}
+
+.tl-card.cat-weather::before {
+  border-color: var(--hue-weather);
+}
+
+.tl-card.cat-emergency::before {
+  border-color: var(--hue-emergency);
 }
 
 /* STRING CONNECTOR between nodes */
@@ -593,20 +625,28 @@ button:focus-visible {
   width: 3px;
 }
 
-.tl-card.sev-critical .tl-card-inner::before {
-  background: var(--danger);
+.tl-card.cat-health .tl-card-inner::before {
+  background: var(--hue-health);
 }
 
-.tl-card.sev-elevated .tl-card-inner::before {
-  background: var(--warn);
+.tl-card.cat-infrastructure .tl-card-inner::before {
+  background: var(--hue-infrastructure);
 }
 
-.tl-card.sev-info .tl-card-inner::before {
-  background: var(--primary);
+.tl-card.cat-mobility .tl-card-inner::before {
+  background: var(--hue-mobility);
 }
 
-.tl-card.sev-clear .tl-card-inner::before {
-  background: var(--ok);
+.tl-card.cat-safety .tl-card-inner::before {
+  background: var(--hue-safety);
+}
+
+.tl-card.cat-weather .tl-card-inner::before {
+  background: var(--hue-weather);
+}
+
+.tl-card.cat-emergency .tl-card-inner::before {
+  background: var(--hue-emergency);
 }
 
 /* FOCUS STATE */
@@ -743,8 +783,8 @@ button:focus-visible {
   text-overflow: ellipsis;
 }
 
-/* Severity pill badge in card head (top-right) */
-.tl-severity-pill {
+/* Incident type pill badge in card head (top-right) */
+.tl-type-pill {
   font-size: 7px;
   font-weight: 600;
   text-transform: uppercase;
@@ -756,24 +796,34 @@ button:focus-visible {
   margin-top: 1px;
 }
 
-.sev-pill-sev-critical {
-  background: rgba(207, 34, 46, 0.12);
-  color: var(--danger);
+.cat-pill-health {
+  background: rgba(185, 28, 48, 0.12);
+  color: var(--hue-health);
 }
 
-.sev-pill-sev-elevated {
-  background: rgba(154, 103, 0, 0.12);
-  color: var(--warn);
+.cat-pill-infrastructure {
+  background: rgba(146, 92, 12, 0.12);
+  color: var(--hue-infrastructure);
 }
 
-.sev-pill-sev-info {
-  background: rgba(31, 111, 235, 0.10);
-  color: var(--primary);
+.cat-pill-mobility {
+  background: rgba(55, 65, 160, 0.12);
+  color: var(--hue-mobility);
 }
 
-.sev-pill-sev-clear {
-  background: rgba(26, 127, 55, 0.08);
-  color: var(--ok);
+.cat-pill-safety {
+  background: rgba(20, 108, 100, 0.10);
+  color: var(--hue-safety);
+}
+
+.cat-pill-weather {
+  background: rgba(96, 50, 168, 0.12);
+  color: var(--hue-weather);
+}
+
+.cat-pill-emergency {
+  background: rgba(168, 22, 38, 0.14);
+  color: var(--hue-emergency);
 }
 
 /* Empty timeline state */
@@ -908,10 +958,15 @@ button:focus-visible {
   }
 }
 
-/* ── Severity polygon animations ───────────────────────────────── */
+/* ── Incident-type polygon animations ────────────────────────────
+   Breathe animations are keyed by incident type intensity tier.
+   Tier-1 (health, emergency): faster breathe — active/urgent incidents.
+   Tier-2 (infrastructure, mobility): slower breathe — operational.
+   Tier-3 (safety, weather): static in district view.
+   All rates: ≤ 0.5 Hz — Access Board compliant. */
 
-/* District View: only critical pulse, max 1 (managed by JS) */
-@keyframes breathe-critical {
+/* Tier-1: health / emergency — District View (0.28 Hz) */
+@keyframes breathe-t1 {
 
   0%,
   100% {
@@ -919,18 +974,16 @@ button:focus-visible {
   }
 
   50% {
-    stroke-opacity: 0.32;
+    stroke-opacity: 0.34;
   }
 }
 
-/* 3.5s cycle = 0.28 Hz — Access Board compliant */
-
-/* Live Mode: critical full breathe */
-@keyframes breathe-critical-live {
+/* Tier-1: health / emergency — Live Mode (0.45 Hz) */
+@keyframes breathe-t1-live {
 
   0%,
   100% {
-    stroke-opacity: 0.35;
+    stroke-opacity: 0.36;
   }
 
   50% {
@@ -938,37 +991,36 @@ button:focus-visible {
   }
 }
 
-/* 2.2s cycle = 0.45 Hz — compliant */
-
-/* Live Mode: elevated breathe */
-@keyframes breathe-elevated-live {
+/* Tier-2: infrastructure / mobility — Live Mode only (0.33 Hz) */
+@keyframes breathe-t2-live {
 
   0%,
   100% {
-    stroke-opacity: 0.32;
+    stroke-opacity: 0.28;
   }
 
   50% {
-    stroke-opacity: 0.65;
+    stroke-opacity: 0.58;
   }
 }
 
-/* 3s cycle = 0.33 Hz — compliant */
-
-/* Leaflet path overrides for severity classes */
-.leaflet-interactive.sev-critical-path {
-  animation: breathe-critical 3.5s ease-in-out infinite;
+/* Leaflet path overrides for incident type classes */
+.leaflet-interactive.cat-health-path,
+.leaflet-interactive.cat-emergency-path {
+  animation: breathe-t1 3.5s ease-in-out infinite;
   animation-play-state: paused;
-  /* JS sets running on highest-severity only */
+  /* JS sets running on highest-priority only */
 }
 
-#map.live-mode .leaflet-interactive.sev-critical-path {
-  animation: breathe-critical-live 2.2s ease-in-out infinite;
+#map.live-mode .leaflet-interactive.cat-health-path,
+#map.live-mode .leaflet-interactive.cat-emergency-path {
+  animation: breathe-t1-live 2.2s ease-in-out infinite;
   animation-play-state: running;
 }
 
-#map.live-mode .leaflet-interactive.sev-elevated-path {
-  animation: breathe-elevated-live 3s ease-in-out infinite;
+#map.live-mode .leaflet-interactive.cat-infrastructure-path,
+#map.live-mode .leaflet-interactive.cat-mobility-path {
+  animation: breathe-t2-live 3s ease-in-out infinite;
   animation-play-state: running;
 }
 
@@ -1722,38 +1774,42 @@ button:focus-visible {
   stroke-width: 1.5px;
 }
 
-/* Sliding Stats Bar (Animated push layout) */
+/* District Stats Sidebar (slides in from right, content-sized) */
 #hs-district-stats {
   width: 0;
   padding: 0;
   opacity: 0;
   overflow: hidden;
-  /* Important for width animation clipping */
   flex-shrink: 0;
+  align-self: flex-start;
+  /* size to content, not to parent height */
   display: flex;
   flex-direction: column;
   background: rgba(10, 14, 23, 0.85);
   border: 1px solid transparent;
-  border-radius: 4px;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 6px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 #hs-district-stats.open {
   width: 240px;
-  padding: 16px;
+  padding: 20px 16px;
   opacity: 1;
   border-color: rgba(255, 255, 255, 0.1);
 }
 
 #hs-stats-content {
   width: 206px;
-  /* 240 - 32 padding - 2 borders */
+  /* 240 - 32px padding - 2px borders */
   min-width: 206px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  /* height NOT set — wraps content */
 }
 
 #hs-stats-name {
@@ -1795,16 +1851,35 @@ button:focus-visible {
 }
 
 #hs-stats-action {
-  margin-top: auto;
-  font-size: 11px;
-  text-align: center;
-  color: var(--ok);
+  margin-top: 16px;
+}
+
+.hs-district-action-btn {
+  width: 100%;
   padding: 10px;
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  border-radius: 2px;
-  background: rgba(34, 197, 94, 0.05);
+  background: rgba(31, 111, 235, 0.1);
+  border: 1px solid rgba(31, 111, 235, 0.4);
+  border-radius: 4px;
+  color: #58a6ff;
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 150ms, color 150ms, border-color 150ms, transform 100ms;
+}
+
+.hs-district-action-btn:hover {
+  background: rgba(31, 111, 235, 0.25);
+  border-color: #58a6ff;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.hs-district-action-btn:active {
+  transform: translateY(0);
+  background: rgba(31, 111, 235, 0.35);
 }
 
 #hs-stats-action:hover {
@@ -1847,4 +1922,71 @@ button:focus-visible {
 
 .hidden {
   display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIVE MODE ACTIVE STATES
+   Applied when #map has class live-mode (via JS setMode)
+═══════════════════════════════════════════════════════════════════ */
+
+/* LIVE pill highlight in top bar */
+#mode-live.active {
+  background: rgba(26, 127, 55, 0.18);
+  color: #3fb950;
+}
+
+/* Top bar subtle green border when live mode active */
+body.live-active #topbar {
+  border-bottom: 1px solid rgba(26, 127, 55, 0.30);
+}
+
+/* Density ribbon shimmer in Live Mode (spec §4) */
+body.live-active #ta-ribbon {
+  animation: ribbon-shimmer 3s ease-in-out infinite alternate;
+}
+
+@keyframes ribbon-shimmer {
+  0% {
+    filter: brightness(1.0);
+  }
+
+  100% {
+    filter: brightness(1.06);
+  }
+}
+
+/* Playhead stronger glow in Live Mode (spec §4) */
+body.live-active #ta-playhead-line {
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS (Issue 4)
+   Reduce layout reflow, enable GPU compositing hints
+═══════════════════════════════════════════════════════════════════ */
+
+/* Prevent timeline scroll from affecting map layout */
+#tl-scroll {
+  contain: layout style;
+  overflow-anchor: none;
+}
+
+/* GPU-hint for animated Leaflet SVG paths.
+   Applied by JS via _applyCatClass. Reduces main-thread paint cost. */
+.leaflet-interactive.cat-health-path,
+.leaflet-interactive.cat-emergency-path,
+.leaflet-interactive.cat-infrastructure-path,
+.leaflet-interactive.cat-mobility-path {
+  will-change: stroke-opacity;
+}
+
+/* Timeline cards: contain painting to their box */
+.tl-card-inner {
+  contain: layout style paint;
+}
+
+/* Env overlays: already use opacity, add compositing hint */
+.env-rain,
+.env-haze {
+  will-change: opacity;
 }

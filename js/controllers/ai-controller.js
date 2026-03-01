@@ -95,7 +95,7 @@ function _open() {
         evtIntents.classList.remove("hidden");
     } else {
         // ── GENERAL DISTRICT context ─────────────────────────────────
-        contextBar.className = "";
+        contextBar.className = "general";
         const districtName = _ctx.state.currentDistrict?.name ?? "–";
         contextText.textContent = `DISTRICT · ${districtName} · GENERAL`;
         if (contextMode) {

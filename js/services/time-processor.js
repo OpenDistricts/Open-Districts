@@ -45,18 +45,23 @@ export function detectResolution(events) {
  *
  * TimeBucket shape (matches the backend contract for V5):
  * {
- *   startTs:      string (ISO UTC),
- *   endTs:        string (ISO UTC),
- *   eventCount:   number,
- *   maxSeverity:  "critical"|"elevated"|"informational"|"clear",
- *   severityScore: number (average of events in bucket, 0-100),
- *   hasData:      boolean
+ *   startTs:           string (ISO UTC),
+ *   endTs:             string (ISO UTC),
+ *   eventCount:        number,
+ *   dominantCategory:  "health"|"infrastructure"|"mobility"|"safety"|"weather"|"emergency",
+ *   hasData:           boolean
  * }
  */
 export function computeTimeSeries(events, resolution) {
     if (!events || events.length === 0) return [];
 
-    const SEVERITY_ORDER = { critical: 4, elevated: 3, informational: 2, clear: 1 };
+    // Tier-1 categories animate in district view; tier-3 are static.
+    // Lower tier number = more urgent.
+    const CAT_TIER = {
+        health: 1, emergency: 1,
+        infrastructure: 2, mobility: 2,
+        safety: 3, weather: 3
+    };
 
     // Determine the full date range from the event set
     const timestamps = events.map(e => new Date(e.timestamp).getTime());
@@ -79,28 +84,23 @@ export function computeTimeSeries(events, resolution) {
                 startTs: new Date(startMs).toISOString(),
                 endTs: new Date(endMs).toISOString(),
                 eventCount: 0,
-                maxSeverity: "clear",
-                severityScore: 0,
+                dominantCategory: "safety",
                 hasData: false
             };
         }
 
-        // Find highest severity in bucket
-        const maxSevEvent = bucketEvents.reduce((best, e) =>
-            (SEVERITY_ORDER[e.severity] ?? 0) > (SEVERITY_ORDER[best.severity] ?? 0) ? e : best
-        );
-
-        // Average severity score
-        const avgScore = Math.round(
-            bucketEvents.reduce((sum, e) => sum + (e.severityScore ?? 0), 0) / bucketEvents.length
-        );
+        // Find most urgent category in bucket (lowest tier)
+        const dominantEvent = bucketEvents.reduce((best, e) => {
+            const bestTier = CAT_TIER[best.category] ?? 99;
+            const eTier = CAT_TIER[e.category] ?? 99;
+            return eTier < bestTier ? e : best;
+        });
 
         return {
             startTs: new Date(startMs).toISOString(),
             endTs: new Date(endMs).toISOString(),
             eventCount: bucketEvents.length,
-            maxSeverity: maxSevEvent.severity,
-            severityScore: avgScore,
+            dominantCategory: dominantEvent.category,
             hasData: true
         };
     });
@@ -112,7 +112,8 @@ export function computeTimeSeries(events, resolution) {
 
 /**
  * Map a TimeBucket to its density ribbon RGBA colour string.
- * Encodes Section 07 density ribbon colour specification exactly.
+ * Encodes Section 07 density ribbon colour specification.
+ * Colour is driven by incident type (category), not severity level.
  *
  * @param {Object} bucket  TimeBucket
  * @returns {string}  CSS rgba() string
@@ -120,15 +121,17 @@ export function computeTimeSeries(events, resolution) {
 export function bucketToRibbonColour(bucket) {
     if (!bucket.hasData) return "rgba(255,255,255,0.06)";
 
-    // Base opacity per severity class
+    // Category hues (shades only — no pure primaries)
     const BASE = {
-        critical: { r: 207, g: 34, b: 46, baseOpacity: 0.45 },
-        elevated: { r: 154, g: 103, b: 0, baseOpacity: 0.35 },
-        informational: { r: 31, g: 111, b: 235, baseOpacity: 0.25 },
-        clear: { r: 255, g: 255, b: 255, baseOpacity: 0.06 }
+        health: { r: 185, g: 28, b: 48, baseOpacity: 0.44 },   // crimson-rose
+        infrastructure: { r: 146, g: 92, b: 12, baseOpacity: 0.34 },   // amber-ochre
+        mobility: { r: 55, g: 65, b: 160, baseOpacity: 0.28 },   // slate-indigo
+        safety: { r: 20, g: 108, b: 100, baseOpacity: 0.24 },   // teal-cyan
+        weather: { r: 96, g: 50, b: 168, baseOpacity: 0.26 },   // violet-mauve
+        emergency: { r: 168, g: 22, b: 38, baseOpacity: 0.50 },   // deep-scarlet
     };
 
-    const c = BASE[bucket.maxSeverity] ?? BASE.clear;
+    const c = BASE[bucket.dominantCategory] ?? BASE.safety;
 
     // Density tier bonus: +0.15 per tier above baseline (tiers: 1-2, 3-5, 6+)
     let densityBonus = 0;

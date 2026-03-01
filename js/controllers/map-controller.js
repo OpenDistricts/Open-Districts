@@ -4,7 +4,7 @@
 // Exports: init(ctx) → { loadDistrictGeo, syncFocus, syncModeClass, runArbitration }
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { boundingBoxToLeaflet, severityPolygonStyle, districtBoundaryStyle, severityMarkerOptions }
+import { boundingBoxToLeaflet, categoryPolygonStyle, districtBoundaryStyle, categoryMarkerOptions, categoryTier }
     from "../services/geo-service.js";
 
 let _ctx;
@@ -84,7 +84,15 @@ export async function loadDistrictGeo(district, events) {
     // Try to load GeoJSON — falls back to mock grid in geo-service
     const geoData = await _ctx.ds.getGeoJSON(district.geoJsonUrl);
 
-    const severityMap = _buildSeverityByRegion(events);
+    const categoryMap = _buildCategoryByRegion(events);
+
+    // ── DIAGNOSTIC: Expose regionId alignment (→ DEV-04 fix) ───────────
+    console.log('[MAP DEBUG] Event regionIds:', events.map(e => e.regionId));
+    console.log('[MAP DEBUG] GeoJSON feature IDs:', geoData.features.map(f =>
+        f.properties?.id || f.properties?.NAME_2 || f.properties?.dtname || 'UNKNOWN'
+    ));
+    console.log('[MAP DEBUG] Category map keys:', Object.keys(categoryMap));
+    // ───────────────────────────────────────────────────────────────────────────
 
     // District boundary ring
     _boundaryLayer = L.geoJSON(geoData, {
@@ -96,8 +104,8 @@ export async function loadDistrictGeo(district, events) {
     _regionsLayer = L.geoJSON(geoData, {
         style: feature => {
             const regionId = feature.properties?.id ?? feature.id ?? "";
-            const sev = severityMap[regionId]?.severity ?? "clear";
-            return severityPolygonStyle(sev, false);
+            const cat = categoryMap[regionId]?.category ?? "safety";
+            return categoryPolygonStyle(cat, false);
         },
         onEachFeature: (feature, layer) => {
             const regionId = feature.properties?.id ?? feature.id ?? "";
@@ -114,8 +122,8 @@ export async function loadDistrictGeo(district, events) {
         _regionsLayer.eachLayer(layer => {
             const regionId = _idFromLayer(layer);
             if (!regionId || !layer._path) return;
-            const sev = severityMap[regionId]?.severity ?? "clear";
-            _applySevClass(layer._path, sev);
+            const cat = categoryMap[regionId]?.category ?? "safety";
+            _applyCatClass(layer._path, cat);
         });
         runArbitration();
     }, 120);
@@ -124,7 +132,7 @@ export async function loadDistrictGeo(district, events) {
     const group = L.featureGroup();
     events.forEach(ev => {
         if (!ev.geoPoint) return;
-        const opts = severityMarkerOptions(ev.severity);
+        const opts = categoryMarkerOptions(ev.category);
         const marker = L.circleMarker([ev.geoPoint.lat, ev.geoPoint.lng], opts);
         marker.bindTooltip(ev.title, { sticky: true });
         marker.on("click", () => _ctx.emit("map:regionClick", { eventId: ev.id }));
@@ -135,12 +143,12 @@ export async function loadDistrictGeo(district, events) {
 
 /** Highlight focused polygon, dim others, fly to bounds. */
 export function syncFocus(focusedEventId, events) {
-    const severityMap = _buildSeverityByRegion(events);
+    const categoryMap = _buildCategoryByRegion(events);
 
     if (!focusedEventId) {
         _regionLayerMap.forEach((layer, regionId) => {
-            const sev = severityMap[regionId]?.severity ?? "clear";
-            layer.setStyle(severityPolygonStyle(sev, false));
+            const cat = categoryMap[regionId]?.category ?? "safety";
+            layer.setStyle(categoryPolygonStyle(cat, false));
         });
         runArbitration();
         return;
@@ -159,9 +167,9 @@ export function syncFocus(focusedEventId, events) {
 
     // Style update
     _regionLayerMap.forEach((layer, regionId) => {
-        const sev = severityMap[regionId]?.severity ?? "clear";
+        const cat = categoryMap[regionId]?.category ?? "safety";
         const focused = ev.regionId && regionId === ev.regionId;
-        layer.setStyle(severityPolygonStyle(sev, focused));
+        layer.setStyle(categoryPolygonStyle(cat, focused));
     });
 
     runArbitration();
@@ -185,12 +193,12 @@ export function applyHistoricalSnapshot(bucketIndex, timeBuckets, events) {
 
     const cutoff = new Date(cutoffTs);
     const historicalEvts = events.filter(e => new Date(e.timestamp) <= cutoff);
-    const severityMap = _buildSeverityByRegion(historicalEvts);
+    const categoryMap = _buildCategoryByRegion(historicalEvts);
 
     _regionLayerMap.forEach((layer, regionId) => {
-        const sev = severityMap[regionId]?.severity ?? "clear";
-        layer.setStyle(severityPolygonStyle(sev, false));
-        if (layer._path) _applySevClass(layer._path, sev);
+        const cat = categoryMap[regionId]?.category ?? "safety";
+        layer.setStyle(categoryPolygonStyle(cat, false));
+        if (layer._path) _applyCatClass(layer._path, cat);
     });
 
     runArbitration();
@@ -202,44 +210,51 @@ export function runArbitration() {
 
     const t0 = performance.now();
     const events = _ctx.state.events ?? [];
-    const severityMap = _buildSeverityByRegion(events);
+    const categoryMap = _buildCategoryByRegion(events);
     const isLive = _ctx.state.mode === "live" && !_ctx.state.isHistorical;
     const mapBounds = _map.getBounds();
 
-    // Collect visible regions
-    const SEV_ORDER = { critical: 4, elevated: 3, informational: 2, clear: 1 };
+    // Tier order: tier-1 (health/emergency) wins over tier-2, then tier-3.
+    // Within same tier, most-recent timestamp breaks ties.
     const visible = [];
     _regionLayerMap.forEach((layer, regionId) => {
         const center = layer.getBounds?.().getCenter();
         if (!center || !mapBounds.contains(center)) return;
-        const sev = severityMap[regionId] ?? { severity: "clear", severityScore: 0, timestamp: "0" };
-        visible.push({ regionId, layer, ...sev });
+        const entry = categoryMap[regionId] ?? { category: "safety", timestamp: "0" };
+        const tier = categoryTier(entry.category);
+        visible.push({ regionId, layer, ...entry, tier });
     });
 
-    // Deterministic sort: score desc → timestamp desc → regionId lexical asc
+    // Sort: tier asc (tier-1 first), then timestamp desc
     visible.sort((a, b) => {
-        const sd = (SEV_ORDER[b.severity] ?? 0) - (SEV_ORDER[a.severity] ?? 0);
-        if (sd !== 0) return sd;
-        const sc = b.severityScore - a.severityScore;
-        if (sc !== 0) return sc;
-        const td = new Date(b.timestamp) - new Date(a.timestamp);
-        if (td !== 0) return td;
-        return a.regionId.localeCompare(b.regionId);
+        if (a.tier !== b.tier) return a.tier - b.tier;
+        return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
     const elapsed = performance.now() - t0;
     _updatePerfCounter(elapsed);
     const maxTier = _effectiveTierCeiling(elapsed);
 
-    visible.forEach(({ layer, severity }, index) => {
+    visible.forEach(({ layer, category, tier }, index) => {
         if (!layer._path) return;
-        let animate = false;
+        const path = layer._path;
+
         if (isLive) {
-            animate = (index === 0 && maxTier >= 1) || (index <= 2 && maxTier >= 2);
+            // CSS drives animations via .cat-*-path classes.
+            // JS only pauses paths beyond the tier cap.
+            const isTier1Slot = tier === 1 && index === 0 && maxTier >= 1;
+            const isTier2Slot = tier === 2 && index >= 1 && index <= 2 && maxTier >= 2;
+
+            if (isTier1Slot || isTier2Slot) {
+                path.style.animationPlayState = "running";
+            } else {
+                path.style.animationPlayState = "paused";
+            }
         } else {
-            animate = index === 0 && severity === "critical";
+            // District View: only #1 tier-1 category animates
+            const animate = index === 0 && tier === 1;
+            path.style.animationPlayState = animate ? "running" : "paused";
         }
-        layer._path.style.animationPlayState = animate ? "running" : "paused";
     });
 }
 
@@ -247,27 +262,33 @@ export function runArbitration() {
 // PRIVATE helpers
 // ═══════════════════════════════════════════════════════════════════
 
-function _buildSeverityByRegion(events) {
-    const SEV_ORDER = { critical: 4, elevated: 3, informational: 2, clear: 1 };
+/** Build a per-region category map: picks the category from the most-recent event per region.
+ *  If a region has multiple event types, the one with the lowest tier (most urgent) wins.
+ */
+function _buildCategoryByRegion(events) {
     const result = {};
     events.forEach(ev => {
         if (!ev.regionId) return;
         const existing = result[ev.regionId];
-        if (!existing
-            || SEV_ORDER[ev.severity] > SEV_ORDER[existing.severity]
-            || (SEV_ORDER[ev.severity] === SEV_ORDER[existing.severity] && ev.severityScore > existing.severityScore)) {
-            result[ev.regionId] = { severity: ev.severity, severityScore: ev.severityScore, timestamp: ev.timestamp };
+        const evTier = categoryTier(ev.category);
+        const exTier = existing ? categoryTier(existing.category) : 99;
+        // Lower tier wins; ties broken by most-recent timestamp
+        if (!existing || evTier < exTier || (evTier === exTier && ev.timestamp > existing.timestamp)) {
+            result[ev.regionId] = { category: ev.category, timestamp: ev.timestamp };
         }
     });
     return result;
 }
 
+/** Top event for region — picks lowest tier (most urgent), then most recent. */
 function _topEventForRegion(regionId, events) {
-    const SEV_ORDER = { critical: 4, elevated: 3, informational: 2, clear: 1 };
     return events
         .filter(e => e.regionId === regionId)
-        .sort((a, b) => (SEV_ORDER[b.severity] ?? 0) - (SEV_ORDER[a.severity] ?? 0) || b.severityScore - a.severityScore)
-    [0] ?? null;
+        .sort((a, b) => {
+            const td = categoryTier(a.category) - categoryTier(b.category);
+            if (td !== 0) return td;
+            return b.timestamp.localeCompare(a.timestamp);
+        })[0] ?? null;
 }
 
 function _idFromLayer(layer) {
@@ -277,9 +298,12 @@ function _idFromLayer(layer) {
     return null;
 }
 
-function _applySevClass(path, sev) {
-    path.classList.remove("sev-critical-path", "sev-elevated-path", "sev-info-path", "sev-clear-path");
-    path.classList.add(`sev-${sev === "informational" ? "info" : sev}-path`);
+function _applyCatClass(path, category) {
+    path.classList.remove(
+        "cat-health-path", "cat-infrastructure-path", "cat-mobility-path",
+        "cat-safety-path", "cat-weather-path", "cat-emergency-path"
+    );
+    path.classList.add(`cat-${category}-path`);
 }
 
 function _suspendAnimations() {

@@ -45,38 +45,76 @@ export function boundingBoxToLeaflet(bb) {
     ];
 }
 
+// ── Category colour map (shades only — no pure primaries) ──────────────────────
+const CAT_HUES = {
+    health: { hex: "#B91C30", r: 185, g: 28, b: 48 },   // crimson-rose
+    infrastructure: { hex: "#925C0C", r: 146, g: 92, b: 12 },   // amber-ochre
+    mobility: { hex: "#3741A0", r: 55, g: 65, b: 160 },   // slate-indigo
+    safety: { hex: "#146C64", r: 20, g: 108, b: 100 },   // teal-cyan
+    weather: { hex: "#603294", r: 96, g: 50, b: 168 },   // violet-mauve
+    emergency: { hex: "#A81626", r: 168, g: 22, b: 38 },   // deep-scarlet
+};
+
+// Tier-1 = animated in district view (health, emergency)
+// Tier-2 = animated in live mode only (infrastructure, mobility)
+// Tier-3 = never animated (safety, weather)
+const CAT_TIER = {
+    health: 1, emergency: 1,
+    infrastructure: 2, mobility: 2,
+    safety: 3, weather: 3
+};
+
 /**
- * Build a Leaflet circle marker options object for an event's geoPoint.
- * @param {string} severity  "critical"|"elevated"|"informational"|"clear"
- * @returns {Object}  Leaflet CircleMarker options
+ * Returns the animation tier for a category.
+ * Tier 1: health/emergency (always-animate candidates)
+ * Tier 2: infrastructure/mobility (live-mode only)
+ * Tier 3: safety/weather (static)
+ * @param {string} category
+ * @returns {1|2|3}
  */
-export function severityMarkerOptions(severity) {
-    const CONFIG = {
-        critical: { color: "#CF222E", fillColor: "#CF222E", radius: 12, weight: 2, fillOpacity: 0.85 },
-        elevated: { color: "#9A6700", fillColor: "#9A6700", radius: 9, weight: 2, fillOpacity: 0.75 },
-        informational: { color: "#1F6FEB", fillColor: "#1F6FEB", radius: 7, weight: 2, fillOpacity: 0.65 },
-        clear: { color: "#1A7F37", fillColor: "#1A7F37", radius: 5, weight: 1, fillOpacity: 0.50 }
-    };
-    return CONFIG[severity] ?? CONFIG.informational;
+export function categoryTier(category) {
+    return CAT_TIER[category] ?? 3;
 }
 
 /**
- * Build Leaflet polygon style for a severity class.
- * District View: low fill, pulse on critical only.
- * Live Mode fills are applied via CSS class on the parent element.
+ * Build a Leaflet circle marker options object for an event's geoPoint.
+ * @param {string} category  event.category
+ * @returns {Object}  Leaflet CircleMarker options
+ */
+export function categoryMarkerOptions(category) {
+    const h = CAT_HUES[category] ?? CAT_HUES.safety;
+    // Tier-1: largest dot; Tier-2: medium; Tier-3: small
+    const tier = CAT_TIER[category] ?? 3;
+    const radius = tier === 1 ? 11 : tier === 2 ? 8 : 6;
+    const fillOpacity = tier === 1 ? 0.82 : tier === 2 ? 0.70 : 0.56;
+    return {
+        color: h.hex,
+        fillColor: h.hex,
+        radius,
+        weight: tier === 1 ? 2 : 1.5,
+        fillOpacity
+    };
+}
+
+/**
+ * Build Leaflet polygon style for an incident category.
+ * District View: low fill, breathe on tier-1 only (managed by JS + CSS).
  *
- * @param {string} severity
- * @param {boolean} focused  Whether this polygon is currently focused
+ * @param {string}  category  event.category
+ * @param {boolean} focused   Whether this polygon is currently focused
  * @returns {Object}  Leaflet PathOptions
  */
-export function severityPolygonStyle(severity, focused = false) {
-    const BASE = {
-        critical: { color: "#CF222E", fillColor: "#CF222E", fillOpacity: 0.05, weight: focused ? 2.5 : 1.5, opacity: focused ? 0.55 : 0.22 },
-        elevated: { color: "#9A6700", fillColor: "#9A6700", fillOpacity: 0.05, weight: focused ? 2.0 : 1.5, opacity: focused ? 0.50 : 0.18 },
-        informational: { color: "#1F6FEB", fillColor: "#1F6FEB", fillOpacity: 0.04, weight: focused ? 1.5 : 1, opacity: focused ? 0.45 : 0.15 },
-        clear: { color: "#1A7F37", fillColor: "#1A7F37", fillOpacity: 0.02, weight: 1, opacity: 0.10 }
+export function categoryPolygonStyle(category, focused = false) {
+    const h = CAT_HUES[category] ?? CAT_HUES.safety;
+    const tier = CAT_TIER[category] ?? 3;
+    // Tier-1 gets slightly more fill/stroke weight to signal urgency
+    return {
+        color: h.hex,
+        fillColor: h.hex,
+        fillOpacity: tier === 1 ? 0.06 : tier === 2 ? 0.05 : 0.03,
+        weight: focused ? (tier === 1 ? 2.5 : 2.0) : (tier === 1 ? 1.5 : 1),
+        opacity: focused ? (tier === 1 ? 0.55 : 0.44) : (tier === 1 ? 0.22 : 0.15)
     };
-    return BASE[severity] ?? BASE.clear;
 }
 
 /**
@@ -140,6 +178,39 @@ function _getMockGeometry(url) {
             }
         }
         return { type: "FeatureCollection", features };
+    }
+
+    // ── Khordha district: block-level mock polygons ──────────────────
+    // IDs match mock-events.js regionId values exactly (DEV-04 fix)
+    if (fileName === "khordha") {
+        const BLOCKS = [
+            { id: "balianta-block", lat: 20.1847, lng: 85.7891, name: "Balianta Block" },
+            { id: "tangi-block", lat: 20.0634, lng: 85.9271, name: "Tangi Block" },
+            { id: "bolagarh-block", lat: 20.1189, lng: 85.5843, name: "Bolagarh Block" },
+            { id: "jatni-block", lat: 20.1694, lng: 85.7066, name: "Jatni Block" },
+            { id: "khordha-block", lat: 20.1820, lng: 85.6145, name: "Khordha Block" },
+            { id: "cuttack-block", lat: 20.4625, lng: 85.8828, name: "Cuttack Block" },
+            { id: "bhubaneswar", lat: 20.2961, lng: 85.8245, name: "Bhubaneswar" },
+        ];
+        const sq = 0.08; // ~9km block size
+        return {
+            type: "FeatureCollection",
+            features: BLOCKS.map(b => ({
+                type: "Feature",
+                id: b.id,
+                properties: { id: b.id, name: b.name, districtId: "khordha" },
+                geometry: {
+                    type: "Polygon",
+                    coordinates: [[
+                        [b.lng - sq, b.lat - sq],
+                        [b.lng + sq, b.lat - sq],
+                        [b.lng + sq, b.lat + sq],
+                        [b.lng - sq, b.lat + sq],
+                        [b.lng - sq, b.lat - sq]
+                    ]]
+                }
+            }))
+        };
     }
 
     // Generate a rough convex polygon around center

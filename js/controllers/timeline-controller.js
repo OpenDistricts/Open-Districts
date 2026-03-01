@@ -87,12 +87,12 @@ export function setGeoData(geoData) {
 // ═══════════════════════════════════════════════════════════════════
 
 function _buildCard(ev) {
-    const sevClass = ev.severity === "informational" ? "sev-info" : `sev-${ev.severity}`;
+    const catClass = `cat-${ev.category}`;
     const timeStr = formatCardTime(ev.timestamp);
     const regionLabel = _getRegionName(ev.regionId, ev.location?.block);
 
     const card = document.createElement("article");
-    card.className = `tl-card ${sevClass}`;
+    card.className = `tl-card ${catClass}`;
     card.setAttribute("data-event-id", ev.id);
     card.setAttribute("role", "listitem");
     card.setAttribute("aria-label", ev.title);
@@ -105,7 +105,7 @@ function _buildCard(ev) {
           <div class="tl-loc-name">${regionLabel}</div>
           <div class="tl-time">${timeStr}</div>
         </div>
-        <div class="tl-severity-pill sev-pill-${sevClass}">${_sevLabel(ev.severity)}</div>
+        <div class="tl-type-pill cat-pill-${ev.category}">${_catLabel(ev.category)}</div>
       </div>
       <div class="tl-title-row">${ev.title}</div>
       <div class="tl-summary">${ev.summary}</div>
@@ -182,8 +182,16 @@ function _getRegionName(regionId, fallback) {
     return regionId.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 }
 
-function _sevLabel(s) {
-    return { critical: "CRIT", elevated: "ELEV", informational: "INFO", clear: "CLEAR" }[s] ?? s.toUpperCase();
+function _catLabel(cat) {
+    const MAP = {
+        health: "HEALTH",
+        infrastructure: "INFRA",
+        mobility: "MOBIL.",
+        safety: "SAFETY",
+        weather: "WEATHER",
+        emergency: "EMRGNCY"
+    };
+    return MAP[cat] ?? cat.toUpperCase().slice(0, 7);
 }
 
 // ── Collapse ──────────────────────────────────────────────────────
