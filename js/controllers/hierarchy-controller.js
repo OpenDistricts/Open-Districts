@@ -3,6 +3,7 @@
 // Receives: { state, ds, emit } context.
 // Exports: init(ctx) → { open, close }
 // ─────────────────────────────────────────────────────────────────────────────
+import { fuzzyMatch } from '../utils/string-matcher.js';
 
 let _ctx;
 let _allStates = [];
@@ -145,19 +146,19 @@ async function _renderIndiaMinimap(states) {
         const isSupported = matchedState && matchedState.districts && matchedState.districts.length > 0;
         if (!isSupported) {
             path.classList.add("unsupported"); // Mark no-data states
+        } else {
+            // Mouse interactions for glow
+            path.addEventListener("mouseenter", () => {
+                path.classList.add("hovered");
+                const lbl = document.getElementById(`lbl-${stateId}`);
+                if (lbl) lbl.classList.add("active");
+            });
+            path.addEventListener("mouseleave", () => {
+                path.classList.remove("hovered");
+                const lbl = document.getElementById(`lbl-${stateId}`);
+                if (lbl) lbl.classList.remove("active");
+            });
         }
-
-        // Mouse interactions for glow
-        path.addEventListener("mouseenter", () => {
-            path.classList.add("hovered");
-            const lbl = document.getElementById(`lbl-${stateId}`);
-            if (lbl) lbl.classList.add("active");
-        });
-        path.addEventListener("mouseleave", () => {
-            path.classList.remove("hovered");
-            const lbl = document.getElementById(`lbl-${stateId}`);
-            if (lbl) lbl.classList.remove("active");
-        });
 
         // Click logic
         path.addEventListener("click", () => {
@@ -293,12 +294,10 @@ function _renderSVGMap(districts, stateGeo) {
             const pathStr = pathGen(feature);
             const centroid = pathGen.centroid(feature);
 
-            // Does this geo feature map to one of our active mock districts?
+            // Resilient matching tying 2011 census properties to live metadata aliases using Levenshtein distance
             const matchedDistrict = districts.find(d => {
-                const geoLow = name.toLowerCase();
-                const matchName = geoLow.includes(d.name.toLowerCase());
-                const matchAlias = d.aliases && d.aliases.some(alias => geoLow.includes(alias.toLowerCase()));
-                return matchName || matchAlias;
+                const candidates = [d.name, ...(d.aliases || [])];
+                return fuzzyMatch(name, candidates, 2) !== null;
             });
 
             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -349,6 +348,7 @@ function _renderSVGMap(districts, stateGeo) {
                 });
             } else {
                 // Unmatched district: render dimly so the full state map is visible
+                path.classList.add("unsupported");
                 path.style.opacity = "0.35";
                 path.style.cursor = "default";
 

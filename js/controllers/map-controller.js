@@ -4,14 +4,16 @@
 // Exports: init(ctx) → { loadDistrictGeo, syncFocus, syncModeClass, runArbitration }
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { boundingBoxToLeaflet, categoryPolygonStyle, districtBoundaryStyle, categoryMarkerOptions, categoryTier }
-    from "../services/geo-service.js";
+import {
+    boundingBoxToLeaflet, categoryMarkerOptions, categoryPolygonStyle, districtBoundaryStyle, categoryTier
+} from '../services/geo-service.js';
+import { fuzzyMatch } from '../utils/string-matcher.js';
 
 let _ctx;
 
 // ── Leaflet handles (module-scoped, not on AppState) ──────────────
 let _map;
-let _boundaryLayer, _regionsLayer, _markersLayer;
+let _boundaryLayer, _regionsLayer, _markersLayer, _maskLayer;
 const _regionLayerMap = new Map(); // regionId → Leaflet layer
 
 // ═══════════════════════════════════════════════════════════════════
@@ -75,6 +77,7 @@ export async function loadDistrictGeo(district, events) {
     if (_boundaryLayer) _map.removeLayer(_boundaryLayer);
     if (_regionsLayer) _map.removeLayer(_regionsLayer);
     if (_markersLayer) _map.removeLayer(_markersLayer);
+    if (_maskLayer) _map.removeLayer(_maskLayer);
     _regionLayerMap.clear();
 
     // Fit to bounds and strictly cage the user
@@ -101,7 +104,53 @@ export async function loadDistrictGeo(district, events) {
         f.properties?.id || f.properties?.NAME_2 || f.properties?.dtname || 'UNKNOWN'
     ));
     console.log('[MAP DEBUG] Category map keys:', Object.keys(categoryMap));
+
+    // Fuzzy match alignment: bind 2011 Census GeoJSON features to actual event data slugs 
+    // even if spellings or transliterations differ across datasets
+    const knownEventRegions = Object.keys(categoryMap);
+    geoData.features.forEach(feature => {
+        let currId = feature.properties?.id ?? feature.id ?? "";
+        // If exact match fails, attempt fuzzy matching the common name fields against events
+        if (!categoryMap[currId]) {
+            const rawNames = [feature.properties?.name, feature.properties?.NAME_3, feature.properties?.NAME_2].filter(Boolean);
+            for (const n of rawNames) {
+                const match = fuzzyMatch(n, knownEventRegions, 3);
+                if (match) {
+                    if (!feature.properties) feature.properties = {};
+                    feature.properties.id = match;
+                    feature.id = match;
+                    console.log(`[MAP DEBUG] Fuzzy Matched geometry '${n}' to event region '${match}'`);
+                    break;
+                }
+            }
+        }
+    });
     // ───────────────────────────────────────────────────────────────────────────
+
+    // Create an inverted polygon to mask out everything outside the district
+    const maskCoordinates = [
+        [[90, -180], [90, 180], [-90, 180], [-90, -180]]
+    ];
+
+    L.geoJSON(geoData, {
+        onEachFeature: (feature, layer) => {
+            if (layer instanceof L.Polygon) {
+                const latlngs = layer.getLatLngs();
+                if (feature.geometry.type === "Polygon") {
+                    maskCoordinates.push(latlngs[0]);
+                } else if (feature.geometry.type === "MultiPolygon") {
+                    latlngs.forEach(polygon => maskCoordinates.push(polygon[0]));
+                }
+            }
+        }
+    });
+
+    _maskLayer = L.polygon(maskCoordinates, {
+        fillColor: '#DDE1E7', // --map-base
+        fillOpacity: 1.0,
+        stroke: false,
+        interactive: false
+    }).addTo(_map);
 
     // District boundary ring
     _boundaryLayer = L.geoJSON(geoData, {

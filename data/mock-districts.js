@@ -1,9 +1,11 @@
 // ─── MOCK DISTRICTS & STATES — OpenDistricts V4 ───────────────────────────────
 // Schema source: docs/V4-transition-schema.md
 
+import { MOCK_EVENTS } from "./mock-events.js";
+
 // ── STATES ───────────────────────────────────────────────────────────────────
 
-export const MOCK_STATES = [
+const _rawStates = [
     {
         id: "OD",
         name: "Odisha",
@@ -105,9 +107,14 @@ export const MOCK_STATES = [
     { id: "UT", name: "Uttaranchal", nameLocal: "उत्तरांचल", geoJsonUrl: "/data/geo/UT/state-outline.geojson", districts: [], dataPoints: 0 }
 ];
 
+export const MOCK_STATES = _rawStates.map(state => ({
+    ...state,
+    dataPoints: MOCK_EVENTS.filter(e => e.stateId === state.id).length
+}));
+
 // ── DISTRICTS ─────────────────────────────────────────────────────────────────
 
-export const MOCK_DISTRICTS = [
+const _rawDistricts = [
 
     // Odisha
     {
@@ -278,6 +285,11 @@ export const MOCK_DISTRICTS = [
         dataPoints: 15
     }
 ];
+
+export const MOCK_DISTRICTS = _rawDistricts.map(dist => ({
+    ...dist,
+    dataPoints: MOCK_EVENTS.filter(e => e.districtId === dist.id).length
+}));
 
 // ── SUB-DISTRICT REGIONS (for GeoJSON regionId binding) ───────────────────────
 // Used by geo-service to map regionId slugs to display names

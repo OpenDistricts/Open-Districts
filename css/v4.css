@@ -873,22 +873,22 @@ button:focus-visible {
 /* Custom zoom controls */
 #map-zoom-controls {
   position: absolute;
-  right: 12px;
-  bottom: 14px;
+  right: 60px;
+  bottom: 60px;
   /* above time axis */
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 10px;
   z-index: 1000;
 }
 
 .zoom-btn {
-  width: 36px;
-  height: 36px;
+  width: 64px;
+  height: 64px;
   background: var(--white);
   border: 1px solid var(--rule);
-  border-radius: 2px;
-  font-size: 20px;
+  border-radius: 8px;
+  font-size: 40px;
   font-weight: 300;
   color: var(--ink-mid);
   display: flex;
@@ -896,6 +896,7 @@ button:focus-visible {
   justify-content: center;
   transition: border-color 120ms, color 120ms;
   line-height: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .zoom-btn:hover {
@@ -1554,7 +1555,7 @@ button:focus-visible {
   transition: all 150ms ease-out;
 }
 
-.india-state-path:hover,
+.india-state-path:not(.unsupported):hover,
 .india-state-path.hovered {
   fill: rgba(31, 111, 235, 0.15);
   stroke: #1F6FEB;
@@ -1765,7 +1766,7 @@ button:focus-visible {
 }
 
 .hdist-poly.active,
-.hdist-poly:hover {
+.hdist-poly:not(.unsupported):hover {
   fill: rgba(31, 111, 235, 0.20);
   stroke: #1F6FEB;
   stroke-width: 1.5;
