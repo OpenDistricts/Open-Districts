@@ -199,25 +199,36 @@ export async function loadDistrictGeo(district, events) {
 
     const punchData = unifiedDistrict ? { type: "FeatureCollection", features: [unifiedDistrict] } : geoData;
 
-    // Direct GeoJSON coordinate extraction (more robust than Leaflet Layer inspection)
-    const swap = (arr) => {
-        if (typeof arr[0] === 'number') return [arr[1], arr[0]];
-        return arr.map(swap);
-    };
+    console.log(`[MAP DEBUG] Punching mask holes. Features: ${punchData.features.length}, Unified: ${!!unifiedDistrict}`);
 
-    punchData.features.forEach(f => {
-        if (!f.geometry) return;
-        if (f.geometry.type === "Polygon") {
-            maskCoordinates.push(swap(f.geometry.coordinates)[0]);
-        } else if (f.geometry.type === "MultiPolygon") {
-            swap(f.geometry.coordinates).forEach(poly => maskCoordinates.push(poly[0]));
+    punchData.features.forEach((f, idx) => {
+        if (!f.geometry || !f.geometry.coordinates) return;
+
+        try {
+            // Use Leaflet's own GeoJSON coordinate parser to be 100% safe
+            const latlngs = L.GeoJSON.coordsToLatLngs(f.geometry.coordinates, (f.geometry.type === "MultiPolygon" ? 2 : 1));
+
+            if (f.geometry.type === "Polygon") {
+                maskCoordinates.push(latlngs[0]);
+                console.log(`[MAP DEBUG] Punched Polygon hole ${idx}`);
+            } else if (f.geometry.type === "MultiPolygon") {
+                latlngs.forEach((parts, pIdx) => {
+                    maskCoordinates.push(parts[0]);
+                    console.log(`[MAP DEBUG] Punched MultiPolygon part hole ${idx}.${pIdx}`);
+                });
+            }
+        } catch (err) {
+            console.error("[MAP] Failed to extract coordinates for mask hole", err);
         }
     });
+
+    console.log(`[MAP DEBUG] Total rings in _maskLayer: ${maskCoordinates.length} (incl. world)`);
 
     _maskLayer = L.polygon(maskCoordinates, {
         fillColor: '#DDE1E7', // --map-base
         fillOpacity: 0.8,
         stroke: false,
+        className: 'focus-mask-layer',
         interactive: false
     }); // Do not add to map by default
 

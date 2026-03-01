@@ -21,6 +21,19 @@ const _geoCache = new Map(); // url → GeoJSON FeatureCollection
 export async function loadGeoJSON(url) {
     if (_geoCache.has(url)) return _geoCache.get(url);
 
+    // Handle Data URIs — used for unmapped districts with dynamically generated GeoJSON
+    if (url && url.startsWith('data:')) {
+        try {
+            const commaIdx = url.indexOf(',');
+            const encoded = url.slice(commaIdx + 1);
+            const json = JSON.parse(decodeURIComponent(encoded));
+            _geoCache.set(url, json);
+            return json;
+        } catch (e) {
+            console.warn('[GeoService] Failed to parse Data URI GeoJSON', e);
+        }
+    }
+
     // Hardcoded regex for files known to safely exist on disk.
     // Prevents throwing standard 404s in the browser devtools console!
     const KNOWN_GEOJSON_PATTERN = /india-states(-simplified)?\.geojson|\/geo\/[A-Z]{2}(\/.*)?\.geojson/;
