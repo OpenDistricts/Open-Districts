@@ -114,17 +114,57 @@ export const DataService = {
      * @param {string} districtId
      * @returns {Promise<District|null>}
      */
-    async getDistrictById(districtId) {
+    async getDistrictById(districtId, stateId = null) {
         const found = MOCK_DISTRICTS.find(d => d.id === districtId);
         if (found) return found;
 
         // Stub unsupported districts
+        let bbox = { north: 28, south: 8, east: 97, west: 68 }; // Fallback India
+        let geoUrl = `mock-geo-${districtId}`;
+        let actualName = districtId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+        if (stateId) {
+            try {
+                const stateGeo = await this.getStateGeoJSON(stateId.toUpperCase());
+                if (stateGeo && stateGeo.features) {
+                    const feature = stateGeo.features.find(f => {
+                        const n = String(f.properties.id || f.properties.name || f.properties.district || f.properties.NAME_2 || f.properties.dtname || "").toLowerCase().replace(/\s+/g, '-');
+                        return n === districtId;
+                    });
+
+                    if (feature) {
+                        actualName = feature.properties.name || feature.properties.district || feature.properties.NAME_2 || feature.properties.dtname || actualName;
+
+                        let minLat = 90, maxLat = -90, minLon = 180, maxLon = -180;
+                        const traverse = (arr) => {
+                            if (arr.length >= 2 && typeof arr[0] === 'number') {
+                                if (arr[1] < minLat) minLat = arr[1];
+                                if (arr[1] > maxLat) maxLat = arr[1];
+                                if (arr[0] < minLon) minLon = arr[0];
+                                if (arr[0] > maxLon) maxLon = arr[0];
+                            } else if (Array.isArray(arr)) {
+                                arr.forEach(traverse);
+                            }
+                        };
+                        traverse(feature.geometry.coordinates);
+                        bbox = { north: maxLat, south: minLat, east: maxLon, west: minLon };
+
+                        // Pass real boundaries as Data URI so map displays actual polygon shape instead of rectangle
+                        const fc = { type: "FeatureCollection", features: [feature] };
+                        geoUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fc));
+                    }
+                }
+            } catch (e) {
+                console.warn(`Could not extract geo for dynamic district ${districtId}`, e);
+            }
+        }
+
         return {
             id: districtId,
-            stateId: "UNKNOWN",
-            name: districtId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-            geoJsonUrl: `mock-geo-${districtId}`,
-            boundingBox: { north: 28, south: 8, east: 97, west: 68 },
+            stateId: stateId || "UNKNOWN",
+            name: actualName,
+            geoJsonUrl: geoUrl,
+            boundingBox: bbox,
             population: 0,
             dataPoints: 0
         };

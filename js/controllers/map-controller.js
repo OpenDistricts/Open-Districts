@@ -45,6 +45,8 @@ function _initLeaflet() {
     document.getElementById("zoom-in").addEventListener("click", () => _map.zoomIn());
     document.getElementById("zoom-out").addEventListener("click", () => _map.zoomOut());
 
+    let _arbitrationTimer;
+
     // Pan lifecycle → auto-hide timeline + arbitration suspension
     _map.on("movestart", () => {
         _ctx.state.isPanning = true;
@@ -53,6 +55,7 @@ function _initLeaflet() {
         }
         _suspendAnimations();
         clearTimeout(_ctx.state.autoHideTimer);
+        clearTimeout(_arbitrationTimer);
     });
 
     _map.on("moveend", () => {
@@ -61,9 +64,13 @@ function _initLeaflet() {
             if (!_ctx.state.manuallyCollapsed) {
                 document.getElementById("timeline-panel").classList.remove("hidden");
             }
+        }, _ctx.state.manuallyCollapsed ? 300 : 500);
+
+        clearTimeout(_arbitrationTimer);
+        _arbitrationTimer = setTimeout(() => {
             _ctx.state.isPanning = false;
             runArbitration();
-        }, _ctx.state.manuallyCollapsed ? 300 : 500);
+        }, 300);
     });
 
     _setupMapControls();
@@ -137,14 +144,6 @@ export async function loadDistrictGeo(district, events) {
     const bounds = L.latLngBounds(boundingBoxToLeaflet(district.boundingBox));
     _map.fitBounds(bounds, { padding: [20, 20] });
 
-    // Prevent zooming out past the district or panning away to other states
-    const padBounds = bounds.pad(0.05);
-    _map.setMaxBounds(padBounds);
-
-    // Set minZoom exactly to the level that fits the padded bounds 
-    // without subtracting extra zoom levels to keep the map strictly caged.
-    _map.setMinZoom(_map.getBoundsZoom(padBounds, false));
-
     // Try to load GeoJSON — falls back to mock grid in geo-service
     const geoData = await _ctx.ds.getGeoJSON(district.geoJsonUrl);
 
@@ -179,12 +178,28 @@ export async function loadDistrictGeo(district, events) {
     });
     // ───────────────────────────────────────────────────────────────────────────
 
+    // Construct a singular outer polygon (merge all sub-regions) for the boundary ring and the exterior mask.
+    let unifiedDistrict = null;
+    try {
+        if (typeof turf !== 'undefined' && geoData.features.length > 0) {
+            unifiedDistrict = JSON.parse(JSON.stringify(geoData.features[0]));
+            for (let i = 1; i < geoData.features.length; i++) {
+                const result = turf.union(unifiedDistrict, geoData.features[i]);
+                if (result) unifiedDistrict = result;
+            }
+        }
+    } catch (e) {
+        console.warn("[MAP] Failed to union polygons with turf. Falling back to multi-feature mask.", e);
+    }
+
     // Create an inverted polygon to mask out everything outside the district
     const maskCoordinates = [
         [[90, -180], [90, 180], [-90, 180], [-90, -180]]
     ];
 
-    L.geoJSON(geoData, {
+    const punchData = unifiedDistrict ? { type: "FeatureCollection", features: [unifiedDistrict] } : geoData;
+
+    L.geoJSON(punchData, {
         onEachFeature: (feature, layer) => {
             if (layer instanceof L.Polygon) {
                 const latlngs = layer.getLatLngs();
@@ -202,10 +217,10 @@ export async function loadDistrictGeo(district, events) {
         fillOpacity: 0.8,
         stroke: false,
         interactive: false
-    }).addTo(_map);
+    }); // Do not add to map by default
 
-    // District boundary ring
-    _boundaryLayer = L.geoJSON(geoData, {
+    // District boundary ring (using unified outer border if available)
+    _boundaryLayer = L.geoJSON(punchData, {
         style: districtBoundaryStyle(),
         interactive: false,
     }).addTo(_map);
@@ -214,7 +229,8 @@ export async function loadDistrictGeo(district, events) {
     _regionsLayer = L.geoJSON(geoData, {
         style: feature => {
             const regionId = feature.properties?.id ?? feature.id ?? "";
-            const cat = categoryMap[regionId]?.category ?? "safety";
+            const entry = categoryMap[regionId];
+            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
             return categoryPolygonStyle(cat, false);
         },
         onEachFeature: (feature, layer) => {
@@ -232,8 +248,12 @@ export async function loadDistrictGeo(district, events) {
         _regionsLayer.eachLayer(layer => {
             const regionId = _idFromLayer(layer);
             if (!regionId || !layer._path) return;
-            const cat = categoryMap[regionId]?.category ?? "safety";
-            _applyCatClass(layer._path, cat);
+            const entry = categoryMap[regionId];
+            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
+            if (cat !== "none") {
+                _applyCatClass(layer._path, cat);
+            }
+            if (!layer._path.classList.contains("polygon-path")) layer._path.classList.add("polygon-path");
         });
         runArbitration();
     }, 120);
@@ -243,12 +263,38 @@ export async function loadDistrictGeo(district, events) {
     events.forEach(ev => {
         if (!ev.geoPoint) return;
         const opts = categoryMarkerOptions(ev.category);
-        const marker = L.circleMarker([ev.geoPoint.lat, ev.geoPoint.lng], opts);
+
+        let marker;
+        if (ev.impactScale === "LOCAL") {
+            // Draw a circle for local events (e.g. 2000m radius)
+            marker = L.circle([ev.geoPoint.lat, ev.geoPoint.lng], {
+                color: opts.color,
+                fillColor: opts.fillColor,
+                fillOpacity: opts.fillOpacity * 0.5,
+                weight: opts.weight,
+                radius: 2000
+            });
+        } else {
+            // Point or Wide uses a small circleMarker for the exact point
+            marker = L.circleMarker([ev.geoPoint.lat, ev.geoPoint.lng], opts);
+        }
+
         marker.bindTooltip(ev.title, { sticky: true });
         marker.on("click", () => _ctx.emit("map:regionClick", { eventId: ev.id }));
+
+        // Attach properties for animation arbitration
+        marker.eventId = ev.id;
+        marker.category = ev.category;
+        marker.impactScale = ev.impactScale;
+        marker.isClusterPoint = ev.meta?.clusterPoints?.length > 1; // Flag for cluster points
+
         group.addLayer(marker);
     });
     _markersLayer = group.addTo(_map);
+
+    // Sync lock state with UI toggle
+    const lockCheckbox = document.getElementById("lock-map-focus");
+    setLockState(lockCheckbox ? lockCheckbox.checked : false);
 }
 
 /** Highlight focused polygon, dim others, fly to bounds. */
@@ -257,10 +303,11 @@ export function syncFocus(focusedEventId, events) {
 
     if (!focusedEventId) {
         _regionLayerMap.forEach((layer, regionId) => {
-            const cat = categoryMap[regionId]?.category ?? "safety";
+            const entry = categoryMap[regionId];
+            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
             layer.setStyle(categoryPolygonStyle(cat, false));
         });
-        runArbitration();
+        setTimeout(runArbitration, 100); // Ensure arbitration runs after potential map movement
         return;
     }
 
@@ -269,20 +316,42 @@ export function syncFocus(focusedEventId, events) {
 
     // Fly to event
     const targetLayer = ev.regionId ? _regionLayerMap.get(ev.regionId) : null;
-    if (ev.geoPoint) {
+
+    if (ev.meta?.clusterPoints && ev.meta.clusterPoints.length > 0) {
+        // Collect all lat/lngs to form a bounds
+        const bounds = L.latLngBounds(ev.meta.clusterPoints.map(pt => [pt.lat, pt.lng]));
+        _map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+    }
+    else if (ev.impactScale === "LOCAL" && ev.meta?.radiusMetres && ev.geoPoint) {
+        // Create temporary circle just to get accurate bounds
+        const tempCircle = L.circle([ev.geoPoint.lat, ev.geoPoint.lng], { radius: ev.meta.radiusMetres });
+        _map.fitBounds(tempCircle.getBounds(), { padding: [30, 30] });
+    }
+    else if (ev.geoPoint) {
         _map.flyTo([ev.geoPoint.lat, ev.geoPoint.lng], 14, { duration: 0.8 });
-    } else if (targetLayer?.getBounds) {
+    }
+    else if (targetLayer?.getBounds) {
         _map.fitBounds(targetLayer.getBounds(), { padding: [30, 30] });
     }
 
     // Style update
     _regionLayerMap.forEach((layer, regionId) => {
-        const cat = categoryMap[regionId]?.category ?? "safety";
-        const focused = ev.regionId && regionId === ev.regionId;
-        layer.setStyle(categoryPolygonStyle(cat, focused));
+        const entry = categoryMap[regionId];
+        let cat = "none";
+        let isFocusedPoly = false;
+
+        if (ev.impactScale === "WIDE" && regionId === ev.regionId) {
+            cat = ev.category;
+            isFocusedPoly = true;
+        } else if (entry && entry.impactScale === "WIDE") {
+            cat = entry.category;
+        }
+
+        layer.setStyle(categoryPolygonStyle(cat, isFocusedPoly));
     });
 
-    runArbitration();
+    // Arbitration (delay slightly to let fitBounds complete, or it will find wrong items in view)
+    setTimeout(runArbitration, 100);
 }
 
 /** Apply district-view / live-mode class to #map + manage env overlays. */
@@ -306,9 +375,14 @@ export function applyHistoricalSnapshot(bucketIndex, timeBuckets, events) {
     const categoryMap = _buildCategoryByRegion(historicalEvts);
 
     _regionLayerMap.forEach((layer, regionId) => {
-        const cat = categoryMap[regionId]?.category ?? "safety";
+        const entry = categoryMap[regionId];
+        const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
         layer.setStyle(categoryPolygonStyle(cat, false));
-        if (layer._path) _applyCatClass(layer._path, cat);
+        if (layer._path && cat !== "none") {
+            _applyCatClass(layer._path, cat);
+        } else if (layer._path) {
+            _applyCatClass(layer._path, "none");
+        }
     });
 
     runArbitration();
@@ -320,23 +394,47 @@ export function runArbitration() {
 
     const t0 = performance.now();
     const events = _ctx.state.events ?? [];
-    const categoryMap = _buildCategoryByRegion(events);
     const isLive = _ctx.state.mode === "live" && !_ctx.state.isHistorical;
     const mapBounds = _map.getBounds();
 
-    // Tier order: tier-1 (health/emergency) wins over tier-2, then tier-3.
-    // Within same tier, most-recent timestamp breaks ties.
-    const visible = [];
+    const visibleItems = [];
+
+    // 1. WIDE events (Region polygons)
+    const categoryMap = _buildCategoryByRegion(events);
     _regionLayerMap.forEach((layer, regionId) => {
         const center = layer.getBounds?.().getCenter();
         if (!center || !mapBounds.contains(center)) return;
-        const entry = categoryMap[regionId] ?? { category: "safety", timestamp: "0" };
-        const tier = categoryTier(entry.category);
-        visible.push({ regionId, layer, ...entry, tier });
+        const entry = categoryMap[regionId];
+        if (entry && entry.impactScale === "WIDE") {
+            const tier = categoryTier(entry.category);
+            visibleItems.push({ layer, category: entry.category, tier, timestamp: entry.timestamp });
+        }
     });
 
+    // 2. LOCAL and POINT events (Markers/Circles)
+    if (_markersLayer) {
+        _markersLayer.eachLayer(layer => {
+            const latLng = layer.getLatLng?.();
+            if (!latLng || !mapBounds.contains(latLng)) return;
+            const ev = events.find(e => e.id === layer.eventId);
+            if (ev && (ev.impactScale === "POINT" || ev.impactScale === "LOCAL")) {
+                const tier = categoryTier(ev.category);
+                visibleItems.push({ layer, category: ev.category, tier, timestamp: ev.timestamp });
+            }
+            // Ensure the correct CSS class is present for animation styles
+            if (layer._path && ev) {
+                const targetClass = `cat-${ev.category}-path`;
+                if (!layer._path.classList.contains(targetClass)) {
+                    _applyCatClass(layer._path, ev.category);
+                    layer._path.style.transformOrigin = "center";
+                    layer._path.style.transformBox = "fill-box";
+                }
+            }
+        });
+    }
+
     // Sort: tier asc (tier-1 first), then timestamp desc
-    visible.sort((a, b) => {
+    visibleItems.sort((a, b) => {
         if (a.tier !== b.tier) return a.tier - b.tier;
         return new Date(b.timestamp) - new Date(a.timestamp);
     });
@@ -345,13 +443,18 @@ export function runArbitration() {
     _updatePerfCounter(elapsed);
     const maxTier = _effectiveTierCeiling(elapsed);
 
-    visible.forEach(({ layer, category, tier }, index) => {
+    visibleItems.forEach(({ layer, category, tier, eventId }, index) => {
         if (!layer._path) return;
         const path = layer._path;
 
+        // Ensure marker/polygon path classes for CSS selection
+        if (layer instanceof L.CircleMarker || layer instanceof L.Circle) {
+            if (!path.classList.contains("marker-path")) path.classList.add("marker-path");
+        } else {
+            if (!path.classList.contains("polygon-path")) path.classList.add("polygon-path");
+        }
+
         if (isLive) {
-            // CSS drives animations via .cat-*-path classes.
-            // JS only pauses paths beyond the tier cap.
             const isTier1Slot = tier === 1 && index === 0 && maxTier >= 1;
             const isTier2Slot = tier === 2 && index >= 1 && index <= 2 && maxTier >= 2;
 
@@ -361,8 +464,10 @@ export function runArbitration() {
                 path.style.animationPlayState = "paused";
             }
         } else {
-            // District View: only #1 tier-1 category animates
-            const animate = index === 0 && tier === 1;
+            // District View: animate the winner category. 
+            // If the winner is a cluster, we animate ALL points of that same winner event.
+            const winnerEventId = visibleItems[0]?.eventId;
+            const animate = eventId === winnerEventId && tier === 1;
             path.style.animationPlayState = animate ? "running" : "paused";
         }
     });
@@ -384,7 +489,12 @@ function _buildCategoryByRegion(events) {
         const exTier = existing ? categoryTier(existing.category) : 99;
         // Lower tier wins; ties broken by most-recent timestamp
         if (!existing || evTier < exTier || (evTier === exTier && ev.timestamp > existing.timestamp)) {
-            result[ev.regionId] = { category: ev.category, timestamp: ev.timestamp };
+            result[ev.regionId] = {
+                category: ev.category,
+                timestamp: ev.timestamp,
+                impactScale: ev.impactScale,
+                eventId: ev.id
+            };
         }
     });
     return result;
@@ -420,6 +530,11 @@ function _suspendAnimations() {
     _regionLayerMap.forEach(layer => {
         if (layer._path) layer._path.style.animationPlayState = "paused";
     });
+    if (_markersLayer) {
+        _markersLayer.eachLayer(layer => {
+            if (layer._path) layer._path.style.animationPlayState = "paused";
+        });
+    }
 }
 
 function _updatePerfCounter(ms) {

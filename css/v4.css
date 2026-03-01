@@ -471,8 +471,6 @@ button:focus-visible {
   flex-shrink: 0;
 }
 
-#tl-header-labels {}
-
 .tl-header-meta {
   font-size: 8px;
   font-weight: 500;
@@ -717,6 +715,7 @@ button:focus-visible {
   padding: 0 10px 8px 12px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -919,6 +918,35 @@ button:focus-visible {
   transition: opacity 600ms;
 }
 
+.env-scanner {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms;
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+#map.env-active .env-scanner {
+  opacity: 1;
+  background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 270deg, rgba(31, 111, 235, 0.05) 350deg, rgba(31, 111, 235, 0.25) 360deg);
+  animation: radar-sweep 8s linear infinite;
+}
+
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 #map.env-active .env-rain {
   opacity: 1;
   background: repeating-linear-gradient(175deg,
@@ -941,8 +969,9 @@ button:focus-visible {
 
 #map.env-active .env-haze {
   opacity: 1;
-  background: radial-gradient(ellipse 90% 70% at 65% 35%,
-      rgba(190, 170, 110, 0.45) 0%, rgba(180, 160, 100, 0.15) 50%, transparent 75%);
+  /* Simplified for performance */
+  background: radial-gradient(ellipse 80% 60% at 50% 50%,
+      rgba(190, 170, 110, 0.15) 0%, transparent 70%);
   animation: haze-shift 5s ease-in-out infinite alternate;
   /* 0.1 Hz — compliant */
   z-index: 3;
@@ -959,69 +988,75 @@ button:focus-visible {
   }
 }
 
-/* ── Incident-type polygon animations ────────────────────────────
-   Breathe animations are keyed by incident type intensity tier.
-   Tier-1 (health, emergency): faster breathe — active/urgent incidents.
-   Tier-2 (infrastructure, mobility): slower breathe — operational.
-   Tier-3 (safety, weather): static in district view.
-   All rates: ≤ 0.5 Hz — Access Board compliant. */
+/* ── Incident-type kinetic animations (NO BREATHING) ──────────────────────────── */
 
-/* Tier-1: health / emergency — District View (0.28 Hz) */
-@keyframes breathe-t1 {
-
-  0%,
-  100% {
-    stroke-opacity: 0.14;
+/* Kinetic flow for boundaries */
+@keyframes kinetic-flow {
+  0% {
+    stroke-dashoffset: 48;
   }
 
-  50% {
-    stroke-opacity: 0.34;
+  100% {
+    stroke-dashoffset: 0;
   }
 }
 
-/* Tier-1: health / emergency — Live Mode (0.45 Hz) */
-@keyframes breathe-t1-live {
-
-  0%,
-  100% {
-    stroke-opacity: 0.36;
+/* Digital blip for markers */
+@keyframes digital-blip {
+  0% {
+    transform: scale(0.6);
+    stroke-opacity: 1;
+    fill-opacity: 0.8;
   }
 
-  50% {
-    stroke-opacity: 0.72;
+  30% {
+    transform: scale(1.6);
+    stroke-opacity: 0;
+    fill-opacity: 0;
+  }
+
+  100% {
+    transform: scale(0.6);
+    stroke-opacity: 0;
+    fill-opacity: 0;
   }
 }
 
-/* Tier-2: infrastructure / mobility — Live Mode only (0.33 Hz) */
-@keyframes breathe-t2-live {
-
-  0%,
-  100% {
-    stroke-opacity: 0.28;
-  }
-
-  50% {
-    stroke-opacity: 0.58;
-  }
-}
-
-/* Leaflet path overrides for incident type classes */
+/* Base states */
 .leaflet-interactive.cat-health-path,
-.leaflet-interactive.cat-emergency-path {
-  animation: breathe-t1 3.5s ease-in-out infinite;
+.leaflet-interactive.cat-emergency-path,
+.leaflet-interactive.cat-infrastructure-path,
+.leaflet-interactive.cat-mobility-path {
   animation-play-state: paused;
-  /* JS sets running on highest-priority only */
 }
 
-#map.live-mode .leaflet-interactive.cat-health-path,
-#map.live-mode .leaflet-interactive.cat-emergency-path {
-  animation: breathe-t1-live 2.2s ease-in-out infinite;
+/* If it is a polygon (we add polygon-path class in JS) */
+#map.live-mode .leaflet-interactive.polygon-path.cat-health-path,
+#map.live-mode .leaflet-interactive.polygon-path.cat-emergency-path {
+  stroke-dasharray: 8 16;
+  animation: kinetic-flow 0.8s linear infinite;
   animation-play-state: running;
 }
 
-#map.live-mode .leaflet-interactive.cat-infrastructure-path,
-#map.live-mode .leaflet-interactive.cat-mobility-path {
-  animation: breathe-t2-live 3s ease-in-out infinite;
+#map.live-mode .leaflet-interactive.polygon-path.cat-infrastructure-path,
+#map.live-mode .leaflet-interactive.polygon-path.cat-mobility-path {
+  stroke-dasharray: 4 20;
+  animation: kinetic-flow 1.2s linear infinite;
+  animation-play-state: running;
+}
+
+/* If it is a marker (we add marker-path class in JS) */
+#map.live-mode .leaflet-interactive.marker-path.cat-health-path,
+#map.live-mode .leaflet-interactive.marker-path.cat-emergency-path {
+  animation: digital-blip 1s cubic-bezier(0.1, 0.9, 0.2, 1) infinite;
+  animation-play-state: running;
+}
+
+#map.live-mode .leaflet-interactive.marker-path.cat-infrastructure-path,
+#map.live-mode .leaflet-interactive.marker-path.cat-mobility-path,
+#map.live-mode .leaflet-interactive.marker-path.cat-safety-path,
+#map.live-mode .leaflet-interactive.marker-path.cat-weather-path {
+  animation: digital-blip 2s cubic-bezier(0.1, 0.9, 0.2, 1) infinite;
   animation-play-state: running;
 }
 

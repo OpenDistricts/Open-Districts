@@ -155,7 +155,7 @@ async function loadDistrict(districtId, stateId) {
     AppState.isHistorical = false;
     AppState.connectionStatus = "live"; // Phase 2 fix: always "live" in mock
 
-    const district = await DataService.getDistrictById(districtId);
+    const district = await DataService.getDistrictById(districtId, AppState.currentStateId);
 
     const [events, timeBuckets, translation, geoData] = await Promise.all([
         DataService.getEventsForDistrict(districtId),

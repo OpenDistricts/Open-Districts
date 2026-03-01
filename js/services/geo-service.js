@@ -117,6 +117,16 @@ export function categoryMarkerOptions(category) {
  * @returns {Object}  Leaflet PathOptions
  */
 export function categoryPolygonStyle(category, focused = false) {
+    if (category === "none" || !category) {
+        return {
+            color: "transparent",
+            fillColor: "transparent",
+            fillOpacity: 0,
+            weight: 0,
+            opacity: 0,
+            interactive: false
+        };
+    }
     const h = CAT_HUES[category] ?? CAT_HUES.safety;
     const tier = CAT_TIER[category] ?? 3;
     // Tier-1 gets slightly more fill/stroke weight to signal urgency
