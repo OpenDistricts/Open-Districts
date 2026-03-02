@@ -648,11 +648,19 @@ function _runFirstTimeLocationFlow() {
 // 9. BOOT SEQUENCE
 // ═══════════════════════════════════════════════════════════════════
 
-async function boot() {
+// ═══════════════════════════════════════════════════════════════════
+// 9. BOOT SEQUENCE
+// ═══════════════════════════════════════════════════════════════════
+
+/**
+ * Real application initialization.
+ * Deferred until after the branding splash screen.
+ */
+async function startApp() {
     // Create inject context for controllers
     const ctx = { state: AppState, ds: DataService, emit };
 
-    // Init all controllers (no feature additions during split — pure extraction)
+    // Init all controllers
     MapCtrl.init(ctx);
     TimelineCtrl.init(ctx);
     AICtrl.init(ctx);
@@ -666,7 +674,7 @@ async function boot() {
     document.getElementById("mode-district")?.addEventListener("click", () => setMode("district"));
     document.getElementById("mode-live")?.addEventListener("click", () => setMode("live"));
 
-    // ── OPTION C: Check localStorage for a previously saved district ─────────
+    // Check localStorage for a previously saved district
     let savedDistrict = null;
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -676,21 +684,43 @@ async function boot() {
     }
 
     if (savedDistrict?.districtId && savedDistrict?.stateId) {
-        // Returning user — restore their last district directly, no prompt needed
+        // Returning user — restore their last district directly
         console.log(`[V4] Restoring saved district: ${savedDistrict.districtId} (${savedDistrict.stateId})`);
         await TimelineCtrl.prefetchRegions(savedDistrict.districtId);
         await loadDistrict(savedDistrict.districtId, savedDistrict.stateId);
     } else {
-        // First-time visitor — load a default to populate the map, then ask for location
+        // First-time visitor — load a default and then ask for location
         await TimelineCtrl.prefetchRegions("khordha");
         await loadDistrict("khordha", "OD");
-        // Small delay so the map renders before the browser permission dialog appears
         setTimeout(() => _runFirstTimeLocationFlow(), 600);
     }
 
     await _renderLanguageSelector();
+    console.log("[V4] App Initialization Complete.");
+}
 
-    console.log("[V4] Boot complete. Controllers: timeline, map, ai, time, hierarchy.");
+/**
+ * Splash Screen Orchestrator
+ * Ensures branding is visible for 5s, then fades in 1s before starting app.
+ */
+async function boot() {
+    console.log("[V4] Branding Splash Initiated (5s Pause + 1s Fade)");
+    const splash = document.getElementById('splash-overlay');
+
+    // 1. Branding Duration: 5 seconds
+    setTimeout(() => {
+        if (splash) {
+            console.log("[V4] Splash Fading Out...");
+            splash.classList.add('fade-out');
+        }
+    }, 5000);
+
+    // 2. Total Delay before App Init: 6 seconds (5s branding + 1s fade)
+    setTimeout(async () => {
+        if (splash) splash.remove();
+        console.log("[V4] Splash Removed. Starting App Initialization.");
+        await startApp();
+    }, 6000);
 }
 
 boot();
