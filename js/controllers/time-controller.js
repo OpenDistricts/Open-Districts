@@ -12,6 +12,7 @@ const _axis = {
     playheadFrac: 1.0,
     isDragging: false,
     isFF: false,
+    buckets: [], // Added to support dynamic labels
 };
 
 // ═══════════════════════════════════════════════════════════════════
@@ -39,6 +40,7 @@ export function renderTimeAxis(buckets) {
 
     if (!buckets || buckets.length === 0) return;
 
+    _axis.buckets = buckets; // Store for playhead rendering
     const total = buckets.length;
     let lastDateStr = "";
 

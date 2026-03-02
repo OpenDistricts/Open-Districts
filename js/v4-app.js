@@ -304,19 +304,188 @@ function _renderTopBarDistrict(district) {
     if (name) name.textContent = district.name;
 }
 
+let _langSelectorInitialized = false;
+let _pillExpanded = false;
+let _pillPosition = 0;
+let _pillTargetPosition = 0;
+let _pillDragging = false;
+let _pillHasDragged = false;
+let _pillStartX = 0;
+let _pillStartPos = 0;
+let _pillLastX = 0;
+let _pillLastTime = 0;
+let _pillVelocity = 0;
+let _langNodes = [];
+let _activeLocales = [];
+
 async function _renderLanguageSelector() {
     const locales = await DataService.getAvailableLocales();
+    _activeLocales = locales;
+
+    // Map locale IDs to native displays
+    const NATIVE_LANG_NAMES = {
+        'en': 'EN',
+        'hi': 'हिन्दी',
+        'or': 'ଓଡ଼ିଆ',
+        'bn': 'বাংলা',
+        'te': 'తెలుగు',
+        'ur': 'اردو',
+        'mr': 'मराठी',
+        'ta': 'தமிழ்',
+        'gu': 'ગુજરાતી'
+    };
+
     const container = document.getElementById("tb-lang");
-    if (!container) return;
-    container.innerHTML = "";
-    locales.slice(0, 3).forEach(locale => {
-        const btn = document.createElement("button");
-        btn.className = "lang-pill" + (locale === AppState.locale ? " active" : "");
-        btn.textContent = locale.toUpperCase();
-        btn.setAttribute("aria-pressed", locale === AppState.locale);
-        btn.addEventListener("click", () => _switchLocale(locale));
-        container.appendChild(btn);
-    });
+    const track = document.getElementById("langTrack");
+    if (!container || !track) return;
+
+    // Find initial index
+    let activeIdx = locales.indexOf(AppState.locale);
+    if (activeIdx === -1) activeIdx = 0;
+
+    if (!_langSelectorInitialized) {
+        _langSelectorInitialized = true;
+
+        const VISIBLE_NODES = 7;
+        const ITEM_WIDTH = 32;
+
+        _pillPosition = activeIdx;
+        _pillTargetPosition = activeIdx;
+
+        for (let i = 0; i < VISIBLE_NODES; i++) {
+            const el = document.createElement('div');
+            el.className = 'lang-item';
+            track.appendChild(el);
+            _langNodes.push(el);
+        }
+
+        function renderLoop() {
+            if (!_pillDragging) {
+                _pillPosition += (_pillTargetPosition - _pillPosition) * 0.15;
+            }
+            const centerIndexInteger = Math.round(_pillPosition);
+
+            if (!_pillDragging) {
+                _pillTargetPosition = centerIndexInteger;
+            }
+
+            const len = _activeLocales.length;
+            if (len > 0) {
+                for (let idx = 0; idx < VISIBLE_NODES; idx++) {
+                    const itemVirtualIndex = centerIndexInteger - Math.floor(VISIBLE_NODES / 2) + idx;
+                    const langIndex = ((itemVirtualIndex % len) + len) % len;
+
+                    const el = _langNodes[idx];
+                    const loc = _activeLocales[langIndex];
+                    el.textContent = NATIVE_LANG_NAMES[loc] || loc.toUpperCase();
+
+                    if (itemVirtualIndex === centerIndexInteger) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+
+                    const xOffset = (itemVirtualIndex - _pillPosition) * ITEM_WIDTH;
+                    el.style.transform = `translateX(${xOffset}px)`;
+                }
+            }
+            requestAnimationFrame(renderLoop);
+        }
+
+        requestAnimationFrame(renderLoop);
+
+        // Touch & Mouse Events for pill
+        container.addEventListener('pointerdown', (e) => {
+            if (!_pillExpanded) {
+                _pillExpanded = true;
+                container.classList.add('expanded');
+                return;
+            }
+
+            _pillDragging = true;
+            _pillHasDragged = false;
+            _pillStartX = e.clientX;
+            _pillStartPos = _pillPosition;
+            _pillLastX = e.clientX;
+            _pillLastTime = performance.now();
+            container.setPointerCapture(e.pointerId);
+        });
+
+        container.addEventListener('pointermove', (e) => {
+            if (!_pillDragging) return;
+            const deltaX = e.clientX - _pillStartX;
+            if (Math.abs(deltaX) > 5) _pillHasDragged = true;
+
+            _pillPosition = _pillStartPos - (deltaX / ITEM_WIDTH);
+
+            const now = performance.now();
+            const dt = now - _pillLastTime;
+            if (dt > 0) _pillVelocity = (e.clientX - _pillLastX) / dt;
+            _pillLastX = e.clientX;
+            _pillLastTime = now;
+        });
+
+        container.addEventListener('pointerup', (e) => {
+            if (_pillDragging && !_pillHasDragged) {
+                // Was just a tap while open
+                _pillExpanded = false;
+                container.classList.remove('expanded');
+                _pillDragging = false;
+
+                const selectedRaw = Math.round(_pillPosition);
+                const len = _activeLocales.length;
+                const finalIndex = ((selectedRaw % len) + len) % len;
+                const newLocale = _activeLocales[finalIndex];
+
+                if (newLocale && newLocale !== AppState.locale) {
+                    _switchLocale(newLocale);
+                }
+                return;
+            }
+
+            if (_pillDragging) {
+                _pillDragging = false;
+                const throwDistance = _pillVelocity * 15;
+                _pillTargetPosition = Math.round(_pillPosition - (throwDistance / ITEM_WIDTH));
+
+                setTimeout(() => {
+                    const selectedRaw = Math.round(_pillTargetPosition);
+                    const len = _activeLocales.length;
+                    const finalIndex = ((selectedRaw % len) + len) % len;
+                    const newLocale = _activeLocales[finalIndex];
+                    if (newLocale && newLocale !== AppState.locale) {
+                        _switchLocale(newLocale);
+                    }
+                }, 300);
+            }
+        });
+
+        // Click outside to collapse
+        document.addEventListener('click', (e) => {
+            if (_pillExpanded && !container.contains(e.target)) {
+                _pillExpanded = false;
+                container.classList.remove('expanded');
+
+                const selectedRaw = Math.round(_pillTargetPosition);
+                const len = _activeLocales.length;
+                const finalIndex = ((selectedRaw % len) + len) % len;
+                const newLocale = _activeLocales[finalIndex];
+                if (newLocale && newLocale !== AppState.locale) {
+                    _switchLocale(newLocale);
+                }
+            }
+        });
+    } else {
+        // Find nearest integer that matches activeIdx
+        if (!_pillDragging) {
+            const len = _activeLocales.length;
+            const currentMod = ((_pillTargetPosition % len) + len) % len;
+            let offset = activeIdx - currentMod;
+            if (offset > len / 2) offset -= len;
+            else if (offset < -len / 2) offset += len;
+            _pillTargetPosition += offset;
+        }
+    }
 }
 
 function _renderModeToggle() {
