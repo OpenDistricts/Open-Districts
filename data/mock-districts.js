@@ -28,7 +28,7 @@ const _rawStates = [
         nameLocal: "தமிழ் நாடு",
         geoJsonUrl: "./data/geo/TN/state-outline.geojson?v=2",
         districts: ["chennai", "coimbatore", "madurai", "tiruchirappalli", "salem"],
-        dataPoints: 15
+        dataPoints: 18
     },
     {
         id: "KA",
@@ -36,7 +36,7 @@ const _rawStates = [
         nameLocal: "ಕರ್ನಾಟಕ",
         geoJsonUrl: "./data/geo/KA/state-outline.geojson?v=2",
         districts: ["bengaluru-urban", "mysuru", "dharwad", "belagavi", "tumakuru"],
-        dataPoints: 9
+        dataPoints: 14
     },
     {
         id: "WB",
@@ -44,7 +44,7 @@ const _rawStates = [
         nameLocal: "পশ্চিমবঙ্গ",
         geoJsonUrl: "./data/geo/WB/state-outline.geojson?v=2",
         districts: ["kolkata", "howrah", "darjeeling", "purba-medinipur", "murshidabad"],
-        dataPoints: 18
+        dataPoints: 22
     },
     {
         id: "GJ",
@@ -60,7 +60,7 @@ const _rawStates = [
         nameLocal: "उत्तर प्रदेश",
         geoJsonUrl: "./data/geo/UP/state-outline.geojson?v=2",
         districts: ["lucknow", "kanpur", "agra", "varanasi", "prayagraj"],
-        dataPoints: 41
+        dataPoints: 46
     },
     {
         id: "RJ",
@@ -84,7 +84,7 @@ const _rawStates = [
     { id: "AS", name: "Assam", nameLocal: "అసోం", geoJsonUrl: "./data/geo/AS/state-outline.geojson?v=2", districts: [], dataPoints: 0 },
     { id: "BR", name: "Bihar", nameLocal: "बिहार", geoJsonUrl: "./data/geo/BR/state-outline.geojson?v=2", districts: [], dataPoints: 0 },
     { id: "CH", name: "Chandigarh", nameLocal: "चंडीगढ़", geoJsonUrl: "./data/geo/CH/state-outline.geojson?v=2", districts: [], dataPoints: 0 },
-    { id: "CT", name: "Chhattisgarh", nameLocal: "छत्तीसगढ़", geoJsonUrl: "./data/geo/CT/state-outline.geojson?v=2", districts: [], dataPoints: 0 },
+    { id: "CT", name: "Chhattisgarh", nameLocal: "छत्तीसगढ़", geoJsonUrl: "./data/geo/CT/state-outline.geojson?v=2", districts: [], dataPoints: 3 },
     { id: "DN", name: "Dadra and Nagar Haveli", nameLocal: "दादरा और नगर हवेली", geoJsonUrl: "./data/geo/DN/state-outline.geojson?v=2", districts: [], dataPoints: 0 },
     { id: "DD", name: "Daman and Diu", nameLocal: "दमन और दीव", geoJsonUrl: "./data/geo/DD/state-outline.geojson?v=2", districts: [], dataPoints: 0 },
     { id: "DL", name: "Delhi", nameLocal: "दिल्ली", geoJsonUrl: "./data/geo/DL/state-outline.geojson?v=2", districts: ["central", "east", "new_delhi", "north", "north_east", "north_west", "shahdara", "south", "south_east", "south_west", "west"], dataPoints: 0 },
@@ -149,6 +149,103 @@ const _rawDistricts = [
         boundingBox: { north: 19.42, south: 18.18, east: 74.60, west: 73.50 },
         population: 9429408
     },
+    // Punjab
+    {
+        id: "jalandhar",
+        stateId: "PB",
+        name: "Jalandhar",
+        nameLocal: "ਜਲੰਧਰ",
+        geoJsonUrl: "./data/geo/PB/jalandhar.geojson?v=2",
+        boundingBox: { north: 31.62, south: 30.97, east: 75.96, west: 75.08 },
+        population: 2193590,
+        dataPoints: 8
+    },
+    // Madhya Pradesh
+    {
+        id: "ujjain",
+        stateId: "MP",
+        name: "Ujjain",
+        nameLocal: "उज्जैन",
+        geoJsonUrl: "./data/geo/MP/ujjain.geojson?v=2",
+        boundingBox: { north: 23.76, south: 22.83, east: 76.25, west: 75.13 },
+        population: 1986864,
+        dataPoints: 7
+    },
+    // Odisha
+    {
+        id: "khordha",
+        stateId: "OD",
+        name: "Khordha",
+        nameLocal: "ଖୋର୍ଦ୍ଧା",
+        geoJsonUrl: "./data/geo/OD/khordha.geojson?v=2",
+        boundingBox: { north: 20.43, south: 19.67, east: 86.08, west: 84.94 },
+        population: 2251673,
+        dataPoints: 9
+    },
+    // Bihar
+    {
+        id: "gaya",
+        stateId: "BR",
+        name: "Gaya",
+        nameLocal: "गया",
+        geoJsonUrl: "./data/geo/BR/gaya.geojson?v=2",
+        boundingBox: { north: 25.07, south: 24.29, east: 85.40, west: 84.29 },
+        population: 4391418,
+        dataPoints: 11
+    },
+
+    // Uttar Pradesh - Batch 2
+    {
+        id: "sitapur",
+        stateId: "UP",
+        name: "Sitapur",
+        nameLocal: "सीतापुर",
+        geoJsonUrl: "./data/geo/UP/sitapur.geojson?v=2",
+        boundingBox: { north: 27.91, south: 27.10, east: 81.41, west: 80.30 },
+        population: 4483992
+    },
+    // Karnataka - Batch 2
+    {
+        id: "mysuru",
+        stateId: "KA",
+        name: "Mysuru",
+        nameLocal: "ಮೈಸೂರು",
+        geoJsonUrl: "./data/geo/KA/mysuru.geojson?v=2",
+        boundingBox: { north: 12.66, south: 11.74, east: 77.13, west: 75.91 },
+        population: 3001127
+    },
+    // West Bengal - Batch 2
+    {
+        id: "hugli",
+        stateId: "WB",
+        name: "Hugli",
+        nameLocal: "হুগলী",
+        geoJsonUrl: "./data/geo/WB/hugli.geojson?v=2",
+        boundingBox: { north: 23.22, south: 22.60, east: 88.50, west: 87.51 },
+        population: 5519145
+    },
+    // Chhattisgarh - Batch 2
+    {
+        id: "raipur",
+        stateId: "CT",
+        name: "Raipur",
+        nameLocal: "रायपुर",
+        geoJsonUrl: "./data/geo/CT.geojson?v=2",
+        boundingBox: { north: 21.88, south: 19.77, east: 82.98, west: 81.53 },
+        population: 4063872
+    },
+    // Tamil Nadu - Batch 2
+    {
+        id: "vellore",
+        stateId: "TN",
+        name: "Vellore",
+        nameLocal: "வேலூர்",
+        geoJsonUrl: "./data/geo/TN.geojson?v=2",
+        boundingBox: { north: 13.20, south: 12.25, east: 79.77, west: 78.40 },
+        population: 3936331
+    },
+
+
     {
         id: "new_delhi",
         stateId: "DL",
@@ -353,5 +450,70 @@ export const MOCK_REGIONS = {
         { id: "patel-nagar", name: "Patel Nagar" },
         { id: "punjabi-bagh", name: "Punjabi Bagh" },
         { id: "rajouri-garden", name: "Rajouri Garden" }
+    ],
+    // New Districts
+    "jaipur": [
+        { id: "jaipur", name: "Jaipur" },
+        { id: "sanganer", name: "Sanganer" },
+        { id: "amber", name: "Amber" },
+        { id: "chomu", name: "Chomu" }
+    ],
+    "jalandhar": [
+        { id: "jalandhar-i", name: "Jalandhar I" },
+        { id: "jalandhar-ii", name: "Jalandhar II" },
+        { id: "nakodar", name: "Nakodar" }
+    ],
+    "ujjain": [
+        { id: "ujjain-urban", name: "Ujjain Urban" },
+        { id: "tarana", name: "Tarana" },
+        { id: "nagda", name: "Nagda" }
+    ],
+    "khordha": [
+        { id: "bhubaneswar", name: "Bhubaneswar" },
+        { id: "jatni", name: "Jatni" },
+        { id: "khordha", name: "Khordha" }
+    ],
+    "gaya": [
+        { id: "gaya-sadar", name: "Gaya Sadar" },
+        { id: "bodhgaya", name: "Bodh Gaya" },
+        { id: "sherghati", name: "Sherghati" }
+    ],
+    "sitapur": [
+        { id: "sadar-sitapur", name: "Sitapur Sadar" },
+        { id: "misrikh", name: "Misrikh" },
+        { id: "sidhauli", name: "Sidhauli" },
+        { id: "mahmudabad", name: "Mahmudabad" },
+        { id: "biswan", name: "Biswan" },
+        { id: "laharpur", name: "Laharpur" }
+    ],
+    "mysuru": [
+        { id: "mysuru-urban", name: "Mysuru Urban" },
+        { id: "nanjangud", name: "Nanjangud" },
+        { id: "hunsur", name: "Hunsur" },
+        { id: "kr-nagara", name: "K.R. Nagara" },
+        { id: "t-narasipura", name: "T. Narasipura" },
+        { id: "periyapatna", name: "Periyapatna" }
+    ],
+    "hugli": [
+        { id: "chinsurah", name: "Chinsurah" },
+        { id: "chandannagar", name: "Chandannagar" },
+        { id: "serampore", name: "Serampore" },
+        { id: "tarakeswar", name: "Tarakeswar" },
+        { id: "arambagh", name: "Arambagh" },
+        { id: "pandua", name: "Pandua" }
+    ],
+    "raipur": [
+        { id: "raipur", name: "Raipur City" },
+        { id: "naya-raipur", name: "Naya Raipur" },
+        { id: "tilda-neora", name: "Tilda Neora" },
+        { id: "abhanpur", name: "Abhanpur" },
+        { id: "arany", name: "Arang" }
+    ],
+    "vellore": [
+        { id: "vellore", name: "Vellore City" },
+        { id: "gudiyatham", name: "Gudiyatham" },
+        { id: "vaniyambadi", name: "Vaniyambadi" },
+        { id: "ambur", name: "Ambur" },
+        { id: "arcot", name: "Arcot" }
     ]
 };
