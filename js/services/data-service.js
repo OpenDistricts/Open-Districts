@@ -8,6 +8,7 @@
 // Public API is frozen. Implementation fetches live dataset + mock translations.
 
 import { MOCK_TRANSLATIONS } from "../../data/mock-translations.js";
+import { DEFAULT_AVAILABLE_LOCALES, STATE_LANGUAGE_PREFERENCES } from "../../data/state-locales.js";
 import { computeTimeSeries, detectResolution } from "./time-processor.js";
 import { loadGeoJSON } from "./geo-service.js";
 
@@ -337,11 +338,34 @@ export const DataService = {
     },
 
     /**
-     * Get all available locales (for language selector pills).
-     * @returns {Promise<string[]>}  BCP 47 codes
+     * Get available locales for the current state context.
+     * Uses central state mapping and augments with event translation locales.
+     *
+     * @param {string|null} stateId
+     * @param {Array<Object>} events
+     * @returns {Promise<string[]>}
      */
-    async getAvailableLocales() {
-        return MOCK_TRANSLATIONS.map(t => t.locale);
+    async getAvailableLocales(stateId = null, events = []) {
+        const bundleLocales = new Set(MOCK_TRANSLATIONS.map(t => t.locale));
+        const preferred = STATE_LANGUAGE_PREFERENCES[stateId] ?? DEFAULT_AVAILABLE_LOCALES;
+        const out = [];
+        const seen = new Set();
+
+        const pushLocale = (loc) => {
+            if (!loc || seen.has(loc) || !bundleLocales.has(loc)) return;
+            seen.add(loc);
+            out.push(loc);
+        };
+
+        preferred.forEach(pushLocale);
+
+        for (const ev of events ?? []) {
+            if (!ev?.translations) continue;
+            Object.keys(ev.translations).forEach(pushLocale);
+        }
+
+        pushLocale("en");
+        return out.length ? out : ["en"];
     },
 
     // ── Live Updates ───────────────────────────────────────────────────────────

@@ -115,8 +115,30 @@ export function close() {
  * Update labels when language changes.
  */
 export function updateLabels() {
-    // Hierarchy selector labels are mostly generated dynamically
-    // No static hardcoded labels to update currently
+    const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    };
+    const search = document.getElementById("hs-search");
+    if (search) {
+        search.setAttribute("placeholder", t("ui.searchState"));
+        search.setAttribute("aria-label", t("ui.searchState"));
+    }
+
+    setText("hs-title", t("ui.selectState"));
+    setText("hs-popup-title", t("ui.stateSelector"));
+    setText("hs-panel-open", t("ui.statePanel"));
+    setText("hs-state-pop-label", t("ui.population"));
+    setText("hs-state-points-label", t("ui.dataPoints"));
+    setText("hs-dist-pop-label", t("ui.population"));
+    setText("hs-dist-points-label", t("ui.dataPoints"));
+    setText("hs-state-stats-action", t("ui.doubleClickEnter"));
+
+    const enterBtn = document.getElementById("hs-stats-enter-state-btn");
+    if (enterBtn) enterBtn.textContent = t("ui.viewDistricts");
+
+    const viewMapBtn = document.querySelector("#hs-stats-action .hs-district-action-btn");
+    if (viewMapBtn) viewMapBtn.textContent = t("ui.viewMap");
 }
 
 /**
@@ -334,8 +356,8 @@ function _showStateStats(state) {
             alertsEl.style.color = "";
         }
     } else {
-        popEl.getContext = "Data Not Found";
-        alertsEl.textContent = "No Data";
+        popEl.textContent = t("ui.noData");
+        alertsEl.textContent = t("ui.noData");
         alertsEl.classList.remove("danger-text");
         alertsEl.style.color = "rgba(255,255,255,0.4)";
     }
@@ -343,7 +365,7 @@ function _showStateStats(state) {
     // Setup button for explicit navigation
     const actionContainer = document.getElementById("hs-state-stats-action");
     actionContainer.innerHTML = `
-        <button id="hs-stats-enter-state-btn" class="hs-enter-btn">View Districts</button>
+        <button id="hs-stats-enter-state-btn" class="hs-enter-btn">${t("ui.viewDistricts")}</button>
     `;
     document.getElementById("hs-stats-enter-state-btn").onclick = () => {
         _loadTierTwo(state);
@@ -593,7 +615,7 @@ function _showStatsPanel(district) {
     popEl.textContent = Math.floor(10 + (district.name.length * 2.3)) + " Lakh";
 
     if (!district.dataPoints || district.dataPoints === 0) {
-        alertsEl.textContent = "No Data";
+        alertsEl.textContent = t("ui.noData");
         alertsEl.classList.remove("danger-text");
         alertsEl.style.color = "rgba(255,255,255,0.4)";
     } else {
@@ -603,7 +625,7 @@ function _showStatsPanel(district) {
     }
 
     // Inject "View Map" button — also bound to same _selectDistrict action
-    actionEl.innerHTML = `<button class="hs-district-action-btn">View Map</button>`;
+    actionEl.innerHTML = `<button class="hs-district-action-btn">${t("ui.viewMap")}</button>`;
     actionEl.querySelector("button").onclick = () => _selectDistrict(district);
 }
 

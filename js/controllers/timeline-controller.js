@@ -35,7 +35,7 @@ export function renderTimeline(events) {
     spine.innerHTML = "";
 
     if (!events || events.length === 0) {
-        spine.innerHTML = `<div class="tl-empty-state">No events in this district</div>`;
+        spine.innerHTML = `<div class="tl-empty-state">${t("ui.noEventsDistrict")}</div>`;
         return;
     }
 
@@ -195,7 +195,7 @@ function _buildCard(ev) {
       <div class="tl-title-row">${displayTitle}</div>
       <div class="tl-summary-wrap">
         <div class="tl-summary">${displaySummary}</div>
-        <div class="tl-view-more" aria-hidden="true">View more</div>
+        <div class="tl-view-more" aria-hidden="true">${t("ui.viewMore")}</div>
       </div>
       <div class="tl-details">
         ${_buildDetailRows(ev)}
@@ -218,12 +218,12 @@ function _buildCard(ev) {
 function _buildDetailRows(ev) {
     const rows = [];
     const m = ev.meta ?? {};
-    if (m.caseCount !== undefined) rows.push(["CASES", m.caseCount]);
-    if (m.phcName) rows.push(["FACILITY", m.phcName]);
-    if (m.affectedPopulation) rows.push(["AFFECTED", m.affectedPopulation.toLocaleString()]);
-    if (m.highway) rows.push(["HIGHWAY", m.highway]);
-    if (m.zone) rows.push(["ZONE", m.zone]);
-    if (m.actionsTaken?.length) rows.push(["ACTION", m.actionsTaken[0]]);
+    if (m.caseCount !== undefined) rows.push([t("detail.cases"), m.caseCount]);
+    if (m.phcName) rows.push([t("detail.facility"), m.phcName]);
+    if (m.affectedPopulation) rows.push([t("detail.affected"), m.affectedPopulation.toLocaleString()]);
+    if (m.highway) rows.push([t("detail.highway"), m.highway]);
+    if (m.zone) rows.push([t("detail.zone"), m.zone]);
+    if (m.actionsTaken?.length) rows.push([t("detail.action"), m.actionsTaken[0]]);
     return rows.map(([label, value]) =>
         `<div class="tl-detail-row">
        <div class="tl-detail-label">${label}</div>

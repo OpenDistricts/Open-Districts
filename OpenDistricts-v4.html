@@ -169,14 +169,14 @@
                 <div class="settings-grid">
                     <!-- Option 1: Lock Focus -->
                     <label class="setting-toggle-label">
-                        <span class="setting-toggle-text">Lock Map Focus</span>
+                        <span class="setting-toggle-text" id="st-lock-focus-label">Lock Map Focus</span>
                         <input type="checkbox" id="lock-map-focus" checked />
                         <span class="setting-toggle-switch"></span>
                     </label>
 
                     <!-- Option 2: District Scope -->
                     <label class="setting-toggle-label">
-                        <span class="setting-toggle-text">Unlock District Scope</span>
+                        <span class="setting-toggle-text" id="st-unlock-scope-label">Unlock District Scope</span>
                         <input type="checkbox" id="unlock-district-scope" />
                         <span class="setting-toggle-switch"></span>
                     </label>
@@ -195,7 +195,7 @@
         <!-- Panel header -->
         <div id="tl-header">
             <div id="tl-header-labels">
-                <div class="tl-header-meta">WEEKLY EVENTS</div>
+                <div class="tl-header-meta" id="tl-header-meta">WEEKLY EVENTS</div>
                 <div class="tl-header-district" id="tl-header-district">Khordha</div>
             </div>
         </div>
@@ -236,7 +236,7 @@
 
         <!-- Intent section — scrollable -->
         <div id="ai-intent-section">
-            <div class="ai-section-label">SELECT A QUERY</div>
+            <div class="ai-section-label" id="ai-section-label">SELECT A QUERY</div>
 
             <!-- General district intents -->
             <div class="ai-intents" id="ai-intents-general">
@@ -372,11 +372,11 @@
                             <div id="hs-state-stats-bar" class="hidden" role="region" aria-label="State Stats">
                                 <h3 id="hs-state-stats-name"></h3>
                                 <div class="hs-stat-row">
-                                    <span>Population</span>
+                                    <span id="hs-state-pop-label">Population</span>
                                     <strong id="hs-state-stats-pop">-</strong>
                                 </div>
                                 <div class="hs-stat-row">
-                                    <span>Data Points</span>
+                                    <span id="hs-state-points-label">Data Points</span>
                                     <strong id="hs-state-stats-alerts" class="danger-text">-</strong>
                                 </div>
                                 <div id="hs-state-stats-action">Double-click map to enter</div>
@@ -407,11 +407,11 @@
                             <h3 id="hs-stats-name"></h3>
                             <div id="hs-stats-data">
                                 <div class="hs-stat-row">
-                                    <span>Population</span>
+                                    <span id="hs-dist-pop-label">Population</span>
                                     <strong id="hs-stats-pop">-</strong>
                                 </div>
                                 <div class="hs-stat-row">
-                                    <span>Data Points</span>
+                                    <span id="hs-dist-points-label">Data Points</span>
                                     <strong id="hs-stats-alerts" class="danger-text">-</strong>
                                 </div>
                             </div>

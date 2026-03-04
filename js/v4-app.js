@@ -31,6 +31,7 @@ const STORAGE_KEY = "opendistricts_savedDistrict";
 const AppState = {
     locale: "en",
     translations: {},
+    fallbackTranslations: {},
     mode: "district",
     connectionStatus: "live",       // "live" | "reconnecting" | "offline"
     isHistorical: false,
@@ -62,7 +63,7 @@ const AppState = {
  * Usage: t('ui.weeklyEvents') or t('ui.alertCount', { count: 5 })
  */
 export function t(key, vars = {}) {
-    let str = AppState.translations[key] ?? key;
+    let str = AppState.translations[key] ?? AppState.fallbackTranslations[key] ?? key;
     
     // Variable substitution: {name} → value
     Object.entries(vars).forEach(([varName, value]) => {
@@ -307,14 +308,14 @@ async function loadDistrict(districtId, stateId) {
     // After filtering, rebuild time buckets from the filtered list
     // (We also re-pass it to DataService calculation)
     const timeBuckets = await DataService.calculateTimeSeriesDirectly(events);
-    const translation = await DataService.getTranslation(AppState.locale);
 
     AppState.currentDistrict = district;
     AppState.events = events;
     AppState.timeBuckets = timeBuckets;
-    AppState.translations = translation.strings;
 
     // Update all controllers
+    await _renderLanguageSelector();
+    _applyPermanentTranslations();
     _renderTopBarDistrict(district);
     TimelineCtrl.renderPanelHeader(district.name);
     TimelineCtrl.setGeoData(geoData);
@@ -422,8 +423,18 @@ let _langNodes = [];
 let _activeLocales = [];
 
 async function _renderLanguageSelector() {
-    const locales = await DataService.getAvailableLocales();
+    const locales = await DataService.getAvailableLocales(AppState.currentStateId, AppState.events);
     _activeLocales = locales;
+    if (!Array.isArray(locales) || locales.length === 0) return;
+
+    if (!locales.includes(AppState.locale)) {
+        AppState.locale = locales.includes("en") ? "en" : locales[0];
+        const translation = await DataService.getTranslation(AppState.locale);
+        AppState.translations = translation.strings ?? {};
+        _applyPermanentTranslations();
+        AICtrl.updatePanelText();
+        HierarchyCtrl.updateLabels();
+    }
 
     // Map locale IDs to native displays
     const NATIVE_LANG_NAMES = {
@@ -608,7 +619,7 @@ function _renderSyncDot(overrideText = null) {
     if (overrideText) {
         label.innerHTML = overrideText;
     } else {
-        label.textContent = AppState.isHistorical ? "HISTORICAL" : "LIVE";
+        label.textContent = AppState.isHistorical ? t("ui.historical") : t("ui.live");
     }
 }
 
@@ -644,11 +655,7 @@ async function _syncHierarchyWithTimeline() {
 }
 
 function _updateTopBarLabels() {
-    // Update district label in topbar
-    const districtMeta = document.getElementById("tb-district-meta");
-    if (districtMeta) {
-        districtMeta.textContent = t('ui.currentDistrict');
-    }
+    _applyPermanentTranslations();
 }
 
 async function _switchLocale(locale) {
@@ -663,6 +670,51 @@ async function _switchLocale(locale) {
     TimelineCtrl.renderFocusState(AppState.focusedEventId);
     AICtrl.updatePanelText();  // Update AI panel with translations
     HierarchyCtrl.updateLabels();  // Update hierarchy selector labels
+}
+
+function _setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+function _setAttr(id, attr, value) {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute(attr, value);
+}
+
+function _applyPermanentTranslations() {
+    _setText("tb-logo", t("ui.appName"));
+    _setText("tb-district-meta", t("ui.currentDistrict"));
+    _setText("tb-change-area", t("ui.changeArea"));
+    _setText("mode-district", t("ui.modeBasic"));
+    _setText("mode-live", t("ui.modeAdvanced"));
+    _setText("tb-ai-btn", t("ui.aiMode"));
+    _setText("tl-header-meta", t("ui.weeklyEvents"));
+    _setText("ai-header-title", t("ui.aiMode"));
+    _setText("ai-section-label", t("ui.selectQuery"));
+    _setText("ai-context-mode-badge", t("ai.context.district"));
+
+    _setText("st-lock-focus-label", t("settings.lockMapFocus"));
+    _setText("st-unlock-scope-label", t("settings.unlockDistrictScope"));
+    _setText("hs-title", t("ui.selectState"));
+    _setText("hs-popup-title", t("ui.stateSelector"));
+    _setText("hs-panel-open", t("ui.statePanel"));
+    _setText("hs-state-pop-label", t("ui.population"));
+    _setText("hs-state-points-label", t("ui.dataPoints"));
+    _setText("hs-dist-pop-label", t("ui.population"));
+    _setText("hs-dist-points-label", t("ui.dataPoints"));
+    _setText("hs-state-stats-action", t("ui.doubleClickEnter"));
+
+    _setAttr("hs-search", "placeholder", t("ui.searchState"));
+    _setAttr("hs-search", "aria-label", t("ui.searchState"));
+    _setAttr("tb-change-area", "aria-label", t("ui.changeArea"));
+    _setAttr("tb-ai-btn", "aria-label", t("ui.openAiPanel"));
+    _setAttr("settings-tab", "aria-label", t("settings.toggle"));
+    _setAttr("settings-panel", "aria-label", t("settings.grid"));
+    _setAttr("timeline-panel", "aria-label", t("ui.weeklyEvents"));
+    _setAttr("hierarchy-selector", "aria-label", t("ui.selectDistrict"));
+    _setAttr("hs-close", "aria-label", t("ui.closeDistrictSelector"));
+    _setAttr("hs-panel-open", "aria-label", t("ui.showStatePopup"));
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -781,6 +833,13 @@ function _runFirstTimeLocationFlow() {
  * Deferred until after the branding splash screen.
  */
 async function startApp() {
+    const enTranslation = await DataService.getTranslation("en");
+    AppState.fallbackTranslations = enTranslation.strings ?? {};
+    const activeTranslation = AppState.locale === "en"
+        ? enTranslation
+        : await DataService.getTranslation(AppState.locale);
+    AppState.translations = activeTranslation.strings ?? {};
+
     // Create inject context for controllers
     const ctx = { state: AppState, ds: DataService, emit };
 
@@ -793,6 +852,9 @@ async function startApp() {
 
     // Wire cross-controller event routing
     _wireEvents();
+    _applyPermanentTranslations();
+    AICtrl.updatePanelText();
+    HierarchyCtrl.updateLabels();
 
     // Mode toggle buttons
     document.getElementById("mode-district")?.addEventListener("click", () => setMode("district"));

@@ -524,3 +524,56 @@ export const MOCK_TRANSLATIONS = [
         }
     }
 ];
+
+// Normalize translation bundles so permanent UI labels are fully covered,
+// and deprecated keys are removed from runtime maps.
+const UI_EN_DEFAULTS = {
+    "ui.modeBasic": "Basic",
+    "ui.modeAdvanced": "Advanced",
+    "ui.aiMode": "AI Mode",
+    "ui.openAiPanel": "Open AI panel",
+    "ui.selectState": "Select Your State",
+    "ui.stateSelector": "State Selector",
+    "ui.statePanel": "State Panel",
+    "ui.population": "Population",
+    "ui.dataPoints": "Data Points",
+    "ui.doubleClickEnter": "Double-click map to enter",
+    "ui.viewDistricts": "View Districts",
+    "ui.viewMap": "View Map",
+    "ui.noData": "No Data",
+    "ui.noEventsDistrict": "No events in this district",
+    "ui.viewMore": "View more",
+    "ui.closeDistrictSelector": "Close district selector",
+    "ui.showStatePopup": "Show state popup",
+    "settings.toggle": "Toggle map settings",
+    "settings.grid": "Map settings grid",
+    "settings.lockMapFocus": "Lock Map Focus",
+    "settings.unlockDistrictScope": "Unlock District Scope",
+    "ai.context.district": "DISTRICT CONTEXT",
+    "ai.context.event": "EVENT CONTEXT",
+    "detail.facility": "FACILITY",
+    "detail.affected": "AFFECTED",
+    "detail.highway": "HIGHWAY",
+    "detail.zone": "ZONE",
+};
+
+const DEPRECATED_KEYS = [
+    "ui.districtMode",
+    "ui.liveMode",
+    "ui.guidedAI",
+    "ui.cloudActive",
+    "ui.today",
+    "ui.play",
+    "ui.fastForward",
+];
+
+for (const bundle of MOCK_TRANSLATIONS) {
+    bundle.strings = {
+        ...UI_EN_DEFAULTS,
+        ...(bundle.strings || {}),
+    };
+
+    for (const key of DEPRECATED_KEYS) {
+        delete bundle.strings[key];
+    }
+}

@@ -58,6 +58,36 @@ export function close() { _close(); }
 
 /** Update AI panel text when language changes */
 export function updatePanelText() {
+    const header = document.getElementById("ai-header-title");
+    if (header) header.textContent = t("ui.aiMode");
+
+    const section = document.getElementById("ai-section-label");
+    if (section) section.textContent = t("ui.selectQuery");
+
+    const contextMode = document.getElementById("ai-context-mode-badge");
+    if (contextMode) {
+        contextMode.textContent = contextMode.classList.contains("event")
+            ? t("ai.context.event")
+            : t("ai.context.district");
+    }
+
+    const map = {
+        "disease-history": ["ai.intent.diseaseHistory", "ai.intent.diseaseHistorySub"],
+        "nearest-facility": ["ai.intent.nearestFacility", "ai.intent.nearestFacilitySub"],
+        "water-status": ["ai.intent.waterStatus", "ai.intent.waterStatusSub"],
+        "safe-travel": ["ai.intent.safeTravel", "ai.intent.safeTravelSub"],
+        "spreading": ["ai.intent.spreading", "ai.intent.spreadingSub"],
+        "historical-compare": ["ai.intent.historicalCompare", "ai.intent.historicalCompareSub"],
+    };
+    document.querySelectorAll(".intent-card").forEach((card) => {
+        const keys = map[card.getAttribute("data-intent")];
+        if (!keys) return;
+        const title = card.querySelector(".intent-title");
+        const sub = card.querySelector(".intent-sub");
+        if (title) title.textContent = t(keys[0]);
+        if (sub) sub.textContent = t(keys[1]);
+    });
+
     const panel = document.getElementById("ai-panel");
     if (panel.classList.contains("open")) {
         _open();  // Re-render context and labels
@@ -97,7 +127,7 @@ function _open() {
         const regionLabel = _humaniseRegion(focusedEvent.regionId) ?? focusedEvent.location?.block ?? "–";
         contextText.textContent = `${t(`category.${focusedEvent.category}`).toUpperCase()} · ${regionLabel} · ${timeStr}`;
         if (contextMode) {
-            contextMode.textContent = "EVENT CONTEXT";
+            contextMode.textContent = t("ai.context.event");
             contextMode.className = "ai-context-badge event";
         }
         genIntents.classList.add("hidden");
@@ -108,7 +138,7 @@ function _open() {
         const districtName = _ctx.state.currentDistrict?.name ?? "–";
         contextText.textContent = `${t('ai.general.context', { name: districtName })}`;
         if (contextMode) {
-            contextMode.textContent = "DISTRICT CONTEXT";
+            contextMode.textContent = t("ai.context.district");
             contextMode.className = "ai-context-badge general";
         }
         genIntents.classList.remove("hidden");
