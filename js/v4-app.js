@@ -452,7 +452,7 @@ async function _renderLanguageSelector() {
         _langSelectorInitialized = true;
 
         const VISIBLE_NODES = 7;
-        const ITEM_WIDTH = 32;
+        const ITEM_WIDTH = 52;
 
         _pillPosition = activeIdx;
         _pillTargetPosition = activeIdx;

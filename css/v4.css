@@ -366,8 +366,8 @@ button:focus-visible {
 
 /* Language selector (Infinite Swipe Pill) */
 #tb-lang {
-  width: var(--tap-min);
-  height: var(--tap-min);
+  width: calc(var(--tap-min) + 2px);
+  height: calc(var(--tap-min) + 2px);
   background-color: transparent;
   border-radius: 999px;
   position: relative;
@@ -386,11 +386,32 @@ button:focus-visible {
 }
 
 #tb-lang.expanded {
-  width: 220px;
+  width: 320px;
   /* Expands to the left because of tb-spacer */
-  background-color: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.06));
   /* Dark background when open */
-  border-color: transparent;
+  border-color: rgba(111, 168, 255, 0.35);
+  box-shadow: 0 0 0 1px rgba(31, 111, 235, 0.25), 0 8px 22px rgba(6, 18, 38, 0.45);
+}
+
+#tb-lang::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(110deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.14) 40%,
+      rgba(31, 111, 235, 0.22) 50%,
+      rgba(255, 255, 255, 0.14) 60%,
+      transparent 100%);
+}
+
+#tb-lang.expanded::before {
+  opacity: 1;
+  animation: lang-sheen 3.6s linear infinite;
 }
 
 .lang-track {
@@ -412,19 +433,21 @@ button:focus-visible {
   justify-content: center;
   align-items: center;
   color: var(--ink-ghost);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   opacity: 0;
   /* Hidden by default when not expanded */
-  transition: opacity 0.2s, font-size 0.2s, color 0.2s;
+  transition: opacity 0.25s, font-size 0.25s, color 0.25s, filter 0.25s;
   will-change: transform;
   pointer-events: none;
+  filter: blur(0.2px);
 }
 
 #tb-lang.expanded .lang-item {
-  opacity: 0.4;
+  opacity: 0.5;
+  filter: blur(0);
 }
 
 #tb-lang .lang-item.active {
@@ -434,8 +457,10 @@ button:focus-visible {
 
 #tb-lang.expanded .lang-item.active {
   color: var(--primary);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
+  text-shadow: 0 0 12px rgba(31, 111, 235, 0.45);
+  animation: lang-active-pulse 1.9s ease-in-out infinite;
 }
 
 .lang-focus-ring {
@@ -443,8 +468,8 @@ button:focus-visible {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid transparent;
   pointer-events: none;
@@ -455,6 +480,47 @@ button:focus-visible {
 #tb-lang.expanded .lang-focus-ring {
   border-color: var(--primary);
   opacity: 1;
+  animation: lang-ring-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes lang-sheen {
+  0% {
+    transform: translateX(-85%);
+  }
+
+  55% {
+    transform: translateX(95%);
+  }
+
+  100% {
+    transform: translateX(95%);
+  }
+}
+
+@keyframes lang-active-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(31, 111, 235, 0.38);
+    opacity: 1;
+  }
+
+  50% {
+    text-shadow: 0 0 16px rgba(31, 111, 235, 0.62);
+    opacity: 0.95;
+  }
+}
+
+@keyframes lang-ring-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(31, 111, 235, 0.22);
+  }
+
+  50% {
+    opacity: 0.92;
+    box-shadow: 0 0 0 8px rgba(31, 111, 235, 0.0);
+  }
 }
 
 /* Mode toggle */
