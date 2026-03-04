@@ -328,7 +328,7 @@ export const DataService = {
      * Get translation map for a locale.
      * Returns English as fallback if locale is not found.
      *
-     * @param {string} locale  BCP 47 code: "en" | "or" | "hi"
+     * @param {string} locale  BCP 47 code: "en" | "hi" | "gu" | "mr" | "or" | "kn" | "ta" | "bn" | "pa" | "te" | "ur"
      * @returns {Promise<{ locale: string, strings: Object }>}
      */
     async getTranslation(locale) {

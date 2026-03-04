@@ -429,13 +429,15 @@ async function _renderLanguageSelector() {
     const NATIVE_LANG_NAMES = {
         'en': 'EN',
         'hi': 'हिन्दी',
-        'or': 'ଓଡ଼ିଆ',
-        'bn': 'বাংলা',
-        'te': 'తెలుగు',
-        'ur': 'اردو',
+        'gu': 'ગુજરાતી',
         'mr': 'मराठी',
+        'or': 'ଓଡ଼ିଆ',
+        'kn': 'ಕನ್ನಡ',
         'ta': 'தமிழ்',
-        'gu': 'ગુજરાતી'
+        'bn': 'বাংলা',
+        'pa': 'ਪੰਜਾਬੀ',
+        'te': 'తెలుగు',
+        'ur': 'اردو'
     };
 
     const container = document.getElementById("tb-lang");
