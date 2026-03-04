@@ -1,82 +1,53 @@
 [
   {
-  "id": "evt_GJ_surat_20260114_001",
-  "stateId": "GJ",
-  "districtId": "surat",
-  "regionId": "surat-city",
-  "category": "safety",
-  "impactScale": "POINT",
-  "title": "Family Dies in Flyover Fall",
-  "summary": "A family of three died after their scooter hit a railing on the Chandrashekhar Azad flyover and plunged 70 feet in Adajan.",
-  "translations": {
-    "gu": {
-      "title": "ફ્લાયઓવર પરથી પટકાતા પરિવારનું મોત",
-      "summary": "અડાજણમાં ચંદ્રશેખર આઝાદ ફ્લાયઓવરની રેલિંગ સાથે સ્કૂટર અથડાતા અને 70 ફૂટ નીચે પટકાતા પરિવારના ત્રણ સભ્યોના મોત થયા છે।"
+    "id": "evt_GJ_surat_20260114_001",
+    "stateId": "GJ",
+    "districtId": "surat",
+    "regionId": "surat-city",
+    "category": "safety",
+    "impactScale": "POINT",
+    "title": "Family Dies in Flyover Fall",
+    "summary": "A family of three died after their scooter hit a railing on the Chandrashekhar Azad flyover and plunged 70 feet in Adajan.",
+    "timestamp": "2026-01-14T16:00:00Z",
+    "expiresAt": null,
+    "geoPoint": {
+      "lat": 21.1965,
+      "lng": 72.7989
     },
-    "hi": {
-      "title": "फ्लाईओवर से गिरकर परिवार की मौत",
-      "summary": "अडाजण में चंद्रशेखर आज़ाद फ्लाईओवर की रेलिंग से स्कूटर टकराने और 70 फीट नीचे गिरने से एक ही परिवार के तीन सदस्यों की मौत हो गई।"
+    "location": {
+      "block": "Adajan (Chandrashekhar Azad Flyover)"
     },
-    "mr": {
-      "title": "फ्लाईओव्हरवरून पडून कुटुंबाचा मृत्यू",
-      "summary": "अडाजण येथील चंद्रशेखर आझाद फ्लाईओव्हरच्या रेलिंगला स्कूटर धडकून ७० फूट खाली कोसळल्याने एकाच कुटुंबातील तिघांचा मृत्यू झाला।"
+    "source": "The Week",
+    "verified": true,
+    "meta": {
+      "fatalities": 3,
+      "incidentType": "Road Accident"
     }
   },
-  "timestamp": "2026-01-14T16:00:00Z",
-  "expiresAt": null,
-  "geoPoint": {
-    "lat": 21.1965,
-    "lng": 72.7989
-  },
-  "location": {
-    "block": "Adajan (Chandrashekhar Azad Flyover)"
-  },
-  "source": "The Week",
-  "verified": true,
-  "meta": {
-    "fatalities": 3,
-    "incidentType": "Road Accident"
-  }
-},
   {
-"id": "evt_GJ_surat_20260301_002",
-"stateId": "GJ",
-"districtId": "surat",
-"regionId": "chorasi",
-"category": "safety",
-"title": "Workers Arrested After Plant Unrest",
-"summary": "Police arrested 40 workers at the AM/NS plant following an outbreak of unrest in Hazira.",
-"translations": {
-"gu": {
-"title": "પ્લાન્ટમાં અશાંતિ બાદ કામદારોની ધરપકડ",
-"summary": "હજીરામાં AM/NS પ્લાન્ટમાં અશાંતિ ફાટી નીકળ્યા બાદ પોલીસે 40 કામદારોની ધરપકડ કરી હતી."
-},
-"hi": {
-"title": "प्लांट में अशांति के बाद मजदूर गिरफ्तार",
-"summary": "हजीरा स्थित AM/NS प्लांट में अशांति फैलने के बाद पुलिस ने 40 मजदूरों को गिरफ्तार किया।"
-},
-"mr": {
-"title": "प्लांटमध्ये अशांतीनंतर कामगारांना अटक",
-"summary": "हजीरा येथील AM/NS प्लांटमध्ये झालेल्या अशांतीनंतर पोलिसांनी 40 कामगारांना अटक केली।"
-}
-},
-"timestamp": "2026-03-01T08:30:00Z",
-"expiresAt": null,
-"geoPoint": {
-"lat": 21.1685,
-"lng": 72.6567
-},
-"location": {
-"block": "Hazira (AM/NS Plant)"
-},
-"source": "Times of India",
-"verified": true,
-"meta": {
-"arrests": 40,
-"charges": "Attempted Murder"
-  }
-},
-  [
+    "id": "evt_GJ_surat_20260301_002",
+    "stateId": "GJ",
+    "districtId": "surat",
+    "regionId": "chorasi",
+    "category": "safety",
+    "title": "Workers Arrested After Plant Unrest",
+    "summary": "Police arrested 40 workers at the AM/NS plant following an outbreak of unrest in Hazira.",
+    "timestamp": "2026-03-01T08:30:00Z",
+    "expiresAt": null,
+    "geoPoint": {
+      "lat": 21.1685,
+      "lng": 72.6567
+    },
+    "location": {
+      "block": "Hazira (AM/NS Plant)"
+    },
+    "source": "Times of India",
+    "verified": true,
+    "meta": {
+      "arrests": 40,
+      "charges": "Attempted Murder"
+    }
+  },
   {
     "id": "evt_GJ_surat_20260301_003",
     "stateId": "GJ",
@@ -86,20 +57,6 @@
     "impactScale": "LOCAL",
     "title": "HPV Vaccine Drive Launch Planned",
     "summary": "A statewide vaccination campaign against Human Papillomavirus for teenage girls is set to begin full-scale operations.",
-    "translations": {
-      "gu": {
-        "title": "એચપીવી રસીકરણ અભિયાન શરૂ કરવાનું આયોજન",
-        "summary": "કિશોરીઓ માટે હ્યુમન પેપિલોમાવાયરસ વિરોધી રાજ્યવ્યાપી રસીકરણ અભિયાન પૂર્ણ સ્તરે કામગીરી શરૂ કરવા માટે તૈયાર છે."
-      },
-      "hi": {
-        "title": "एचपीवी टीकाकरण अभियान शुरू करने की योजना",
-        "summary": "किशोरियों के लिए ह्यूमन पैपिलोमावायरस के खिलाफ राज्यव्यापी टीकाकरण अभियान पूर्ण स्तर पर संचालन शुरू करने के लिए तैयार है।"
-      },
-      "mr": {
-        "title": "एचपीव्ही लसीकरण मोहीम सुरू करण्याचे नियोजन",
-        "summary": "किशोरवयीन मुलींसाठी ह्युमन पॅपिलोમાव्हायरस विरुद्ध राज्यव्यापी लसीकरण मोहीम पूर्ण स्तरावर सुरू होणार आहे।"
-      }
-    },
     "timestamp": "2026-03-01T10:00:00Z",
     "expiresAt": "2026-04-01T10:00:00Z",
     "location": {
@@ -111,9 +68,18 @@
       "targetGroup": "Teenage girls",
       "vaccineType": "HPV",
       "clusterPoints": [
-        { "lat": 21.1702, "lng": 72.8311 },
-        { "lat": 21.1965, "lng": 72.7989 },
-        { "lat": 21.1411, "lng": 72.7758 }
+        {
+          "lat": 21.1702,
+          "lng": 72.8311
+        },
+        {
+          "lat": 21.1965,
+          "lng": 72.7989
+        },
+        {
+          "lat": 21.1411,
+          "lng": 72.7758
+        }
       ]
     }
   },
@@ -125,24 +91,15 @@
     "category": "safety",
     "title": "Diamond Traders Booked for Fraud",
     "summary": "The Gajera brothers were booked in a massive Rs 1,928 crore cheating and forgery case involving funds from Ring Road textile markets.",
-    "translations": {
-      "gu": {
-        "title": "હીરાના વેપારીઓ સામે છેતરપિંડીનો ગુનો નોંધાયો",
-        "summary": "રિંગ રોડ ટેક્સટાઇલ માર્કેટના ભંડોળ સાથે સંકળાયેલા રૂપિયા ૧,૯૨૮ કરોડના છેતરપિંડી અને બનાવટના કેસમાં ગજેરા ભાઈઓ સામે ગુનો નોંધવામાં આવ્યો હતો."
-      },
-      "hi": {
-        "title": "हीरा व्यापारियों पर धोखाधड़ी का मामला दर्ज",
-        "summary": "रिंग रोड कपड़ा बाजार के फंड से जुड़े 1,928 करोड़ रुपये की धोखाधड़ी और जालसाजी के मामले में गजेरा भाइयों पर मामला दर्ज किया गया।"
-      },
-      "mr": {
-        "title": "हिरे व्यापाऱ्यांवर फसवणुकीचा गुन्हा दाखल",
-        "summary": "रिंग रोड कापड बाजारातील निधीशी संबंधित १,९२८ कोटी रुपयांच्या फसवणूक आणि बनावटगिरीच्या प्रकरणात गजेरा बंधूंवर गुन्हा दाखल करण्यात आला।"
-      }
-    },
     "timestamp": "2026-02-23T14:15:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 21.1901, "lng": 72.8433 },
-    "location": { "block": "Ring Road Textile Market" },
+    "geoPoint": {
+      "lat": 21.1901,
+      "lng": 72.8433
+    },
+    "location": {
+      "block": "Ring Road Textile Market"
+    },
     "source": "DeshGujarat",
     "verified": true,
     "meta": {
@@ -158,24 +115,15 @@
     "category": "emergency",
     "title": "Market Fire Rescues Successful",
     "summary": "A fire broke out at a city market, leading to the rescue of four individuals trapped in a lift.",
-    "translations": {
-      "gu": {
-        "title": "માર્કેટમાં લાગેલી આગમાં સફળ બચાવ કામગીરી",
-        "summary": "શહેરના એક બજારમાં આગ ફાટી નીકળી હતી, જેના કારણે લિફ્ટમાં ફસાયેલા ચાર વ્યક્તિઓને સુરક્ષિત બહાર કાઢવામાં આવ્યા હતા."
-      },
-      "hi": {
-        "title": "बाजार में आग, सफल बचाव अभियान",
-        "summary": "शहर के एक बाजार में आग लग गई, जिसके बाद लिफ्ट में फंसे चार व्यक्तियों को सुरक्षित बाहर निकाला गया।"
-      },
-      "mr": {
-        "title": "बाजारपेठेतील आगीतून बचाव यशस्वी",
-        "summary": "शहरातील एका बाजारपेठेत आग लागली, ज्यामुळे लिफ्टमध्ये अडकलेल्या चार व्यक्तींची सुटका करण्यात आली।"
-      }
-    },
     "timestamp": "2026-03-01T11:20:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 21.185, "lng": 72.825 },
-    "location": { "block": "Main City Market" },
+    "geoPoint": {
+      "lat": 21.185,
+      "lng": 72.825
+    },
+    "location": {
+      "block": "Main City Market"
+    },
     "source": "Times of India",
     "verified": true,
     "meta": {
@@ -191,24 +139,15 @@
     "category": "health",
     "title": "Waterborne Disease Counter-Drive",
     "summary": "The SMC Health Department intensified monitoring of diseases in the Udhna and Limbayat zones.",
-    "translations": {
-      "gu": {
-        "title": "જળજન્ય રોગ સામે ઝુંબેશ",
-        "summary": "એસએમસીના આરોગ્ય વિભાગે ઉધના અને લિંબાયત ઝોનમાં રોગોનું નિરીક્ષણ તેજ કર્યું છે."
-      },
-      "hi": {
-        "title": "जलजनित रोगों के खिलाफ अभियान",
-        "summary": "एसएमसी स्वास्थ्य विभाग ने उधना और लिंबायत क्षेत्रों में बीमारियों की निगरानी तेज कर दी है।"
-      },
-      "mr": {
-        "title": "पाण्याद्वारे पसरणाऱ्या आजारांविरुद्ध मोहीम",
-        "summary": "एसएमसी आरोग्य विभागाने उधना आणि लिंबायत भागात आजारांचे निरीक्षण तीव्र केले आहे।"
-      }
-    },
     "timestamp": "2026-01-08T10:00:00Z",
     "expiresAt": "2026-02-08T10:00:00Z",
-    "geoPoint": { "lat": 21.1743, "lng": 72.8422 },
-    "location": { "block": "Udhna and Limbayat Zones" },
+    "geoPoint": {
+      "lat": 21.1743,
+      "lng": 72.8422
+    },
+    "location": {
+      "block": "Udhna and Limbayat Zones"
+    },
     "source": "Times of India",
     "verified": true,
     "meta": {
@@ -224,24 +163,15 @@
     "category": "mobility",
     "title": "BRTS Shutdown for Uttarayan",
     "summary": "All BRTS bus services were suspended to prevent kite string accidents across multiple city corridors.",
-    "translations": {
-      "gu": {
-        "title": "ઉત્તરાયણ નિમિત્તે બીઆરટીએસ બંધ",
-        "summary": "શહેરના વિવિધ કોરિડોરમાં પતંગની દોરીથી થતા અકસ્માતો રોકવા માટે તમામ બીઆરટીએસ બસ સેવાઓ સ્થગિત કરવામાં આવી હતી."
-      },
-      "hi": {
-        "title": "उत्तरायण के लिए बीआरटीएस बंद",
-        "summary": "पतंग की डोर से होने वाली दुर्घटनाओं को रोकने के लिए शहर के कई गलियारों में सभी बीआरटीएस बस सेवाएं निलंबित कर दी गई थीं।"
-      },
-      "mr": {
-        "title": "उत्तरायणनिમિત्त बीआरटीएस बंद",
-        "summary": "पतंगाच्या दोरीमुळे होणारे अपघात रोखण्यासाठी शहरातील अनेक मार्गांवर सर्व बीआरटीएस बस सेवा स्थगित करण्यात आल्या होत्या।"
-      }
-    },
     "timestamp": "2026-01-14T06:00:00Z",
     "expiresAt": "2026-01-14T22:00:00Z",
-    "geoPoint": { "lat": 21.1702, "lng": 72.8311 },
-    "location": { "block": "BRTS Corridors" },
+    "geoPoint": {
+      "lat": 21.1702,
+      "lng": 72.8311
+    },
+    "location": {
+      "block": "BRTS Corridors"
+    },
     "source": "DeshGujarat",
     "verified": true,
     "meta": {
@@ -257,22 +187,25 @@
     "category": "health",
     "title": "ARI Spike — Winter Pollution Impact",
     "summary": "2,293 acute respiratory illness emergencies recorded. 358 case increase over previous winter due to poor AQI.",
-    "translations": {
-      "hi": {
-        "title": "एआरआई में उछाल — शीतकालीन प्रदूषण का प्रभाव",
-        "summary": "2,293 तीव्र श्वसन संबंधी आपातकालीन मामले दर्ज किए गए। खराब AQI के कारण पिछले सर्दियों की तुलना में 358 मामलों की वृद्धि हुई।"
-      }
-    },
     "timestamp": "2026-01-31T18:00:00Z",
     "expiresAt": "2026-03-15T18:00:00Z",
-    "geoPoint": { "lat": 28.4595, "lng": 77.0266 },
-    "location": { "block": "Gurugram Sadar — Civil Hospital, Medanta, Paras" },
+    "geoPoint": {
+      "lat": 28.4595,
+      "lng": 77.0266
+    },
+    "location": {
+      "block": "Gurugram Sadar — Civil Hospital, Medanta, Paras"
+    },
     "source": "Gurugram Health Dept / HT",
     "verified": true,
     "verifiedAt": "2026-01-31T23:23:00Z",
     "meta": {
       "caseCount": 2293,
-      "sentinelSites": [ "Medanta", "Paras", "Civil Hospital Sector 10" ],
+      "sentinelSites": [
+        "Medanta",
+        "Paras",
+        "Civil Hospital Sector 10"
+      ],
       "pollutantFocus": "PM2.5 / PM10"
     }
   },
@@ -284,23 +217,25 @@
     "category": "infrastructure",
     "title": "Service Road Repairs — Sector 30/31",
     "summary": "GMDA tenders floated for service lane upgrades and footpath repairs to reduce highway congestion.",
-    "translations": {
-      "hi": {
-        "title": "सर्विस रोड मरम्मत — सेक्टर 30/31",
-        "summary": "राजमार्ग पर भीड़ कम करने के लिए सर्विस लेन अपग्रेड और फुटपाथ मरम्मत के लिए जीएमडीए द्वारा निविदाएं जारी की गईं।"
-      }
-    },
     "timestamp": "2026-02-03T07:12:00Z",
     "expiresAt": "2026-08-01T18:00:00Z",
-    "geoPoint": { "lat": 28.455, "lng": 77.058 },
-    "location": { "block": "Sector 30-31, Gurugram" },
+    "geoPoint": {
+      "lat": 28.455,
+      "lng": 77.058
+    },
+    "location": {
+      "block": "Sector 30-31, Gurugram"
+    },
     "source": "GMDA / Hindustan Times",
     "verified": true,
     "verifiedAt": "2026-02-03T09:00:00Z",
     "meta": {
       "projectLengthKm": 7.5,
       "authority": "GMDA",
-      "scope": [ "Service lane repair", "Encroachment removal" ]
+      "scope": [
+        "Service lane repair",
+        "Encroachment removal"
+      ]
     }
   },
   {
@@ -311,21 +246,23 @@
     "category": "mobility",
     "title": "Fatal Crash — KMP Expressway",
     "summary": "Dumper truck collision with tourist vehicle resulting in 2 fatalities. Significant traffic disruption reported.",
-    "translations": {
-      "hi": {
-        "title": "भीषण दुर्घटना — केएमपी एक्सप्रेसवे",
-        "summary": "डंपर ट्रक और पर्यटक वाहन की टक्कर में 2 लोगों की मौत। भारी ट्रैफिक जाम की सूचना मिली है।"
-      }
-    },
     "timestamp": "2026-02-18T08:07:00Z",
     "expiresAt": "2026-02-19T12:00:00Z",
-    "geoPoint": { "lat": 28.3245, "lng": 76.8521 },
-    "location": { "block": "KMP Expressway, Gurugram-Rewari stretch" },
+    "geoPoint": {
+      "lat": 28.3245,
+      "lng": 76.8521
+    },
+    "location": {
+      "block": "KMP Expressway, Gurugram-Rewari stretch"
+    },
     "source": "Gurugram Traffic Police",
     "verified": true,
     "verifiedAt": "2026-02-18T09:30:00Z",
     "meta": {
-      "vehicleTypes": [ "Dumper", "Sedan" ],
+      "vehicleTypes": [
+        "Dumper",
+        "Sedan"
+      ],
       "fatalities": 2,
       "highway": "KMP Expressway"
     }
@@ -338,16 +275,15 @@
     "category": "safety",
     "title": "Serious Assault — Badshahpur Police Area",
     "summary": "19-year-old student assaulted. Accused arrested under serious criminal charges. Investigation active.",
-    "translations": {
-      "hi": {
-        "title": "गंभीर हमला — बादशाहपुर पुलिस क्षेत्र",
-        "summary": "19 वर्षीय छात्र पर हमला। आरोपी को गंभीर आपराधिक धाराओं के तहत गिरफ्तार किया गया। जांच जारी है।"
-      }
-    },
     "timestamp": "2026-02-22T13:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 28.3962, "lng": 77.0543 },
-    "location": { "block": "Badshahpur, Gurugram" },
+    "geoPoint": {
+      "lat": 28.3962,
+      "lng": 77.0543
+    },
+    "location": {
+      "block": "Badshahpur, Gurugram"
+    },
     "source": "Badshahpur Police / ANI",
     "verified": true,
     "verifiedAt": "2026-02-22T15:00:00Z",
@@ -366,16 +302,15 @@
     "impactScale": "WIDE",
     "title": "Dense Fog — Massive Pile-up Advisory",
     "summary": "Visibility < 50m causing multiple vehicle collisions across Haryana highways, including Gurugram sectors.",
-    "translations": {
-      "hi": {
-        "title": "घना कोहरा — बड़े वाहनों की टक्कर की चेतावनी",
-        "summary": "दृश्यता 50 मीटर से कम होने के कारण गुरुग्राम सहित हरियाणा के राजमार्गों पर कई वाहन आपस में टकराए।"
-      }
-    },
     "timestamp": "2025-12-14T12:34:00Z",
     "expiresAt": "2025-12-16T12:00:00Z",
-    "geoPoint": { "lat": 28.4595, "lng": 77.0266 },
-    "location": { "block": "District-wide highway corridors" },
+    "geoPoint": {
+      "lat": 28.4595,
+      "lng": 77.0266
+    },
+    "location": {
+      "block": "District-wide highway corridors"
+    },
     "source": "IMD / Local News",
     "verified": true,
     "verifiedAt": "2025-12-14T13:00:00Z",
@@ -393,20 +328,15 @@
     "category": "emergency",
     "title": "Dump Site Fire Hospitalizes Five",
     "summary": "A massive fire at a garbage dump on the Mula-Mutha river bed led to the hospitalization of five students with breathing issues in Loni Kalbhor.",
-    "translations": {
-      "hi": {
-        "title": "डंपिंग यार्ड में आग, पांच अस्पताल में भर्ती",
-        "summary": "मुला-मुठा नदी तट पर कचरा डंप यार्ड में भीषण आग लगने से लोणी कालभोर में सांस की समस्या के कारण पांच छात्रों को अस्पताल में भर्ती कराया गया।"
-      },
-      "mr": {
-        "title": "कचरा डेपोला आग, पाच विद्यार्थी रुग्णालयात",
-        "summary": "मुळा-मुठा नदीपात्रातील कचरा डेपोला भीषण आग लागल्याने लोणी काळभोरमध्ये श्वास घेण्यास त्रास झाल्यामुळे पाच विद्यार्थ्यांना रुग्णालयात दाखल करावे लागले।"
-      }
-    },
     "timestamp": "2026-03-01T01:36:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.4875, "lng": 74.0194 },
-    "location": { "block": "Loni Kalbhor" },
+    "geoPoint": {
+      "lat": 18.4875,
+      "lng": 74.0194
+    },
+    "location": {
+      "block": "Loni Kalbhor"
+    },
     "source": "The Times of India",
     "verified": true,
     "meta": {
@@ -423,20 +353,15 @@
     "category": "safety",
     "title": "Propylene Tanker Overturns on Expressway",
     "summary": "An inflammable gas tanker overturned near Khopoli, resulting in a 33-hour traffic halt on the Mumbai-Pune Expressway.",
-    "translations": {
-      "hi": {
-        "title": "एक्सप्रेसवे पर प्रोपलीन टैंकर पलटा",
-        "summary": "खोपोली के पास एक ज्वलनशील गैस टैंकर पलट गया, जिसके परिणामस्वरूप मुंबई-पुणे एक्सप्रेसवे पर 33 घंटे तक यातायात बाधित रहा।"
-      },
-      "mr": {
-        "title": "एक्सप्रेस-वेवर प्रोपिलीनचा टँकर उलटला",
-        "summary": "खोपोलीजवळ एक ज्वलनशील गॅस टँकर उलटल्याने मुंबई-पुणे एक्स्प्रेस वेवर ३३ तास वाहतूक विस्कळीत झाली होती।"
-      }
-    },
     "timestamp": "2026-03-01T08:00:00Z",
     "expiresAt": "2026-03-02T17:00:00Z",
-    "geoPoint": { "lat": 18.7881, "lng": 73.3444 },
-    "location": { "block": "Khopoli Stretch, Expressway" },
+    "geoPoint": {
+      "lat": 18.7881,
+      "lng": 73.3444
+    },
+    "location": {
+      "block": "Khopoli Stretch, Expressway"
+    },
     "source": "Hindustan Times",
     "verified": true,
     "meta": {
@@ -452,20 +377,15 @@
     "category": "infrastructure",
     "title": "Construction Stop Notices Issued",
     "summary": "PMC issued stop-work notices to 220 construction sites for failing to implement air pollution control measures across city areas.",
-    "translations": {
-      "hi": {
-        "title": "निर्माण कार्य रोकने का नोटिस जारी",
-        "summary": "पीएमसी ने वायु प्रदूषण नियंत्रण उपायों को लागू करने में विफल रहने पर शहर के 220 निर्माण स्थलों को काम रोकने का नोटिस जारी किया।"
-      },
-      "mr": {
-        "title": "बांधकाम थांबवण्याच्या नोटिसा बजावल्या",
-        "summary": "हवा प्रदूषण नियंत्रण उपायांची अंमलबजावणी न केल्याबद्दल पीएमसीने शहरातील २२० बांधकाम साईट्सना काम थांबवण्याच्या नोटिसा बजावल्या आहेत।"
-      }
-    },
     "timestamp": "2026-02-25T05:04:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.5204, "lng": 73.8567 },
-    "location": { "block": "Pune City (Various)" },
+    "geoPoint": {
+      "lat": 18.5204,
+      "lng": 73.8567
+    },
+    "location": {
+      "block": "Pune City (Various)"
+    },
     "source": "The Indian Express",
     "verified": true,
     "meta": {
@@ -481,20 +401,15 @@
     "category": "safety",
     "title": "Fatal Crash Near Katraj Tunnel",
     "summary": "A truck driver died and several passengers were injured after a truck carrying iron pipes collided with a bus at Katraj Ghat.",
-    "translations": {
-      "hi": {
-        "title": "कात्रज सुरंग के पास भीषण दुर्घटना",
-        "summary": "कात्रज घाट पर लोहे के पाइप ले जा रहे एक ट्रक और बस के बीच हुई टक्कर में ट्रक चालक की मौत हो गई और कई यात्री घायल हो गए।"
-      },
-      "mr": {
-        "title": "कात्रज बोगद्याजवळ भीषण अपघात",
-        "summary": "कात्रज घाटात लोखंडी पाईप वाहून नेणाऱ्या ट्रकची बसला धडक बसल्याने ट्रक चालकाचा मृत्यू झाला असून अनेक प्रवासी जखमी झाले आहेत।"
-      }
-    },
     "timestamp": "2026-02-23T22:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.4312, "lng": 73.8561 },
-    "location": { "block": "Katraj Ghat (Jambhulwadi)" },
+    "geoPoint": {
+      "lat": 18.4312,
+      "lng": 73.8561
+    },
+    "location": {
+      "block": "Katraj Ghat (Jambhulwadi)"
+    },
     "source": "The Bridge Chronicle",
     "verified": true,
     "meta": {
@@ -510,20 +425,15 @@
     "category": "weather",
     "title": "Second Highest February Minimum Temp",
     "summary": "Shivajinagar recorded a minimum temperature of 19.2°C, the second-highest for February since 2015.",
-    "translations": {
-      "hi": {
-        "title": "फरवरी का दूसरा सबसे अधिक न्यूनतम तापमान",
-        "summary": "शिवाजीनगर में न्यूनतम तापमान 19.2°C दर्ज किया गया, जो 2015 के बाद से फरवरी का दूसरा सबसे अधिक तापमान है।"
-      },
-      "mr": {
-        "title": "फेब्रुवारीतील दुसरे सर्वोच्च किमान तापमान",
-        "summary": "शिवाजीनगरमध्ये १९.२°से किमान तापमानाची नोंद झाली असून, २०१५ नंतर फेब्रुवारीतील हे दुसरे सर्वोच्च तापमान आहे।"
-      }
-    },
     "timestamp": "2026-02-22T23:08:00Z",
     "expiresAt": "2026-02-28T18:00:00Z",
-    "geoPoint": { "lat": 18.5312, "lng": 73.8445 },
-    "location": { "block": "Shivajinagar" },
+    "geoPoint": {
+      "lat": 18.5312,
+      "lng": 73.8445
+    },
+    "location": {
+      "block": "Shivajinagar"
+    },
     "source": "Hindustan Times",
     "verified": true,
     "meta": {
@@ -539,20 +449,15 @@
     "category": "health",
     "title": "High Chikungunya Infection Rates",
     "summary": "Pune district logged the highest chikungunya infections and second-highest dengue cases in Maharashtra for the 2025 season.",
-    "translations": {
-      "hi": {
-        "title": "चिकनगुनिया संक्रमण की उच्च दर",
-        "summary": "पुणे जिले में 2025 के सीजन के लिए महाराष्ट्र में सबसे अधिक चिकनगुनिया संक्रमण और दूसरे सबसे अधिक डेंगू के मामले दर्ज किए गए।"
-      },
-      "mr": {
-        "title": "चिकनगुनिया संसर्गाचे उच्च दर",
-        "summary": "२०२५ च्या हंगामात महाराष्ट्रात पुण्यात सर्वाधिक चिकनगुनिया आणि दुसऱ्या क्रमांकाच्या डेंग्यू रुग्णांची नोंद झाली आहे।"
-      }
-    },
     "timestamp": "2026-02-22T08:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.5204, "lng": 73.8567 },
-    "location": { "block": "Pune District" },
+    "geoPoint": {
+      "lat": 18.5204,
+      "lng": 73.8567
+    },
+    "location": {
+      "block": "Pune District"
+    },
     "source": "The Times of India",
     "verified": true,
     "meta": {
@@ -568,20 +473,15 @@
     "category": "infrastructure",
     "title": "Mula Mutha Riverfront Stretch Opened",
     "summary": "The Pune Municipal Corporation opened a 1.5 km rejuvenated stretch of the riverfront in Yerawada-Kalyani Nagar.",
-    "translations": {
-      "hi": {
-        "title": "मुला-मुठा रिवरफ्रंट का हिस्सा खुला",
-        "summary": "पुणे नगर निगम ने यरवडा-कल्याणी नगर में रिवरफ्रंट का 1.5 किमी का पुनर्जीवित हिस्सा जनता के लिए खोला।"
-      },
-      "mr": {
-        "title": "मुळा-मुठा नदीकाठचा भाग खुला",
-        "summary": "पुणे महानगरपालिकेने येरवडा-कल्याणी नगरमधील १.५ किमी लांबीचा नदीकाठचा पुनरुज्जीवित भाग खुला केला आहे।"
-      }
-    },
     "timestamp": "2026-02-15T04:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.5362, "lng": 73.894 },
-    "location": { "block": "Yerawada-Kalyani Nagar" },
+    "geoPoint": {
+      "lat": 18.5362,
+      "lng": 73.894
+    },
+    "location": {
+      "block": "Yerawada-Kalyani Nagar"
+    },
     "source": "Times Property",
     "verified": true,
     "meta": {
@@ -596,20 +496,15 @@
     "category": "infrastructure",
     "title": "MHADA Lottery Results Declared",
     "summary": "Results for the Pune MHADA housing lottery were officially declared for thousands of affordable units.",
-    "translations": {
-      "hi": {
-        "title": "म्हाडा लॉटरी के परिणाम घोषित",
-        "summary": "पुणे म्हाडा हाउसिंग लॉटरी के परिणाम हजारों किफायती घरों के लिए आधिकारिक तौर पर घोषित किए गए।"
-      },
-      "mr": {
-        "title": "म्हाडा लॉटरीचे निकाल जाहीर",
-        "summary": "पुणे म्हाडा गृहनिर्माण लॉटरीचे निकाल हजारो परवडणाऱ्या घरांसाठी अधिकृतपणे जाहीर करण्यात आले आहेत।"
-      }
-    },
     "timestamp": "2026-02-10T05:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.5284, "lng": 73.8744 },
-    "location": { "block": "MHADA Pune Office" },
+    "geoPoint": {
+      "lat": 18.5284,
+      "lng": 73.8744
+    },
+    "location": {
+      "block": "MHADA Pune Office"
+    },
     "source": "Times Property",
     "verified": true,
     "meta": {
@@ -624,20 +519,15 @@
     "category": "mobility",
     "title": "Gas Tanker Overturns Near Tunnel",
     "summary": "A gas tanker overturned near Aadoshi tunnel, causing a 50km traffic jam on the Mumbai-Pune Expressway for 20 hours.",
-    "translations": {
-      "hi": {
-        "title": "सुरंग के पास गैस टैंकर पलटा",
-        "summary": "आदोशी सुरंग के पास एक गैस टैंकर पलट गया, जिससे मुंबई-पुणे एक्सप्रेसवे पर 20 घंटे तक 50 किमी लंबा ट्रैफिक जाम लगा रहा।"
-      },
-      "mr": {
-        "title": "बोगद्याजवळ गॅस टँकर उलटला",
-        "summary": "आदोशी बोगद्याजवळ गॅस टँकर उलटल्याने मुंबई-पुणे एक्स्प्रेस वेवर २० तास ५० किमी लांबीची वाहतूक कोंडी झाली होती।"
-      }
-    },
     "timestamp": "2026-02-04T11:30:00Z",
     "expiresAt": "2026-02-05T08:00:00Z",
-    "geoPoint": { "lat": 18.7667, "lng": 73.3833 },
-    "location": { "block": "Aadoshi Tunnel" },
+    "geoPoint": {
+      "lat": 18.7667,
+      "lng": 73.3833
+    },
+    "location": {
+      "block": "Aadoshi Tunnel"
+    },
     "source": "News18 Marathi",
     "verified": true,
     "meta": {
@@ -653,20 +543,15 @@
     "category": "safety",
     "title": "Three Fatalities in Road Accidents",
     "summary": "Three people died in separate road accidents involving a PMPML bus and trucks in Aundh and Nagar Road.",
-    "translations": {
-      "hi": {
-        "title": "सड़क हादसों में तीन की मौत",
-        "summary": "औंध और नगर रोड पर पीएमपीएल बस और ट्रकों से संबंधित अलग-अलग सड़क हादसों में तीन लोगों की मौत हो गई।"
-      },
-      "mr": {
-        "title": "रस्ते अपघातात तिघांचा मृत्यू",
-        "summary": "औंध आणि नगर रोडवर पीएमपीएमएल बस आणि ट्रकशी संबंधित वेगवेगळ्या अपघातात तीन जणांचा मृत्यू झाला।"
-      }
-    },
     "timestamp": "2026-02-02T04:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.5135, "lng": 73.8122 },
-    "location": { "block": "Uttamnagar, Aundh, Nagar Road" },
+    "geoPoint": {
+      "lat": 18.5135,
+      "lng": 73.8122
+    },
+    "location": {
+      "block": "Uttamnagar, Aundh, Nagar Road"
+    },
     "source": "The Bridge Chronicle",
     "verified": true,
     "meta": {
@@ -681,20 +566,15 @@
     "category": "safety",
     "title": "Pune Road Fatalities Surge",
     "summary": "Police data reveals a crisis with 290 road deaths in the past year, primarily affecting pedestrians and bikers in Pune City.",
-    "translations": {
-      "hi": {
-        "title": "पुणे सड़क दुर्घटनाओं में वृद्धि",
-        "summary": "पुलिस आंकड़ों के अनुसार पिछले एक साल में 290 सड़क दुर्घटनाएं हुईं, जिससे मुख्य रूप से पुणे शहर के पैदल यात्री और बाइक सवार प्रभावित हुए।"
-      },
-      "mr": {
-        "title": "पुण्यातील रस्ते अपघातांत वाढ",
-        "summary": "पोलिस आकडेवारीनुसार गेल्या वर्षभरात रस्ते अपघातात २९० जणांचा मृत्यू झाला असून, यात प्रामुख्याने पादचारी आणि दुचाकीस्वारांचा समावेश आहे।"
-      }
-    },
     "timestamp": "2026-01-26T05:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.5204, "lng": 73.8567 },
-    "location": { "block": "Pune City" },
+    "geoPoint": {
+      "lat": 18.5204,
+      "lng": 73.8567
+    },
+    "location": {
+      "block": "Pune City"
+    },
     "source": "The Bridge Chronicle",
     "verified": true,
     "meta": {
@@ -710,20 +590,15 @@
     "category": "mobility",
     "title": "High Speed Train Trials Conducted",
     "summary": "High-speed train trials were successfully conducted on the Daund-Kashti section of the Pune division.",
-    "translations": {
-      "hi": {
-        "title": "हाई स्पीड ट्रेन का ट्रायल हुआ",
-        "summary": "पुणे डिवीजन के दौंड-काष्टी खंड पर हाई-स्पीड ट्रेन का सफल परीक्षण किया गया।"
-      },
-      "mr": {
-        "title": "हाय स्पीड ट्रेनच्या चाचण्या यशस्वी",
-        "summary": "पुणे विभागातील दौंड-काष्टी दरम्यान हाय-स्पीड ट्रेनच्या चाचण्या यशस्वीरित्या पार पडल्या।"
-      }
-    },
     "timestamp": "2026-01-25T07:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.4684, "lng": 74.5878 },
-    "location": { "block": "Daund-Kashti Section" },
+    "geoPoint": {
+      "lat": 18.4684,
+      "lng": 74.5878
+    },
+    "location": {
+      "block": "Daund-Kashti Section"
+    },
     "source": "Times Property",
     "verified": true,
     "meta": {
@@ -738,20 +613,15 @@
     "category": "infrastructure",
     "title": "Outer Ring Road Work Progresses",
     "summary": "Major groundwork for the Pune Outer Ring Road has been completed in the Sangrun and Davaje segments.",
-    "translations": {
-      "hi": {
-        "title": "आउटर रिंग रोड का काम जारी",
-        "summary": "पुणे आउटर रिंग रोड के लिए सांगरुण और दवजे हिस्सों में प्रमुख जमीनी कार्य पूरा कर लिया गया है।"
-      },
-      "mr": {
-        "title": "बाह्य वळण रस्त्याचे काम प्रगतीपथावर",
-        "summary": "पुणे बाह्य वळण रस्त्यासाठी सांगरुण आणि दवजे भागात महत्त्वाचे प्राथमिक काम पूर्ण झाले आहे।"
-      }
-    },
     "timestamp": "2026-01-20T08:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.4233, "lng": 73.7431 },
-    "location": { "block": "Sangrun and Davaje" },
+    "geoPoint": {
+      "lat": 18.4233,
+      "lng": 73.7431
+    },
+    "location": {
+      "block": "Sangrun and Davaje"
+    },
     "source": "Times Property",
     "verified": true,
     "meta": {
@@ -767,20 +637,15 @@
     "category": "mobility",
     "title": "Talegaon Bridge Closure Alert",
     "summary": "A bridge between Talegaon and Dehu Road was closed for maintenance, causing local traffic diversions.",
-    "translations": {
-      "hi": {
-        "title": "तलेगांव पुल बंद करने का अलर्ट",
-        "summary": "तलेगांव और देहू रोड के बीच एक पुल को रखरखाव के लिए बंद कर दिया गया, जिससे स्थानीय यातायात को डायवर्ट करना पड़ा।"
-      },
-      "mr": {
-        "title": "तळेगाव पूल बंद ठेवण्याचा इशारा",
-        "summary": "तळेगाव आणि देहू रोड दरम्यानचा पूल दुरुस्तीसाठी बंद करण्यात आल्याने स्थानिक वाहतूक वळवण्यात आली आहे।"
-      }
-    },
     "timestamp": "2026-01-19T02:00:00Z",
     "expiresAt": "2026-01-25T18:30:00Z",
-    "geoPoint": { "lat": 18.7325, "lng": 73.6766 },
-    "location": { "block": "Talegaon-Dehu Road" },
+    "geoPoint": {
+      "lat": 18.7325,
+      "lng": 73.6766
+    },
+    "location": {
+      "block": "Talegaon-Dehu Road"
+    },
     "source": "Times Property",
     "verified": true,
     "meta": {
@@ -795,20 +660,15 @@
     "category": "infrastructure",
     "title": "Airport Infrastructure Stress Warning",
     "summary": "Authorities project 10 lakh additional flyers in 2026, leading to urgent calls for expanded space at Lohegaon Airport.",
-    "translations": {
-      "hi": {
-        "title": "हवाई अड्डे के बुनियादी ढांचे पर दबाव",
-        "summary": "प्राधिकारियों ने 2026 में 10 लाख अतिरिक्त यात्रियों का अनुमान लगाया है, जिससे लोहेगांव हवाई अड्डे पर विस्तार की तत्काल आवश्यकता है।"
-      },
-      "mr": {
-        "title": "विमानतळ पायाभूत सुविधांवरील ताण",
-        "summary": "२०२६ मध्ये १० लाख अतिरिक्त प्रवाशांचा अंदाज असल्याने लोहेगाव विमानतळावरील जागा वाढवण्याची गरज व्यक्त होत आहे।"
-      }
-    },
     "timestamp": "2026-01-02T15:12:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 18.5822, "lng": 73.9197 },
-    "location": { "block": "Lohegaon (Pune Airport)" },
+    "geoPoint": {
+      "lat": 18.5822,
+      "lng": 73.9197
+    },
+    "location": {
+      "block": "Lohegaon (Pune Airport)"
+    },
     "source": "The Times of India",
     "verified": true,
     "meta": {
@@ -824,16 +684,15 @@
     "category": "weather",
     "title": "Severe Cold Wave Conditions",
     "summary": "Morning temperatures plummeted to 3°C as a severe cold wave accompanied by dense fog disrupted life at Kartavya Path.",
-    "translations": {
-      "hi": {
-        "title": "भीषण शीतलहर की स्थिति",
-        "summary": "कर्तव्य पथ पर सुबह का तापमान 3°C तक गिर गया, जिससे घने कोहरे और शीतलहर ने जनजीवन प्रभावित किया।"
-      }
-    },
     "timestamp": "2026-01-14T10:35:00Z",
     "expiresAt": "2026-01-20T10:35:00Z",
-    "geoPoint": { "lat": 28.6129, "lng": 77.2295 },
-    "location": { "block": "Kartavya Path" },
+    "geoPoint": {
+      "lat": 28.6129,
+      "lng": 77.2295
+    },
+    "location": {
+      "block": "Kartavya Path"
+    },
     "source": "The Hindu",
     "verified": true,
     "meta": {
@@ -848,16 +707,15 @@
     "category": "safety",
     "title": "Missing Persons Data Surge",
     "summary": "Police data reported 807 persons missing in the first 15 days of 2026 in New Delhi district.",
-    "translations": {
-      "hi": {
-        "title": "लापता व्यक्तियों की संख्या में उछाल",
-        "summary": "नई दिल्ली जिले में 2026 के पहले 15 दिनों में पुलिस ने 807 लोगों के लापता होने की रिपोर्ट दर्ज की।"
-      }
-    },
     "timestamp": "2026-01-15T18:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 28.6139, "lng": 77.209 },
-    "location": { "block": "New Delhi" },
+    "geoPoint": {
+      "lat": 28.6139,
+      "lng": 77.209
+    },
+    "location": {
+      "block": "New Delhi"
+    },
     "source": "Economic Times",
     "verified": true,
     "meta": {
@@ -872,16 +730,15 @@
     "category": "mobility",
     "title": "Delhi Metro 394km Milestone",
     "summary": "DMRC milestone reported at Metro Bhawan, located within the New Delhi sub-division.",
-    "translations": {
-      "hi": {
-        "title": "दिल्ली मेट्रो का 394 किमी का मील का पत्थर",
-        "summary": "नई दिल्ली सब-डिवीजन में स्थित मेट्रो भवन में डीएमआरसी के 394 किमी परिचालन के मील के पत्थर की सूचना दी गई।"
-      }
-    },
     "timestamp": "2026-03-01T10:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 28.6226, "lng": 77.2185 },
-    "location": { "block": "Metro Bhawan" },
+    "geoPoint": {
+      "lat": 28.6226,
+      "lng": 77.2185
+    },
+    "location": {
+      "block": "Metro Bhawan"
+    },
     "source": "India Today",
     "verified": true,
     "meta": {
@@ -896,16 +753,15 @@
     "category": "safety",
     "title": "Preventable Disaster Toll Report",
     "summary": "Revenue department data for the New Delhi district revealed significant life loss due to civic lapses.",
-    "translations": {
-      "hi": {
-        "title": "निवारण योग्य आपदा मृत्यु रिपोर्ट",
-        "summary": "नई दिल्ली जिले के राजस्व विभाग के आंकड़ों ने नागरिक खामियों के कारण महत्वपूर्ण जनहानि का खुलासा किया।"
-      }
-    },
     "timestamp": "2026-03-01T09:38:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 28.6139, "lng": 77.209 },
-    "location": { "block": "New Delhi" },
+    "geoPoint": {
+      "lat": 28.6139,
+      "lng": 77.209
+    },
+    "location": {
+      "block": "New Delhi"
+    },
     "source": "Times of India",
     "verified": true,
     "meta": {
@@ -920,16 +776,15 @@
     "category": "weather",
     "title": "Above Normal Winter Heat",
     "summary": "Safdarjung observatory, located in the New Delhi sub-division, recorded markedly high temperatures.",
-    "translations": {
-      "hi": {
-        "title": "सर्दियों में सामान्य से अधिक गर्मी",
-        "summary": "नई दिल्ली सब-डिवीजन में स्थित सफदरजंग वेधशाला ने सामान्य से काफी अधिक तापमान दर्ज किया।"
-      }
-    },
     "timestamp": "2026-02-28T18:00:00Z",
     "expiresAt": "2026-03-05T18:00:00Z",
-    "geoPoint": { "lat": 28.584, "lng": 77.204 },
-    "location": { "block": "Safdarjung" },
+    "geoPoint": {
+      "lat": 28.584,
+      "lng": 77.204
+    },
+    "location": {
+      "block": "Safdarjung"
+    },
     "source": "IMD",
     "verified": true,
     "meta": {
@@ -944,16 +799,15 @@
     "category": "emergency",
     "title": "Electric Vehicle Fire Statistics",
     "summary": "Annual safety report for New Delhi indicated a trend of 9-10 fire-related EV accidents.",
-    "translations": {
-      "hi": {
-        "title": "इलेक्ट्रिक वाहन में आग के आंकड़े",
-        "summary": "नई दिल्ली की वार्षिक सुरक्षा रिपोर्ट में इलेक्ट्रिक वाहनों में आग से संबंधित 9-10 दुर्घटनाओं का रुझान बताया गया।"
-      }
-    },
     "timestamp": "2026-02-10T11:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 28.6139, "lng": 77.209 },
-    "location": { "block": "New Delhi" },
+    "geoPoint": {
+      "lat": 28.6139,
+      "lng": 77.209
+    },
+    "location": {
+      "block": "New Delhi"
+    },
     "source": "Press Information Bureau",
     "verified": true,
     "meta": {
@@ -968,16 +822,15 @@
     "category": "infrastructure",
     "title": "Chandni Chowk Underground Cabling",
     "summary": "Launch of a ₹160-crore project to shift 52.5 km of overhead electricity wires underground in the historic Chandni Chowk area.",
-    "translations": {
-      "hi": {
-        "title": "चांदनी चौक में भूमिगत केबलिंग",
-        "summary": "ऐतिहासिक चांदनी चौक क्षेत्र में 52.5 किमी बिजली के तारों को भूमिगत करने के लिए ₹160 करोड़ की परियोजना का शुभारंभ।"
-      }
-    },
     "timestamp": "2026-02-27T11:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 28.6506, "lng": 77.2304 },
-    "location": { "block": "Chandni Chowk" },
+    "geoPoint": {
+      "lat": 28.6506,
+      "lng": 77.2304
+    },
+    "location": {
+      "block": "Chandni Chowk"
+    },
     "source": "The Times of India",
     "verified": true,
     "meta": {
@@ -992,20 +845,42 @@
     "category": "safety",
     "title": "Community Policing Initiative Launch",
     "summary": "New community policing initiative launched in Saraswati Vihar to improve local safety and emergency response times.",
-    "translations": {
-      "hi": {
-        "title": "सामुदायिक पुलिसिंग पहल का शुभारंभ",
-        "summary": "स्थानीय सुरक्षा और आपातकालीन प्रतिक्रिया समय में सुधार के लिए सरस्वती विहार में नई सामुदायिक पुलिसिंग पहल शुरू की गई।"
-      }
-    },
     "timestamp": "2026-03-01T14:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 28.6942, "lng": 77.1349 },
-    "location": { "block": "Saraswati Vihar" },
+    "geoPoint": {
+      "lat": 28.6942,
+      "lng": 77.1349
+    },
+    "location": {
+      "block": "Saraswati Vihar"
+    },
     "source": "Delhi Police",
     "verified": true,
     "meta": {
       "blocksCovered": 12
+    }
+  },
+  {
+    "id": "evt_RJ_jaipur_20260223_001",
+    "stateId": "RJ",
+    "districtId": "jaipur",
+    "regionId": "jaipur",
+    "category": "safety",
+    "title": "Pedestrian Safety Walkathon Organized",
+    "summary": "The Muskaan Foundation and Rajasthan Police held a walkathon to promote pedestrian-friendly infrastructure in Jaipur City Center.",
+    "timestamp": "2026-02-23T03:09:00Z",
+    "expiresAt": "2026-02-24T18:00:00Z",
+    "geoPoint": {
+      "lat": 26.9124,
+      "lng": 75.7873
+    },
+    "location": {
+      "block": "Jaipur City Center"
+    },
+    "source": "The Times of India",
+    "verified": true,
+    "meta": {
+      "campaignName": "#StreetsForAll"
     }
   },
   {
@@ -1016,24 +891,22 @@
     "category": "safety",
     "title": "National Road Safety Month",
     "summary": "State government launched a month-long awareness campaign focusing on drunk driving and over-speeding enforcement district-wide.",
-    "translations": {
-      "hi": {
-        "title": "राष्ट्रीय सड़क सुरक्षा माह",
-        "summary": "राज्य सरकार ने शराब पीकर गाड़ी चलाने और तेज रफ्तार पर लगाम लगाने के लिए जिले भर में महीने भर चलने वाला जागरूकता अभियान शुरू किया।"
-      },
-      "pa": {
-        "title": "ਰਾਸ਼ਟਰੀ ਸੜਕ ਸੁਰੱਖਿਆ ਮਹੀਨਾ",
-        "summary": "ਰਾਜ ਸਰਕਾਰ ਨੇ ਸ਼ਰਾਬ ਪੀ ਕੇ ਗੱਡੀ ਚਲਾਉਣ ਅਤੇ ਤੇਜ਼ ਰਫ਼ਤਾਰ 'ਤੇ ਨਜ਼ਰ ਰੱਖਣ ਲਈ ਪੂਰੇ ਜ਼ਿਲ੍ਹੇ ਵਿੱਚ ਮਹੀਨਾ ਭਰ ਚੱਲਣ ਵਾਲੀ ਜਾਗਰੂਕਤਾ ਮੁਹਿੰਮ ਸ਼ੁਰੂ ਕੀਤੀ ਹੈ।"
-      }
-    },
     "timestamp": "2026-01-01T19:56:00Z",
     "expiresAt": "2026-01-31T23:59:00Z",
-    "geoPoint": { "lat": 31.326, "lng": 75.5762 },
-    "location": { "block": "Jalandhar District Areas" },
+    "geoPoint": {
+      "lat": 31.326,
+      "lng": 75.5762
+    },
+    "location": {
+      "block": "Jalandhar District Areas"
+    },
     "source": "Babushahi.com",
     "verified": true,
     "meta": {
-      "enforcementFocus": [ "Drunk driving", "Wrong-side driving" ]
+      "enforcementFocus": [
+        "Drunk driving",
+        "Wrong-side driving"
+      ]
     }
   },
   {
@@ -1044,16 +917,15 @@
     "category": "emergency",
     "title": "Mahashivratri Crowd Management Operations",
     "summary": "Massive devotee turnout for Bhasma Aarti at Mahakaleshwar Temple required emergency crowd control and medical standby teams.",
-    "translations": {
-      "hi": {
-        "title": "महाशिवरात्रि भीड़ प्रबंधन अभियान",
-        "summary": "महाकालेश्वर मंदिर में भस्म आरती के लिए भक्तों की भारी भीड़ के कारण आपातकालीन भीड़ नियंत्रण और चिकित्सा स्टैंडबाय टीमों की आवश्यकता पड़ी।"
-      }
-    },
     "timestamp": "2026-02-15T03:00:00Z",
     "expiresAt": "2026-02-16T12:00:00Z",
-    "geoPoint": { "lat": 23.1827, "lng": 75.7682 },
-    "location": { "block": "Mahakaleshwar Temple Complex" },
+    "geoPoint": {
+      "lat": 23.1827,
+      "lng": 75.7682
+    },
+    "location": {
+      "block": "Mahakaleshwar Temple Complex"
+    },
     "source": "India TV News",
     "verified": true,
     "meta": {
@@ -1069,16 +941,15 @@
     "category": "safety",
     "title": "Communal Tensions Erupt Tarana",
     "summary": "Clashes in Tarana led to a bus being torched and shops vandalized following an attack on a local individual.",
-    "translations": {
-      "hi": {
-        "title": "तराना में सांप्रदायिक तनाव",
-        "summary": "तराना में एक स्थानीय व्यक्ति पर हमले के बाद झड़पें हुईं, जिसमें एक बस को आग लगा दी गई और दुकानों में तोड़फोड़ की गई।"
-      }
-    },
     "timestamp": "2026-01-23T16:22:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 23.3333, "lng": 76.0167 },
-    "location": { "block": "Tarana Town" },
+    "geoPoint": {
+      "lat": 23.3333,
+      "lng": 76.0167
+    },
+    "location": {
+      "block": "Tarana Town"
+    },
     "source": "India TV News",
     "verified": true,
     "meta": {
@@ -1093,20 +964,15 @@
     "category": "emergency",
     "title": "Billboard Collapse Kills One",
     "summary": "Gusty winds caused a large hoarding to collapse in Aiginia, killing a 38-year-old man taking shelter.",
-    "translations": {
-      "hi": {
-        "title": "होर्डिंग गिरने से एक की मौत",
-        "summary": "आइगिनिया में तेज हवाओं के कारण एक बड़ा होर्डिंग गिर गया, जिससे आश्रय ले रहे 38 वर्षीय व्यक्ति की मौत हो गई।"
-      },
-      "or": {
-        "title": "ବିଜ୍ଞାପନ ବୋର୍ଡ ପଡି ଜଣେ ମୃତ",
-        "summary": "ଆଇଗିଣିଆରେ ପ୍ରବଳ ପବନ ଯୋଗୁଁ ଏକ ବଡ଼ ହୋର୍ଡିଂ ଖସିପଡିଥିଲା, ଯେଉଁଥିରେ ଆଶ୍ରୟ ନେଇଥିବା ଜଣେ ୩୮ ବର୍ଷୀୟ ବ୍ୟକ୍ତିଙ୍କର ମୃତ୍ୟୁ ଘଟିଛି।"
-      }
-    },
     "timestamp": "2026-02-24T23:54:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 20.2641, "lng": 85.7812 },
-    "location": { "block": "Aiginia Durga Mandap" },
+    "geoPoint": {
+      "lat": 20.2641,
+      "lng": 85.7812
+    },
+    "location": {
+      "block": "Aiginia Durga Mandap"
+    },
     "source": "The Times of India",
     "verified": true,
     "meta": {
@@ -1121,16 +987,15 @@
     "category": "infrastructure",
     "title": "Bageshwari Overbridge Construction Starts",
     "summary": "Work commenced on a ₹90 crore railway overbridge to connect Gaya station with Ramshila.",
-    "translations": {
-      "hi": {
-        "title": "बागेश्वरी ओवरब्रिज का निर्माण शुरू",
-        "summary": "गया स्टेशन को रामशिला से जोड़ने के लिए ₹90 करोड़ के रेलवे ओवरब्रिज पर काम शुरू हुआ।"
-      }
-    },
     "timestamp": "2026-02-24T18:45:00Z",
     "expiresAt": "2027-05-31T23:59:00Z",
-    "geoPoint": { "lat": 24.809, "lng": 85.004 },
-    "location": { "block": "Bageshwari Railway Crossing" },
+    "geoPoint": {
+      "lat": 24.809,
+      "lng": 85.004
+    },
+    "location": {
+      "block": "Bageshwari Railway Crossing"
+    },
     "source": "The Times of India",
     "verified": true,
     "meta": {
@@ -1145,16 +1010,15 @@
     "category": "infrastructure",
     "title": "Sadar Bazar Road Expansion",
     "summary": "Authorities initiated a major road widening project in Sadar Bazar to decongest the main market area of Sitapur.",
-    "translations": {
-      "hi": {
-        "title": "सदर बाजार सड़क चौड़ीकरण",
-        "summary": "सीतापुर के मुख्य बाजार क्षेत्र में भीड़ कम करने के लिए अधिकारियों ने सदर बाजार में सड़क चौड़ीकरण की बड़ी परियोजना शुरू की।"
-      }
-    },
     "timestamp": "2026-02-24T10:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 27.575, "lng": 80.665 },
-    "location": { "block": "Sadar Bazar" },
+    "geoPoint": {
+      "lat": 27.575,
+      "lng": 80.665
+    },
+    "location": {
+      "block": "Sadar Bazar"
+    },
     "source": "Dainik Jagran",
     "verified": true,
     "meta": {
@@ -1169,16 +1033,15 @@
     "category": "health",
     "title": "Mega Health Camp in Hargaon",
     "summary": "Over 500 local residents received free medical screenings and medicines during a district health department drive in Hargaon.",
-    "translations": {
-      "hi": {
-        "title": "हरगांव में मेगा स्वास्थ्य शिविर",
-        "summary": "हरगांव में जिला स्वास्थ्य विभाग के अभियान के दौरान 500 से अधिक स्थानीय निवासियों की मुफ्त चिकित्सा जांच की गई और दवाएं दी गईं।"
-      }
-    },
     "timestamp": "2026-02-23T09:00:00Z",
     "expiresAt": "2026-02-23T18:00:00Z",
-    "geoPoint": { "lat": 27.75, "lng": 80.75 },
-    "location": { "block": "Hargaon" },
+    "geoPoint": {
+      "lat": 27.75,
+      "lng": 80.75
+    },
+    "location": {
+      "block": "Hargaon"
+    },
     "source": "Hindustan Times",
     "verified": true,
     "meta": {
@@ -1193,16 +1056,15 @@
     "category": "infrastructure",
     "title": "Canal Cleaning Drive in Machhrehta",
     "summary": "The Irrigation Department accelerated the desilting of minor canals in Machhrehta ahead of the summer crop season.",
-    "translations": {
-      "hi": {
-        "title": "मछरेहटा में नहर सफाई अभियान",
-        "summary": "सिंचाई विभाग ने गर्मियों की फसल के मौसम से पहले मछरेहटा में छोटी नहरों की सफाई का काम तेज कर दिया है।"
-      }
-    },
     "timestamp": "2026-02-20T08:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 27.42, "lng": 80.52 },
-    "location": { "block": "Machhrehta" },
+    "geoPoint": {
+      "lat": 27.42,
+      "lng": 80.52
+    },
+    "location": {
+      "block": "Machhrehta"
+    },
     "source": "Local Administration",
     "verified": true,
     "meta": {
@@ -1217,16 +1079,15 @@
     "category": "safety",
     "title": "Solar Streetlight Installation in Atwa",
     "summary": "As part of the Gram Jyoti Yojana, 50 solar streetlights were installed in Atwa village to improve nighttime safety.",
-    "translations": {
-      "hi": {
-        "title": "अतवा में सोलर स्ट्रीटलाइट की स्थापना",
-        "summary": "ग्राम ज्योति योजना के तहत रात की सुरक्षा में सुधार के लिए अतवा गांव में 50 सोलर स्ट्रीटलाइट लगाई गईं।"
-      }
-    },
     "timestamp": "2026-02-18T14:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 27.35, "lng": 80.58 },
-    "location": { "block": "Atwa" },
+    "geoPoint": {
+      "lat": 27.35,
+      "lng": 80.58
+    },
+    "location": {
+      "block": "Atwa"
+    },
     "source": "Amar Ujala",
     "verified": true,
     "meta": {
@@ -1241,16 +1102,15 @@
     "category": "infrastructure",
     "title": "Modern Primary School Inaugurated",
     "summary": "A new primary school with smart classroom facilities was opened in Alaudipur, benefiting 200 children.",
-    "translations": {
-      "hi": {
-        "title": "आधुनिक प्राथमिक विद्यालय का उद्घाटन",
-        "summary": "अलाउदीपुर में स्मार्ट क्लासरूम सुविधाओं वाला एक नया प्राथमिक विद्यालय खोला गया, जिससे 200 बच्चों को लाभ होगा।"
-      }
-    },
     "timestamp": "2026-02-15T11:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 27.28, "lng": 80.83 },
-    "location": { "block": "Alaudipur" },
+    "geoPoint": {
+      "lat": 27.28,
+      "lng": 80.83
+    },
+    "location": {
+      "block": "Alaudipur"
+    },
     "source": "District Education Office",
     "verified": true,
     "meta": {
@@ -1265,20 +1125,15 @@
     "category": "infrastructure",
     "title": "Hebbal Industrial Area Upgrade",
     "summary": "The Karnataka Industrial Area Development Board (KIADB) announced a ₹20 crore fund for drainage and road repairs in Hebbal.",
-    "translations": {
-      "hi": {
-        "title": "हेब्बल औद्योगिक क्षेत्र अपग्रेड",
-        "summary": "कर्नाटक औद्योगिक क्षेत्र विकास बोर्ड (KIADB) ने हेब्बल में जल निकासी और सड़क मरम्मत के लिए ₹20 करोड़ के फंड की घोषणा की।"
-      },
-      "kn": {
-        "title": "ಹೆಬ್ಬಾಳ ಕೈಗಾರಿಕಾ ಪ್ರದೇಶದ ಅಭಿವೃದ್ಧಿ",
-        "summary": "ಹೆಬ್ಬಾಳದಲ್ಲಿ ಒಳಚರಂಡಿ ಮತ್ತು ರಸ್ತೆ ದುರಸ್ತಿಗಾಗಿ ಕರ್ನಾಟಕ ಕೈಗಾರಿಕಾ ಪ್ರದೇಶಾಭಿವೃದ್ಧಿ ಮಂಡಳಿ (KIADB) ₹20 ಕೋಟಿ ಅನುದಾನ ಘೋಷಿಸಿದೆ."
-      }
-    },
     "timestamp": "2026-02-24T12:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 12.358, "lng": 76.612 },
-    "location": { "block": "Hebbal" },
+    "geoPoint": {
+      "lat": 12.358,
+      "lng": 76.612
+    },
+    "location": {
+      "block": "Hebbal"
+    },
     "source": "Star of Mysore",
     "verified": true,
     "meta": {
@@ -1293,20 +1148,15 @@
     "category": "safety",
     "title": "Traffic Awareness Drive in Kuvempunagar",
     "summary": "City police conducted an awareness program in Kuvempunagar to reduce accidents at major intersections.",
-    "translations": {
-      "hi": {
-        "title": "कुवेम्पुनगर में यातायात जागरूकता अभियान",
-        "summary": "प्रमुख चौराहों पर दुर्घटनाओं को कम करने के लिए शहर की पुलिस ने कुवेम्पुनगर में एक जागरूकता कार्यक्रम आयोजित किया।"
-      },
-      "kn": {
-        "title": "ಕುವೆಂಪುನಗರದಲ್ಲಿ ಸಂಚಾರ ಜಾಗೃತಿ ಅಭಿಯಾನ",
-        "summary": "ಪ್ರಮುಖ ಜಂಕ್ಷನ್ಗಳಲ್ಲಿ ಅಪಘಾತಗಳನ್ನು ಕಡಿಮೆ ಮಾಡಲು ನಗರ ಪೊಲೀಸರು ಕುವೆಂಪುನಗರದಲ್ಲಿ ಜಾಗೃತಿ ಕಾರ್ಯಕ್ರಮ ನಡೆಸಿದರು."
-      }
-    },
     "timestamp": "2026-02-22T10:00:00Z",
     "expiresAt": "2026-02-22T20:00:00Z",
-    "geoPoint": { "lat": 12.295, "lng": 76.62 },
-    "location": { "block": "Kuvempunagar" },
+    "geoPoint": {
+      "lat": 12.295,
+      "lng": 76.62
+    },
+    "location": {
+      "block": "Kuvempunagar"
+    },
     "source": "The Hindu",
     "verified": true,
     "meta": {
@@ -1321,20 +1171,15 @@
     "category": "environment",
     "title": "Kabini River Desilting Project",
     "summary": "Authorities launched a desilting drive in the Kabini River near Nanjangud to prevent flooding during the upcoming monsoon.",
-    "translations": {
-      "hi": {
-        "title": "कबिनी नदी गाद सफाई परियोजना",
-        "summary": "आगामी मानसून के दौरान बाढ़ को रोकने के लिए अधिकारियों ने नंजनगुड के पास कबिनी नदी में गाद निकालने का अभियान शुरू किया।"
-      },
-      "kn": {
-        "title": "ಕಬಿನಿ ನದಿ ಹೂಳೆತ್ತುವ ಯೋಜನೆ",
-        "summary": "ಮುಂಬರುವ ಮುಂಗಾರು ವೇಳೆ ಪ್ರವಾಹ ತಡೆಯಲು ನಂಜನಗೂಡು ಬಳಿಯ ಕಬಿನಿ ನದಿಯಲ್ಲಿ ಹೂಳೆತ್ತುವ ಅಭಿಯಾನವನ್ನು ಅಧಿಕಾರಿಗಳು ಪ್ರಾರಂಭಿಸಿದ್ದಾರೆ."
-      }
-    },
     "timestamp": "2026-02-19T08:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 12.12, "lng": 76.68 },
-    "location": { "block": "Nanjangud" },
+    "geoPoint": {
+      "lat": 12.12,
+      "lng": 76.68
+    },
+    "location": {
+      "block": "Nanjangud"
+    },
     "source": "Deccan Herald",
     "verified": true,
     "meta": {
@@ -1349,20 +1194,15 @@
     "category": "safety",
     "title": "Hunsur Forest Edge Patrols Increased",
     "summary": "Forest department intensified night patrols along the Hunsur-Nagarahole border after multiple tiger sightings reported.",
-    "translations": {
-      "hi": {
-        "title": "हुन्सुर वन क्षेत्र में गश्त बढ़ी",
-        "summary": "बाघ दिखने की कई रिपोर्टों के बाद वन विभाग ने हुन्सुर-नागरहोल सीमा पर रात की गश्त तेज कर दी है।"
-      },
-      "kn": {
-        "title": "ಹುಣಸೂರು ಅರಣ್ಯ ಅಂಚಿನಲ್ಲಿ ಗಸ್ತು ಹೆಚ್ಚಳ",
-        "summary": "ಹುಲಿ ಕಾಣಿಸಿಕೊಂಡ ಹಿನ್ನೆಲೆಯಲ್ಲಿ ಅರಣ್ಯ ಇಲಾಖೆಯು ಹುಣಸೂರು-ನಾಗರಹೊಳೆ ಗಡಿಯಲ್ಲಿ ರಾತ್ರಿ ಗಸ್ತನ್ನು ತೀವ್ರಗೊಳಿಸಿದೆ."
-      }
-    },
     "timestamp": "2026-02-17T21:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 12.31, "lng": 76.29 },
-    "location": { "block": "Hunsur Frontier" },
+    "geoPoint": {
+      "lat": 12.31,
+      "lng": 76.29
+    },
+    "location": {
+      "block": "Hunsur Frontier"
+    },
     "source": "Forest Department",
     "verified": true,
     "meta": {
@@ -1377,20 +1217,15 @@
     "category": "infrastructure",
     "title": "New Bridge Over Cauvery in K.R. Nagara",
     "summary": "The state cabinet approved the construction of a new bridge across the Cauvery River connecting K.R. Nagara to Hole Narsipur.",
-    "translations": {
-      "hi": {
-        "title": "के.आर. नगर में कावेरी पर नया पुल",
-        "summary": "राज्य मंत्रिमंडल ने के.आर. नगर को होले नरसीपुर से जोड़ने के लिए कावेरी नदी पर एक नए पुल के निर्माण को मंजूरी दी।"
-      },
-      "kn": {
-        "title": "ಕೆ.ಆರ್. ನಗರದಲ್ಲಿ ಕಾವೇರಿ ನದಿಗೆ ಹೊಸ ಸೇತುವೆ",
-        "summary": "ಕೆ.ಆರ್. ನಗರದಿಂದ ಹೊಳೆ ನರಸೀಪುರವನ್ನು ಸಂಪರ್ಕಿಸುವ ಕಾವೇರಿ ನದಿಗೆ ಹೊಸ ಸೇತುವೆ ನಿರ್ಮಾಣಕ್ಕೆ ರಾಜ್ಯ ಸಚಿವ ಸಂಪುಟ ಅನುಮೋದನೆ ನೀಡಿದೆ."
-      }
-    },
     "timestamp": "2026-02-14T15:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 12.45, "lng": 76.38 },
-    "location": { "block": "K.R. Nagara" },
+    "geoPoint": {
+      "lat": 12.45,
+      "lng": 76.38
+    },
+    "location": {
+      "block": "K.R. Nagara"
+    },
     "source": "Public Works Department",
     "verified": true,
     "meta": {
@@ -1405,20 +1240,15 @@
     "category": "emergency",
     "title": "Mild Tremors Felt District-Wide",
     "summary": "A 4.2 magnitude earthquake with epicenter in neighboring district triggered minor tremors in Chinsurah, Serampore and Singur.",
-    "translations": {
-      "hi": {
-        "title": "जिले भर में महसूस किए गए हल्के झटके",
-        "summary": "पड़ोसी जिले में आए 4.2 तीव्रता के भूकंप के कारण चिनसुराह, श्रीरामपुर और सिंगूर में हल्के झटके महसूस किए गए।"
-      },
-      "bn": {
-        "title": "জেলাজুড়ে মৃদু কম্পন অনুভূত",
-        "summary": "পার্শ্ববর্তী জেলায় ৪.২ মাত্রার ভূমিকম্পের ফলে চুঁচুড়া, শ্রীরামপুর ও সিঙ্গুরে মৃদু কম্পন অনুভূত হয়েছে।"
-      }
-    },
     "timestamp": "2026-02-25T03:45:00Z",
     "expiresAt": "2026-02-25T06:00:00Z",
-    "geoPoint": { "lat": 22.9, "lng": 88.39 },
-    "location": { "block": "Hugli District Areas" },
+    "geoPoint": {
+      "lat": 22.9,
+      "lng": 88.39
+    },
+    "location": {
+      "block": "Hugli District Areas"
+    },
     "source": "NDTV",
     "verified": true,
     "meta": {
@@ -1433,20 +1263,15 @@
     "category": "infrastructure",
     "title": "Hooghly Riverfront Beautification",
     "summary": "Chinsurah municipality commenced the phase 2 of riverfront development aiming to create a new promenade.",
-    "translations": {
-      "hi": {
-        "title": "हुगली रिवरफ्रंट सौंदर्यीकरण",
-        "summary": "चिनसुराह नगर पालिका ने एक नया सैरगाह बनाने के उद्देश्य से रिवरफ्रंट विकास का दूसरा चरण शुरू किया।"
-      },
-      "bn": {
-        "title": "হুগলি রিভারফ্রন্ট সৌন্দর্যায়ন",
-        "summary": "একটি নতুন প্রোমেনেড তৈরির লক্ষ্যে চুঁচুড়া পৌরসভা রিভারফ্রন্ট উন্নয়নের দ্বিতীয় পর্ব শুরু করেছে।"
-      }
-    },
     "timestamp": "2026-02-23T11:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 22.9, "lng": 88.39 },
-    "location": { "block": "Chinsurah Ghat" },
+    "geoPoint": {
+      "lat": 22.9,
+      "lng": 88.39
+    },
+    "location": {
+      "block": "Chinsurah Ghat"
+    },
     "source": "The Statesman",
     "verified": true,
     "meta": {
@@ -1461,20 +1286,15 @@
     "category": "infrastructure",
     "title": "Singur Logistics Hub Construction",
     "summary": "Private developers broke ground on a massive cold storage and logistics hub near Singur on NH19.",
-    "translations": {
-      "hi": {
-        "title": "सिंगूर लॉजिस्टिक्स हब का निर्माण",
-        "summary": "निजी डेवलपर्स ने NH19 पर सिंगूर के पास एक विशाल कोल्ड स्टोरेज और लॉजिस्टिक्स हब का भूमि पूजन किया।"
-      },
-      "bn": {
-        "title": "সিঙ্গুর লজিস্টিক হাব নির্মাণ",
-        "summary": "বেসরকারি ডেভেলপাররা NH19-এ সিঙ্গুরের কাছে একটি বিশাল কোল্ড স্টোরেজ এবং লজিস্টিক হাবের কাজ শুরু করেছে।"
-      }
-    },
     "timestamp": "2026-02-20T10:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 22.82, "lng": 88.23 },
-    "location": { "block": "Singur NH19" },
+    "geoPoint": {
+      "lat": 22.82,
+      "lng": 88.23
+    },
+    "location": {
+      "block": "Singur NH19"
+    },
     "source": "Business Standard",
     "verified": true,
     "meta": {
@@ -1489,20 +1309,15 @@
     "category": "safety",
     "title": "Bandel Imambara Restoration Security",
     "summary": "CCTV surveillance increased around the heritage site of Bandel Imambara following recent vandalism attempts.",
-    "translations": {
-      "hi": {
-        "title": "बेंडेल इमामबाड़ा बहाली सुरक्षा",
-        "summary": "हाल ही में हुई तोड़फोड़ की कोशिशों के बाद बेंडेल इमामबाड़ा विरासत स्थल के आसपास सीसीटीवी निगरानी बढ़ाई गई।"
-      },
-      "bn": {
-        "title": "ব্যান্ডেল ইমামবাড়া সংস্কার নিরাপত্তা",
-        "summary": "সাম্প্রতিক ভাঙচুরের চেষ্টার পর ব্যান্ডেল ইমামবাড়া হেরিটেজ সাইটের চারপাশে সিসিটিવી নজরদারি বাড়ানো হয়েছে।"
-      }
-    },
     "timestamp": "2026-02-18T16:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 22.91, "lng": 88.38 },
-    "location": { "block": "Bandel" },
+    "geoPoint": {
+      "lat": 22.91,
+      "lng": 88.38
+    },
+    "location": {
+      "block": "Bandel"
+    },
     "source": "Police Bulletin",
     "verified": true,
     "meta": {
@@ -1517,16 +1332,15 @@
     "category": "infrastructure",
     "title": "Raipur Skywalk Dismantling Reconsidered",
     "summary": "The state cabinet deferred the decision to dismantle the Raipur Skywalk, opting for a feasibility study for commercial reuse.",
-    "translations": {
-      "hi": {
-        "title": "रायपुर स्काईवॉक को हटाने पर पुनर्विचार",
-        "summary": "राज्य मंत्रिमंडल ने रायपुर स्काईवॉक को हटाने के फैसले को टाल दिया और इसके व्यावसायिक पुन: उपयोग के लिए व्यवहार्यता अध्ययन का विकल्प चुना।"
-      }
-    },
     "timestamp": "2026-02-24T17:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 21.238, "lng": 81.634 },
-    "location": { "block": "Raipur City Center" },
+    "geoPoint": {
+      "lat": 21.238,
+      "lng": 81.634
+    },
+    "location": {
+      "block": "Raipur City Center"
+    },
     "source": "Times of India",
     "verified": true,
     "meta": {
@@ -1541,16 +1355,15 @@
     "category": "infrastructure",
     "title": "Naya Raipur Metro Neo Project",
     "summary": "The central government approved the Detailed Project Report for Metro Neo connectivity between Raipur and Naya Raipur.",
-    "translations": {
-      "hi": {
-        "title": "नवा रायपुर मेट्रो नियो परियोजना",
-        "summary": "केंद्र सरकार ने रायपुर और नवा रायपुर के बीच मेट्रो नियो कनेक्टिविटी के लिए विस्तृत परियोजना रिपोर्ट को मंजूरी दी।"
-      }
-    },
     "timestamp": "2026-02-22T13:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 21.17, "lng": 81.79 },
-    "location": { "block": "Naya Raipur Corridor" },
+    "geoPoint": {
+      "lat": 21.17,
+      "lng": 81.79
+    },
+    "location": {
+      "block": "Naya Raipur Corridor"
+    },
     "source": "Chhattisgarh Infotech",
     "verified": true,
     "meta": {
@@ -1565,16 +1378,15 @@
     "category": "infrastructure",
     "title": "Tilda Junction Modernization",
     "summary": "Upgradation work began at Tilda-Neora railway station under the Amrit Bharat Station Scheme.",
-    "translations": {
-      "hi": {
-        "title": "तिल्दा जंक्शन का आधुनिकीकरण",
-        "summary": "अमृत भारत स्टेशन योजना के तहत तिल्दा-नेवरा रेलवे स्टेशन पर उन्नयन का काम शुरू हुआ।"
-      }
-    },
     "timestamp": "2026-02-19T09:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 21.54, "lng": 81.89 },
-    "location": { "block": "Tilda" },
+    "geoPoint": {
+      "lat": 21.54,
+      "lng": 81.89
+    },
+    "location": {
+      "block": "Tilda"
+    },
     "source": "South Eastern Railway",
     "verified": true,
     "meta": {
@@ -1589,20 +1401,15 @@
     "category": "health",
     "title": "Vellore CMC Hospital Expansion",
     "summary": "New specialty wing inaugurated at CMC Chittoor campus extension, primarily serving Vellore city patients.",
-    "translations": {
-      "hi": {
-        "title": "वेल्लोर सीएमसी अस्पताल का विस्तार",
-        "summary": "सीएमसी चित्तूर परिसर विस्तार में नए विशेषता विंग का उद्घाटन किया गया, जो मुख्य रूप से वेल्लोर शहर के मरीजों की सेवा करेगा।"
-      },
-      "ta": {
-        "title": "வேலூர் சிஎம்சி மருத்துவமனை விரிவாக்கம்",
-        "summary": "சிஎம்சி சித்தூர் வளாக விரிவாக்கத்தில் புதிய சிறப்பு பிரிவு திறக்கப்பட்டுள்ளது, இது முக்கியமாக வேலூர் நகர நோயாளிகளுக்கு சேவை செய்யும்."
-      }
-    },
     "timestamp": "2026-02-24T10:00:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 12.92, "lng": 79.13 },
-    "location": { "block": "Katpadi-Sathuvachari Link" },
+    "geoPoint": {
+      "lat": 12.92,
+      "lng": 79.13
+    },
+    "location": {
+      "block": "Katpadi-Sathuvachari Link"
+    },
     "source": "The Hindu",
     "verified": true,
     "meta": {
@@ -1617,20 +1424,15 @@
     "category": "environment",
     "title": "Palar River Bed Restoration Drive",
     "summary": "Environmentalists and district administration organized a community drive to remove illegal encroachments from the Palar river bed.",
-    "translations": {
-      "hi": {
-        "title": "पालार नदी तल बहाली अभियान",
-        "summary": "पर्यावरणविदों और जिला प्रशासन ने पालार नदी के तल से अवैध अतिक्रमण हटाने के लिए एक सामुदायिक अभियान आयोजित किया।"
-      },
-      "ta": {
-        "title": "பாலாறு நதிப்படுகை மீட்பு இயக்கம்",
-        "summary": "பாலாற்று நதிப்படுகையில் உள்ள ஆக்கிரமிப்புகளை அகற்ற சுற்றுச்சூழல் ஆர்வலர்கள் மற்றும் மாவட்ட நிர்வாகம் இணைந்து சமூக இயக்கத்தை நடத்தின."
-      }
-    },
     "timestamp": "2026-02-21T07:30:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 12.684, "lng": 78.614 },
-    "location": { "block": "Vaniyambadi Palar Bank" },
+    "geoPoint": {
+      "lat": 12.684,
+      "lng": 78.614
+    },
+    "location": {
+      "block": "Vaniyambadi Palar Bank"
+    },
     "source": "Dinamalar",
     "verified": true,
     "meta": {
@@ -1645,25 +1447,19 @@
     "category": "infrastructure",
     "title": "Gudiyatham Ring Road Survey",
     "summary": "Government surveyors identified land for the proposed 15km ring road to bypass Gudiyatham town congestion.",
-    "translations": {
-      "hi": {
-        "title": "गुडियाथम रिंग रोड सर्वेक्षण",
-        "summary": "सरकारी सर्वेक्षकों ने गुडियाथम शहर की भीड़ को कम करने के लिए प्रस्तावित 15 किमी रिंग रोड के लिए जमीन की पहचान की।"
-      },
-      "ta": {
-        "title": "குடியாத்தம் வெளிவட்ட சாலை ஆய்வு",
-        "summary": "குடியாத்தம் நகர நெரிசலைத் தவிர்க்க முன்மொழியப்பட்ட 15 கிமீ வெளிவட்ட சாலைக்காக நிலங்களை அரசு ஆய்வாளர்கள் கண்டறிந்துள்ளனர்."
-      }
-    },
     "timestamp": "2026-02-18T14:45:00Z",
     "expiresAt": null,
-    "geoPoint": { "lat": 12.943, "lng": 78.874 },
-    "location": { "block": "Gudiyatham Bypass" },
+    "geoPoint": {
+      "lat": 12.943,
+      "lng": 78.874
+    },
+    "location": {
+      "block": "Gudiyatham Bypass"
+    },
     "source": "Local News Network",
     "verified": true,
     "meta": {
       "lengthKm": 15
     }
   }
-]
 ]
