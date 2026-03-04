@@ -558,6 +558,37 @@ async function _renderLanguageSelector() {
                 }
             }
         });
+
+        // Handle clicking on individual language items
+        track.addEventListener('click', (e) => {
+            const langItem = e.target.closest('.lang-item');
+            if (!langItem || !_pillExpanded) return;
+
+            // Find which language item was clicked
+            const clickedIndex = _langNodes.indexOf(langItem);
+            if (clickedIndex === -1) return;
+
+            // Calculate the virtual index for this visible item
+            const centerIndexInteger = Math.round(_pillPosition);
+            const itemVirtualIndex = centerIndexInteger - Math.floor(7 / 2) + clickedIndex;
+            const len = _activeLocales.length;
+            const langIndex = ((itemVirtualIndex % len) + len) % len;
+            const selectedLocale = _activeLocales[langIndex];
+
+            if (selectedLocale) {
+                // Animate to this language
+                _pillTargetPosition = langIndex;
+                
+                // After animation completes, switch locale and collapse
+                setTimeout(() => {
+                    _pillExpanded = false;
+                    container.classList.remove('expanded');
+                    if (selectedLocale !== AppState.locale) {
+                        _switchLocale(selectedLocale);
+                    }
+                }, 400);
+            }
+        });
     } else {
         // Find nearest integer that matches activeIdx
         if (!_pillDragging) {

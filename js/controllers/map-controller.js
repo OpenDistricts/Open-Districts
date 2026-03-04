@@ -130,10 +130,15 @@ function _setupMapControls() {
 
     settingsTab.addEventListener("click", toggleSettings);
 
-    // Lock Focus toggle (default unlocked/off based on HTML change)
+    // Lock Focus toggle (default locked/on based on HTML change)
     lockCheckbox.addEventListener("change", (e) => {
         setLockState(e.target.checked);
     });
+
+    // Initialize lock state to true (default) based on HTML checked attribute
+    if (lockCheckbox && lockCheckbox.checked) {
+        setLockState(true);
+    }
 }
 function setLockState(isLocked) {
     if (!isLocked) {

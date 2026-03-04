@@ -164,11 +164,22 @@ function _buildCard(ev) {
     const timeStr = formatCardTime(ev.timestamp);
     const regionLabel = _getRegionName(ev.regionId, ev.location?.block);
 
+    // Get translated title and summary if available
+    const currentLocale = _ctx.state.locale;
+    let displayTitle = ev.title;
+    let displaySummary = ev.summary;
+    
+    if (ev.translations && ev.translations[currentLocale]) {
+        const translation = ev.translations[currentLocale];
+        displayTitle = translation.title || ev.title;
+        displaySummary = translation.summary || ev.summary;
+    }
+
     const card = document.createElement("article");
     card.className = `tl-card ${catClass}`;
     card.setAttribute("data-event-id", ev.id);
     card.setAttribute("role", "listitem");
-    card.setAttribute("aria-label", ev.title);
+    card.setAttribute("aria-label", displayTitle);
 
     card.innerHTML = `
     <div class="tl-card-inner">
@@ -180,9 +191,9 @@ function _buildCard(ev) {
         </div>
         <div class="tl-type-pill cat-pill-${ev.category}">${_catLabel(ev.category)}</div>
       </div>
-      <div class="tl-title-row">${ev.title}</div>
+      <div class="tl-title-row">${displayTitle}</div>
       <div class="tl-summary-wrap">
-        <div class="tl-summary">${ev.summary}</div>
+        <div class="tl-summary">${displaySummary}</div>
         <div class="tl-view-more" aria-hidden="true">View more</div>
       </div>
       <div class="tl-details">

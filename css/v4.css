@@ -363,7 +363,7 @@ button:focus-visible {
   background-color: transparent;
   border-radius: 16px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s;
   cursor: pointer;
   touch-action: pan-y;
@@ -371,6 +371,7 @@ button:focus-visible {
   -webkit-tap-highlight-color: transparent;
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.18);
+  z-index: 1000;
 }
 
 #tb-lang:hover {
@@ -378,25 +379,29 @@ button:focus-visible {
 }
 
 #tb-lang.expanded {
-  width: 180px;
-  /* Expands to the left because of tb-spacer */
+  position: fixed;
+  right: 0;
+  top: 6px;
+  width: 200px;
+  height: 32px;
   background-color: rgba(255, 255, 255, 0.08);
-  /* Dark background when open */
   border-color: transparent;
+  border-radius: 2px;
+  overflow: visible;
 }
 
 .lang-track {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%;
+  right: 16px;
   width: 0;
 }
 
 .lang-item {
   position: absolute;
   top: 0;
-  left: -16px;
+  right: -16px;
   /* Half of its own width */
   width: 32px;
   height: 32px;
@@ -413,10 +418,12 @@ button:focus-visible {
   transition: opacity 0.2s, font-size 0.2s, color 0.2s;
   will-change: transform;
   pointer-events: none;
+  cursor: pointer;
 }
 
 #tb-lang.expanded .lang-item {
   opacity: 0.4;
+  pointer-events: auto;
 }
 
 #tb-lang .lang-item.active {
@@ -433,8 +440,8 @@ button:focus-visible {
 .lang-focus-ring {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 16px;
+  transform: translateY(-50%);
   width: 26px;
   height: 26px;
   border-radius: 50%;
@@ -892,9 +899,10 @@ button:focus-visible {
   color: var(--ink);
   padding: 0 10px 4px 12px;
   line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  overflow: visible;
 }
 
 /* Incident type pill badge in card head (top-right) */
