@@ -5,9 +5,26 @@
 ──────────────────────────────────────────────────────────────────────────────── */
 
 /* ═══════════════════════════════════════════════════════════════════
-   SECTION 03 — DESIGN TOKENS
+   SECTION 03 — DESIGN TOKENS + RESPONSIVE SCALING
 ═══════════════════════════════════════════════════════════════════ */
 :root {
+  /* RESPONSIVE BASE SCALE — scales with viewport, clamped min/max */
+  /* For 1920x1080: font-size ≈ 18px | For 3840x2160 (4K): ≈ 36px | For 1280x720: ≈ 12px */
+  --base-font-size: clamp(12px, 1.2vw, 36px);
+  
+  /* Convert all spacing from pixel-based to rem-based multiples */
+  --spacing-xs: calc(0.25rem * (var(--base-font-size) / 16px));
+  --spacing-sm: calc(0.5rem * (var(--base-font-size) / 16px));
+  --spacing-md: calc(1rem * (var(--base-font-size) / 16px));
+  --spacing-lg: calc(1.5rem * (var(--base-font-size) / 16px));
+  --spacing-xl: calc(2rem * (var(--base-font-size) / 16px));
+  
+  /* Layout dimensions (topbar, time-axis, panels) — responsive */
+  --topbar-height: clamp(32px, 2.5vw, 56px);
+  --time-axis-height: clamp(48px, 3.5vw, 72px);
+  --tab-width: clamp(20px, 2vw, 36px);
+  --tab-height: clamp(40px, 3.5vw, 72px);
+  
   /* Ink (text) */
   --ink: #0D1117;
   --ink-mid: #30363D;
@@ -91,6 +108,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+html {
+  font-size: var(--base-font-size);
+}
+
 button {
   font-family: var(--font-data);
   cursor: pointer;
@@ -115,23 +136,23 @@ button:focus-visible {
   top: 0;
   left: 0;
   right: 0;
-  height: 44px;
+  height: var(--topbar-height);
   z-index: 50;
   background: rgba(13, 17, 23, 0.95);
   display: flex;
   align-items: center;
-  padding: 0 14px;
-  gap: 10px;
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 /* MAP CONTAINER — NEVER RESIZES */
 #map {
   position: absolute;
-  top: 44px;
+  top: var(--topbar-height);
   left: 0;
   right: 0;
-  bottom: 60px;
-  width: 100vw;
+  bottom: var(--time-axis-height);
+  width: 100%;
   z-index: 10;
   /* Trap Leaflet's internal z-indexes (400+) */
 }
@@ -144,10 +165,10 @@ button:focus-visible {
 /* LEFT TIMELINE — OVERLAY */
 #timeline-panel {
   position: absolute;
-  top: 44px;
+  top: var(--topbar-height);
   left: 0;
-  bottom: 60px;
-  width: clamp(200px, 22vw, 248px);
+  bottom: var(--time-axis-height);
+  width: clamp(150px, 22vw, 280px);
   z-index: 20;
   background: var(--white);
   border-right: 1.5px solid rgba(0, 0, 0, 0.1);
@@ -174,16 +195,16 @@ button:focus-visible {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 28px;
-  height: 56px;
+  width: var(--tab-width);
+  height: var(--tab-height);
   background: var(--white);
   border: 1.5px solid rgba(0, 0, 0, 0.12);
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 clamp(4px, 0.5vw, 8px) clamp(4px, 0.5vw, 8px) 0;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 20px;
+  font-size: clamp(14px, 1.5vw, 24px);
   color: var(--ink-ghost);
   transition: color 150ms, background 150ms, left 200ms ease-out, right 200ms ease-out;
   z-index: 50;
@@ -222,10 +243,10 @@ button:focus-visible {
 /* RIGHT AI PANEL — OVERLAY */
 #ai-panel {
   position: absolute;
-  top: 44px;
+  top: var(--topbar-height);
   right: 0;
-  bottom: 60px;
-  width: clamp(260px, 28vw, 300px);
+  bottom: var(--time-axis-height);
+  width: clamp(240px, 28vw, 360px);
   z-index: 30;
   background: var(--white);
   border-left: 2px solid var(--primary);
@@ -246,7 +267,7 @@ button:focus-visible {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: var(--time-axis-height);
   z-index: 25;
   background: rgba(13, 17, 23, 0.92);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -287,7 +308,7 @@ button:focus-visible {
 #tb-logo {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 12px;
+  font-size: clamp(10px, 1vw, 16px);
   color: #FFFFFF;
   flex-shrink: 0;
   letter-spacing: 0.2px;
@@ -295,7 +316,7 @@ button:focus-visible {
 
 .tb-sep {
   width: 1px;
-  height: 16px;
+  height: clamp(12px, 1.5vw, 24px);
   background: rgba(255, 255, 255, 0.12);
   flex-shrink: 0;
 }
@@ -305,7 +326,7 @@ button:focus-visible {
 }
 
 .tb-district-meta {
-  font-size: 7px;
+  font-size: clamp(6px, 0.7vw, 11px);
   font-weight: 500;
   color: var(--ink-ghost);
   text-transform: uppercase;
@@ -316,7 +337,7 @@ button:focus-visible {
 .tb-district-name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 13px;
+  font-size: clamp(11px, 1.2vw, 18px);
   color: #FFFFFF;
   line-height: 1.2;
 }
@@ -327,14 +348,14 @@ button:focus-visible {
 
 /* Generic top bar button */
 .tb-btn {
-  font-size: 9px;
+  font-size: clamp(8px, 0.9vw, 14px);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: rgba(255, 255, 255, 0.75);
-  padding: 5px 10px;
+  padding: var(--spacing-xs) var(--spacing-sm);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 2px;
+  border-radius: clamp(2px, 0.2vw, 4px);
   white-space: nowrap;
   flex-shrink: 0;
   transition: border-color 150ms, color 150ms;
@@ -358,10 +379,10 @@ button:focus-visible {
 
 /* Language selector (Infinite Swipe Pill) */
 #tb-lang {
-  width: 32px;
-  height: 32px;
+  width: clamp(28px, 3vw, 44px);
+  height: clamp(28px, 3vw, 44px);
   background-color: transparent;
-  border-radius: 16px;
+  border-radius: 50%;
   position: relative;
   overflow: hidden;
   transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s;
@@ -378,7 +399,7 @@ button:focus-visible {
 }
 
 #tb-lang.expanded {
-  width: 180px;
+  width: clamp(140px, 14vw, 220px);
   /* Expands to the left because of tb-spacer */
   background-color: rgba(255, 255, 255, 0.08);
   /* Dark background when open */
@@ -396,15 +417,15 @@ button:focus-visible {
 .lang-item {
   position: absolute;
   top: 0;
-  left: -16px;
+  left: calc(-50% * clamp(28px, 3vw, 44px) / 28px);
   /* Half of its own width */
-  width: 32px;
-  height: 32px;
+  width: clamp(28px, 3vw, 44px);
+  height: clamp(28px, 3vw, 44px);
   display: flex;
   justify-content: center;
   align-items: center;
   color: var(--ink-ghost);
-  font-size: 8px;
+  font-size: clamp(7px, 0.8vw, 12px);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -426,7 +447,7 @@ button:focus-visible {
 
 #tb-lang.expanded .lang-item.active {
   color: var(--primary);
-  font-size: 9px;
+  font-size: clamp(8px, 0.9vw, 14px);
   font-weight: 700;
 }
 
@@ -435,8 +456,8 @@ button:focus-visible {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 26px;
-  height: 26px;
+  width: clamp(24px, 2.6vw, 40px);
+  height: clamp(24px, 2.6vw, 40px);
   border-radius: 50%;
   border: 1px solid transparent;
   pointer-events: none;
@@ -454,17 +475,17 @@ button:focus-visible {
   display: flex;
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 2px;
+  border-radius: clamp(2px, 0.2vw, 4px);
   overflow: hidden;
 }
 
 .mode-pill {
-  font-size: 9px;
+  font-size: clamp(8px, 0.9vw, 14px);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: var(--ink-ghost);
-  padding: 5px 10px;
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: 0;
   transition: all 120ms;
 }
@@ -482,13 +503,13 @@ button:focus-visible {
 #sync-dot-wrap {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--spacing-xs);
   flex-shrink: 0;
 }
 
 #sync-dot {
-  width: 7px;
-  height: 7px;
+  width: clamp(6px, 0.7vw, 11px);
+  height: clamp(6px, 0.7vw, 11px);
   border-radius: 50%;
   background: var(--ok);
   animation: dot-pulse 2.5s ease-in-out infinite;
@@ -501,7 +522,7 @@ button:focus-visible {
 }
 
 #sync-label {
-  font-size: 8px;
+  font-size: clamp(6px, 0.7vw, 11px);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -528,19 +549,19 @@ button:focus-visible {
    SECTION 05 — LEFT TIMELINE PANEL
 ═══════════════════════════════════════════════════════════════════ */
 
-/* Panel header — 44px */
+/* Panel header — responsive */
 #tl-header {
-  height: 44px;
+  height: clamp(36px, 2.8vw, 52px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px 0 14px;
+  padding: 0 var(--spacing-sm) 0 var(--spacing-md);
   border-bottom: 1px solid var(--rule);
   flex-shrink: 0;
 }
 
 .tl-header-meta {
-  font-size: 8px;
+  font-size: clamp(6px, 0.7vw, 11px);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1.2px;
@@ -551,22 +572,22 @@ button:focus-visible {
 .tl-header-district {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 13px;
+  font-size: clamp(11px, 1.2vw, 18px);
   color: var(--ink);
   line-height: 1.2;
 }
 
 /* Collapse chevron button */
 .tl-collapse-btn {
-  width: 24px;
-  height: 24px;
+  width: clamp(20px, 2vw, 32px);
+  height: clamp(20px, 2vw, 32px);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: clamp(14px, 1.6vw, 24px);
   color: var(--ink-ghost);
   border: 1px solid var(--rule);
-  border-radius: 2px;
+  border-radius: clamp(2px, 0.2vw, 4px);
   flex-shrink: 0;
   transition: color 150ms, border-color 150ms;
   line-height: 1;
@@ -583,7 +604,7 @@ button:focus-visible {
 #tl-scroll {
   flex: 1;
   overflow-y: auto;
-  padding: 12px 0;
+  padding: var(--spacing-md) 0;
   scrollbar-width: thin;
   scrollbar-color: var(--rule) transparent;
 }
@@ -591,7 +612,7 @@ button:focus-visible {
 /* ── SPINE ── */
 .tl-spine {
   position: relative;
-  padding: 0 10px 0 28px;
+  padding: 0 var(--spacing-sm) 0 clamp(20px, 2.2vw, 36px);
   /* left offset creates space for spine + node */
 }
 
@@ -599,10 +620,10 @@ button:focus-visible {
   /* THE SPINE LINE */
   content: "";
   position: absolute;
-  left: 14px;
+  left: clamp(10px, 1.1vw, 18px);
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: clamp(1px, 0.15vw, 3px);
   /* MINIMUM 2px */
   background: var(--rule);
 }
@@ -610,7 +631,7 @@ button:focus-visible {
 /* ── CARD ── */
 .tl-card {
   position: relative;
-  margin-bottom: 16px;
+  margin-bottom: clamp(12px, 1.3vw, 20px);
   cursor: pointer;
   transition: opacity 150ms;
 }
@@ -619,14 +640,14 @@ button:focus-visible {
 .tl-card::before {
   content: "";
   position: absolute;
-  left: -20px;
-  top: 14px;
-  width: 10px;
-  height: 10px;
+  left: calc(-1 * clamp(14px, 1.5vw, 24px));
+  top: clamp(10px, 1.1vw, 18px);
+  width: clamp(8px, 0.9vw, 14px);
+  height: clamp(8px, 0.9vw, 14px);
   /* MINIMUM 10px */
   border-radius: 50%;
   background: var(--white);
-  border: 2px solid var(--rule);
+  border: clamp(1px, 0.15vw, 3px) solid var(--rule);
   z-index: 2;
 }
 
@@ -681,14 +702,14 @@ button:focus-visible {
   /* NO box-shadow. Cards are flat. */
 }
 
-/* LEFT SEVERITY BAND — 3px full height */
+/* LEFT SEVERITY BAND — responsive height */
 .tl-card-inner::before {
   content: "";
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: clamp(2px, 0.35vw, 5px);
 }
 
 .tl-card.cat-health .tl-card-inner::before {
@@ -730,18 +751,18 @@ button:focus-visible {
 .tl-card-head {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  padding: 8px 10px 6px 12px;
-  /* left 12 to clear severity band */
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm) calc(var(--spacing-xs) * 0.75) clamp(10px, 1.1vw, 18px);
+  /* left offset to clear severity band */
 }
 
 /* SVG thumbnail */
 .tl-thumb {
-  width: 28px;
-  height: 24px;
+  width: clamp(24px, 2.6vw, 40px);
+  height: clamp(20px, 2.2vw, 34px);
   flex-shrink: 0;
   overflow: hidden;
-  border-radius: 1px;
+  border-radius: clamp(1px, 0.15vw, 2px);
 }
 
 .tl-thumb svg {
@@ -757,7 +778,7 @@ button:focus-visible {
 .tl-loc-name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 10px;
+  font-size: clamp(8px, 0.95vw, 15px);
   color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
@@ -766,21 +787,21 @@ button:focus-visible {
 }
 
 .tl-time {
-  font-size: 8px;
+  font-size: clamp(6px, 0.7vw, 11px);
   font-weight: 400;
   text-transform: uppercase;
   color: var(--ink-ghost);
   letter-spacing: 0.4px;
-  margin-top: 1px;
+  margin-top: var(--spacing-xs);
 }
 
 /* Event summary */
 .tl-summary {
-  font-size: 9.5px;
+  font-size: clamp(8px, 0.95vw, 15px);
   font-weight: 300;
   color: var(--ink-sub);
   line-height: 1.45;
-  padding: 0 10px 0 12px;
+  padding: 0 var(--spacing-sm) 0 clamp(10px, 1.1vw, 18px);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -789,15 +810,15 @@ button:focus-visible {
 }
 
 .tl-summary-wrap {
-  padding-bottom: 8px;
+  padding-bottom: var(--spacing-xs);
 }
 
 .tl-view-more {
   display: none;
-  font-size: 8.5px;
+  font-size: clamp(7px, 0.85vw, 13px);
   font-weight: 500;
   color: var(--primary);
-  padding: 4px 10px 0 12px;
+  padding: var(--spacing-xs) var(--spacing-sm) 0 clamp(10px, 1.1vw, 18px);
   letter-spacing: 0.2px;
 }
 
@@ -817,7 +838,7 @@ button:focus-visible {
   display: none;
   background: var(--bg);
   border-top: 1px solid var(--rule-faint);
-  padding: 8px 10px 8px 12px;
+  padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) clamp(10px, 1.1vw, 18px);
 }
 
 /* Time Machine States */
@@ -849,23 +870,23 @@ button:focus-visible {
 
 .tl-detail-row {
   display: flex;
-  gap: 8px;
-  margin-bottom: 4px;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
   align-items: baseline;
 }
 
 .tl-detail-label {
-  font-size: 8px;
+  font-size: clamp(6px, 0.7vw, 11px);
   font-weight: 500;
   text-transform: uppercase;
   color: var(--ink-ghost);
   letter-spacing: 0.8px;
-  width: 52px;
+  width: clamp(40px, 4.5vw, 68px);
   flex-shrink: 0;
 }
 
 .tl-detail-value {
-  font-size: 8.5px;
+  font-size: clamp(7px, 0.85vw, 13px);
   font-weight: 400;
   color: var(--ink-mid);
   flex: 1;
@@ -988,22 +1009,22 @@ button:focus-visible {
 /* Custom zoom controls */
 #map-zoom-controls {
   position: absolute;
-  right: 60px;
-  bottom: 60px;
+  right: var(--time-axis-height);
+  bottom: var(--time-axis-height);
   /* above time axis */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--spacing-sm);
   z-index: 1000;
 }
 
 .zoom-btn {
-  width: 64px;
-  height: 64px;
+  width: clamp(48px, 5.5vw, 88px);
+  height: clamp(48px, 5.5vw, 88px);
   background: var(--white);
   border: 1px solid var(--rule);
-  border-radius: 8px;
-  font-size: 40px;
+  border-radius: clamp(6px, 0.7vw, 12px);
+  font-size: clamp(28px, 3.2vw, 56px);
   font-weight: 300;
   color: var(--ink-mid);
   display: flex;
@@ -1011,7 +1032,7 @@ button:focus-visible {
   justify-content: center;
   transition: border-color 120ms, color 120ms;
   line-height: 1;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 clamp(2px, 0.3vw, 6px) clamp(10px, 1.2vw, 20px) rgba(0, 0, 0, 0.1);
 }
 
 .zoom-btn:hover {
@@ -1183,19 +1204,19 @@ button:focus-visible {
 /* Collapse sliver */
 #ai-sliver {
   position: absolute;
-  left: -24px;
+  left: clamp(-20px, -2.2vw, -36px);
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 48px;
+  width: clamp(18px, 2vw, 32px);
+  height: clamp(36px, 4vw, 64px);
   background: var(--white);
   border: 1px solid var(--rule);
   border-right: none;
-  border-radius: 4px 0 0 4px;
+  border-radius: clamp(3px, 0.4vw, 6px) 0 0 clamp(3px, 0.4vw, 6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: clamp(10px, 1.5vw, 22px);
   color: var(--ink-ghost);
   cursor: pointer;
   transition: color 120ms;
@@ -1208,11 +1229,11 @@ button:focus-visible {
 
 /* Panel header */
 #ai-header {
-  height: 44px;
+  height: clamp(36px, 2.8vw, 52px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 clamp(8px, 0.9vw, 16px);
   border-bottom: 1px solid var(--rule);
   flex-shrink: 0;
 }
@@ -1220,12 +1241,12 @@ button:focus-visible {
 #ai-header-left {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--spacing-xs);
 }
 
 #ai-active-dot {
-  width: 7px;
-  height: 7px;
+  width: clamp(6px, 0.7vw, 11px);
+  height: clamp(6px, 0.7vw, 11px);
   border-radius: 50%;
   background: var(--primary);
   animation: dot-pulse 2.0s ease-in-out infinite;
@@ -1235,19 +1256,19 @@ button:focus-visible {
 #ai-header-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 13px;
+  font-size: clamp(11px, 1.2vw, 18px);
   color: var(--ink);
 }
 
 .ai-close-btn {
-  width: 26px;
-  height: 26px;
+  width: clamp(20px, 2.2vw, 36px);
+  height: clamp(20px, 2.2vw, 36px);
   border: 1px solid var(--rule);
-  border-radius: 2px;
+  border-radius: clamp(2px, 0.2vw, 4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: clamp(10px, 1.2vw, 18px);
   color: var(--ink-ghost);
   transition: color 120ms, border-color 120ms;
 }
@@ -1259,7 +1280,7 @@ button:focus-visible {
 
 /* Context bar */
 #ai-context-bar {
-  padding: 7px 12px;
+  padding: var(--spacing-xs) clamp(8px, 0.9vw, 16px);
   border-bottom: 1px solid var(--rule-faint);
   flex-shrink: 0;
 }
@@ -1274,7 +1295,7 @@ button:focus-visible {
 }
 
 #ai-context-text {
-  font-size: 8px;
+  font-size: clamp(6px, 0.7vw, 11px);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.8px;
