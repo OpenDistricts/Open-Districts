@@ -1,0 +1,147 @@
+[
+  {
+    "id": "gurugram",
+    "stateId": "HR",
+    "name": "Gurugram",
+    "nameLocal": "गुरुग्राम",
+    "geoJsonUrl": "./data/geo/HR/gurugram.geojson?v=2",
+    "boundingBox": {"north": 28.55, "south": 28.22, "east": 77.20, "west": 76.75},
+    "population": 1514432,
+    "aliases": ["Gurgaon"]
+  },
+  {
+    "id": "surat",
+    "stateId": "GJ",
+    "name": "Surat",
+    "nameLocal": "સુરત",
+    "geoJsonUrl": "./data/geo/GJ/surat.geojson?v=2",
+    "boundingBox": {"north": 21.43, "south": 21.05, "east": 73.20, "west": 72.63},
+    "population": 6081322
+  },
+  {
+    "id": "pune",
+    "stateId": "MH",
+    "name": "Pune",
+    "nameLocal": "पुणे",
+    "geoJsonUrl": "./data/geo/MH/pune.geojson?v=2",
+    "boundingBox": {"north": 19.42, "south": 18.18, "east": 74.60, "west": 73.50},
+    "population": 9429408
+  },
+  {
+    "id": "khordha",
+    "stateId": "OD",
+    "name": "Khordha",
+    "nameLocal": "ଖୋର୍ଦ୍ଧା",
+    "geoJsonUrl": "./data/geo/OD/khordha.geojson?v=2",
+    "boundingBox": {"north": 20.43, "south": 19.67, "east": 86.08, "west": 84.94},
+    "population": 2251673
+  },
+  {
+    "id": "gaya",
+    "stateId": "BR",
+    "name": "Gaya",
+    "nameLocal": "गया",
+    "geoJsonUrl": "./data/geo/BR/gaya.geojson?v=2",
+    "boundingBox": {"north": 25.07, "south": 24.29, "east": 85.40, "west": 84.29},
+    "population": 4391418
+  },
+  {
+    "id": "central",
+    "stateId": "DL",
+    "name": "Central",
+    "nameLocal": "मध्य दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/central.geojson?v=2",
+    "boundingBox": {"north": 28.7884, "south": 28.6136, "east": 77.2683, "west": 76.9534},
+    "population": 582320
+  },
+  {
+    "id": "east",
+    "stateId": "DL",
+    "name": "East",
+    "nameLocal": "पूर्वी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/east.geojson?v=2",
+    "boundingBox": {"north": 28.7111, "south": 28.6225, "east": 77.3426, "west": 77.2292},
+    "population": 1709346
+  },
+  {
+    "id": "new_delhi",
+    "stateId": "DL",
+    "name": "New Delhi",
+    "nameLocal": "नई दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/new_delhi.geojson?v=2",
+    "boundingBox": {"north": 28.6376, "south": 28.5273, "east": 77.2566, "west": 77.1682},
+    "population": 257803
+  },
+  {
+    "id": "north",
+    "stateId": "DL",
+    "name": "North",
+    "nameLocal": "उत्तरी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/north.geojson?v=2",
+    "boundingBox": {"north": 28.8838, "south": 28.6845, "east": 77.2244, "west": 76.9618},
+    "population": 887978
+  },
+  {
+    "id": "north_east",
+    "stateId": "DL",
+    "name": "North East",
+    "nameLocal": "उत्तर-पूर्वी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/north_east.geojson?v=2",
+    "boundingBox": {"north": 28.7711, "south": 28.6709, "east": 77.298, "west": 77.2179},
+    "population": 2241624
+  },
+  {
+    "id": "north_west",
+    "stateId": "DL",
+    "name": "North West",
+    "nameLocal": "उत्तर-पश्चिमी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/north_west.geojson?v=2",
+    "boundingBox": {"north": 28.8183, "south": 28.6672, "east": 77.1923, "west": 76.9421},
+    "population": 3645184
+  },
+  {
+    "id": "shahdara",
+    "stateId": "DL",
+    "name": "Shahdara",
+    "nameLocal": "शाहदरा",
+    "geoJsonUrl": "./data/geo/DL/shahdara.geojson?v=2",
+    "boundingBox": {"north": 28.7141, "south": 28.6394, "east": 77.3329, "west": 77.267},
+    "population": 322931
+  },
+  {
+    "id": "south",
+    "stateId": "DL",
+    "name": "South",
+    "nameLocal": "दक्षिणी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/south.geojson?v=2",
+    "boundingBox": {"north": 28.5699, "south": 28.4047, "east": 77.2715, "west": 77.1109},
+    "population": 2731929
+  },
+  {
+    "id": "south_east",
+    "stateId": "DL",
+    "name": "South East",
+    "nameLocal": "दक्षिण-पूर्वी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/south_east.geojson?v=2",
+    "boundingBox": {"north": 28.6082, "south": 28.4836, "east": 77.3476, "west": 77.2059},
+    "population": 637775
+  },
+  {
+    "id": "south_west",
+    "stateId": "DL",
+    "name": "South West",
+    "nameLocal": "दक्षिण-पश्चिमी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/south_west.geojson?v=2",
+    "boundingBox": {"north": 28.6698, "south": 28.5007, "east": 77.1039, "west": 76.8389},
+    "population": 2292958
+  },
+  {
+    "id": "west",
+    "stateId": "DL",
+    "name": "West",
+    "nameLocal": "पश्चिमी दिल्ली",
+    "geoJsonUrl": "./data/geo/DL/west.geojson?v=2",
+    "boundingBox": {"north": 28.7021, "south": 28.5962, "east": 77.1789, "west": 76.9534},
+    "population": 2543243
+  }
+]

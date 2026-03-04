@@ -1,0 +1,40 @@
+{
+  "gurugram": [
+    {"id": "gurugram-sadar", "name": "Gurugram Sadar"},
+    {"id": "badshahpur", "name": "Badshahpur"},
+    {"id": "pataudi", "name": "Pataudi"},
+    {"id": "manesar", "name": "Manesar"},
+    {"id": "farrukhnagar", "name": "Farrukhnagar"},
+    {"id": "sohna", "name": "Sohna"}
+  ],
+  "surat": [
+    {"id": "surat-city", "name": "Surat City"},
+    {"id": "chorasi", "name": "Choryasi"},
+    {"id": "olpad", "name": "Olpad"},
+    {"id": "bardoli", "name": "Bardoli"},
+    {"id": "kamrej", "name": "Kamrej"},
+    {"id": "palsana", "name": "Palsana"}
+  ],
+  "pune": [
+    {"id": "pune-city", "name": "Pune City"},
+    {"id": "haveli", "name": "Haveli"},
+    {"id": "mawal", "name": "Mawal"},
+    {"id": "mulshi", "name": "Mulshi"},
+    {"id": "daund", "name": "Daund"},
+    {"id": "shirur", "name": "Shirur"},
+    {"id": "khed", "name": "Khed"}
+  ],
+  "khordha": [
+    {"id": "bhubaneswar", "name": "Bhubaneswar"},
+    {"id": "jatni", "name": "Jatni"},
+    {"id": "khordha", "name": "Khordha"}
+  ],
+  "central": [
+    {"id": "civil-lines", "name": "Civil Lines"},
+    {"id": "darya-ganj", "name": "Darya Ganj"},
+    {"id": "karol-bagh", "name": "Karol Bagh"},
+    {"id": "kotwali", "name": "Kotwali"},
+    {"id": "pahar-ganj", "name": "Pahar Ganj"},
+    {"id": "sadar-bazar", "name": "Sadar Bazar"}
+  ]
+}
