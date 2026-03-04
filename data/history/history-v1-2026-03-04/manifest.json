@@ -1,0 +1,13 @@
+{
+  "datasetVersion": "v1",
+  "schemaVersion": "4.1.0",
+  "generatedAt": "2026-03-04T00:00:00Z",
+  "sourceRevision": "phase1-migration-from-mock-data",
+  "description": "Extracted from original mock-events.js, mock-districts.js during Phase 1 migration to V4.1",
+  "counts": {
+    "events": 61,
+    "districts": 20,
+    "states": 36
+  },
+  "hash": "420ecd75213c35c62249258276e9475435accba9a587094ef425cc5504e65f9d"
+}

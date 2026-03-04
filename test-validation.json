@@ -1,5 +1,0 @@
-Test referential integrity validation:
-
-{"id":"evt_RJ_jaipur_test_001","stateId":"RJ","districtId":"jaipur","regionId":"jaipur","category":"safety","impactScale":"POINT","title":"Test Event Jaipur","summary":"Testing validation with registered district","timestamp":"2026-02-23T03:09:00Z","expiresAt":null,"geoPoint":{"lat":26.9124,"lng":75.7873},"location":{"block":"Test"},"source":"Test","verified":true,"meta":{}}
-
-{"id":"evt_test_nonexistent_001","stateId":"XX","districtId":"nonexistent-district","regionId":null,"category":"safety","impactScale":"POINT","title":"Orphaned Event","summary":"This event has no geojson and no state XX","timestamp":"2026-03-01T00:00:00Z","expiresAt":null,"geoPoint":{"lat":26.0,"lng":75.0},"location":{"block":"Test"},"source":"Test","verified":true,"meta":{}}

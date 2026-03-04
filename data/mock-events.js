@@ -1,7 +1,7 @@
 // ─── EVENTS — OpenDistricts V4 ────────────────────────────────────────────────
 // Data contract: id, stateId, districtId, regionId, category,
 //   title, summary, timestamp, expiresAt, geoPoint, source,
-//   verified, verifiedAt, location, meta
+//   verified, verifiedAt, location, meta, [translations]
 //
 // ENCODING RULE: `category` drives all coloring and animation.
 // `severity` and `severityScore` are NOT part of this schema.
@@ -9,6 +9,16 @@
 //
 // regionId must exactly match a properties.id in the district's .geojson file,
 // or be null if the location cannot be confidently mapped to a sub-region.
+//
+// TRANSLATIONS (optional): events may include a `translations` object to support
+// localized titles and summaries. Schema:
+//   translations: {
+//     "gu": { "title": "...", "summary": "..." },
+//     "hi": { "title": "...", "summary": "..." },
+//     ...
+//   }
+// If present, the timeline controller will use translated text based on current locale,
+// falling back to English (title/summary) if a translation is missing.
 
 export const MOCK_EVENTS = [
 

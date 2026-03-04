@@ -6,9 +6,6 @@
 :root {
     --splash-black: #000000;
     --splash-white: #FFFFFF;
-    /* Responsive splash scaling */
-    --splash-base-size: clamp(80px, 10vw, 200px);
-    --splash-version-size: clamp(40px, 5vw, 100px);
 }
 
 #splash-overlay {
@@ -71,7 +68,7 @@
     display: block;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: var(--splash-base-size);
+    font-size: 140px;
     letter-spacing: 0.05em;
     line-height: 0.85;
     color: var(--splash-white);
@@ -130,7 +127,7 @@
 }
 
 .splash-version-container {
-    margin-top: clamp(40px, 5vw, 100px);
+    margin-top: 60px;
     position: relative;
     opacity: 0;
     transform: scaleX(0);
@@ -145,38 +142,38 @@
 .splash-version-block {
     background: var(--splash-white);
     color: var(--splash-black);
-    padding: clamp(12px, 1.5vw, 32px) clamp(40px, 6vw, 120px);
+    padding: 20px 80px;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: var(--splash-version-size);
+    font-size: 72px;
     letter-spacing: 0.2em;
     text-align: center;
-    border: clamp(2px, 0.3vw, 6px) solid var(--splash-white);
+    border: 4px solid var(--splash-white);
     box-shadow:
-        0 0 0 clamp(4px, 0.6vw, 12px) var(--splash-black),
-        0 0 0 clamp(6px, 0.9vw, 18px) var(--splash-white);
+        0 0 0 8px var(--splash-black),
+        0 0 0 12px var(--splash-white);
     position: relative;
 }
 
 .splash-corner-accent {
     position: absolute;
-    width: clamp(28px, 3.5vw, 60px);
-    height: clamp(28px, 3.5vw, 60px);
-    border: clamp(2px, 0.3vw, 4px) solid var(--splash-white);
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--splash-white);
 }
 
-.splash-corner-accent.tl { top: clamp(-12px, -1.5vw, -28px); left: clamp(-12px, -1.5vw, -28px); border-right: none; border-bottom: none; }
-.splash-corner-accent.tr { top: clamp(-12px, -1.5vw, -28px); right: clamp(-12px, -1.5vw, -28px); border-left: none; border-bottom: none; }
-.splash-corner-accent.bl { bottom: clamp(-12px, -1.5vw, -28px); left: clamp(-12px, -1.5vw, -28px); border-right: none; border-top: none; }
-.splash-corner-accent.br { bottom: clamp(-12px, -1.5vw, -28px); right: clamp(-12px, -1.5vw, -28px); border-left: none; border-top: none; }
+.splash-corner-accent.tl { top: -20px; left: -20px; border-right: none; border-bottom: none; }
+.splash-corner-accent.tr { top: -20px; right: -20px; border-left: none; border-bottom: none; }
+.splash-corner-accent.bl { bottom: -20px; left: -20px; border-right: none; border-top: none; }
+.splash-corner-accent.br { bottom: -20px; right: -20px; border-left: none; border-top: none; }
 
 .splash-underline-bar {
     position: absolute;
-    bottom: clamp(-20px, -2.5vw, -40px);
+    bottom: -30px;
     left: 50%;
     transform: translateX(-50%) scaleX(0);
     width: 80%;
-    height: clamp(4px, 0.5vw, 10px);
+    height: 6px;
     background: var(--splash-white);
     animation: splashBarExpand 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 2s forwards;
 }
@@ -190,7 +187,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: clamp(1px, 0.1vw, 3px);
+    height: 2px;
     background: var(--splash-white);
     opacity: 0.6;
     animation: splashScan 2s linear 0.5s 1;
