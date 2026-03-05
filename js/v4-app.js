@@ -313,13 +313,14 @@ async function loadDistrict(districtId, stateId) {
     DataService.unsubscribeLiveUpdates(AppState.currentDistrictId);
     TimeCtrl.stopAutoPlay();
 
-    AppState.currentDistrictId = districtId;
     AppState.currentStateId = stateId ?? AppState.currentStateId;
     AppState.focusedEventId = null;
     // Preserve isHistorical and timelineRange - district change should not reset temporal state
     AppState.connectionStatus = "live"; // Phase 2 fix: always "live" in mock
 
     const district = await DataService.getDistrictById(districtId, AppState.currentStateId);
+    const resolvedDistrictId = district?.id || districtId;
+    AppState.currentDistrictId = resolvedDistrictId;
 
     // Load geojson first to allow spatial filtering if needed
     const geoData = await DataService.getGeoJSON(district.geoJsonUrl);
@@ -327,7 +328,7 @@ async function loadDistrict(districtId, stateId) {
     // Decide if we fetch events for the specific district or the whole state (unlocked scope)
     let rawEvents = [];
     if (AppState.districtScopeLocked) {
-        rawEvents = await DataService.getEventsForDistrict(districtId, AppState.timelineRange);
+        rawEvents = await DataService.getEventsForDistrict(resolvedDistrictId, AppState.timelineRange);
     } else {
         // Fetch ALL events (or all state events) if unlocked
         // Also pass timelineRange to respect temporal filtering
@@ -353,12 +354,12 @@ async function loadDistrict(districtId, stateId) {
             }
 
             // Keep only district-linked non-point events (region-wide alerts, etc.)
-            if (e?.districtId === districtId) return true;
+            if (e?.districtId === resolvedDistrictId) return true;
             if (Array.isArray(e?.regionIds) && e.regionIds.length) {
-                return e.regionIds.some((rid) => typeof rid === "string" && rid.startsWith(`${districtId}:`));
+                return e.regionIds.some((rid) => typeof rid === "string" && rid.startsWith(`${resolvedDistrictId}:`));
             }
             if (typeof e?.regionId === "string") {
-                return e.regionId.startsWith(`${districtId}:`);
+                return e.regionId.startsWith(`${resolvedDistrictId}:`);
             }
             return false;
         });
@@ -385,7 +386,7 @@ async function loadDistrict(districtId, stateId) {
     // ── FIX-3: Reset env overlay throttle on district change (DEV-05) ─
     AppState.envOverlaysEnabled = true;
     AppState.consecutiveSlowFrames = 0;
-    console.log('[APP] Env overlays reset for new district:', districtId);
+    console.log('[APP] Env overlays reset for new district:', resolvedDistrictId);
     // ─────────────────────────────────────────────────────────────────
 
     MapCtrl.syncModeClass(AppState.mode, false, "live", AppState.envOverlaysEnabled);
@@ -442,7 +443,7 @@ async function loadDistrict(districtId, stateId) {
     // ──────────────────────────────────────────────────────────────────────────
 
     // Subscribe to mock live updates
-    _unsubscribeLive = DataService.subscribeLiveUpdates(districtId, _onLiveUpdate);
+    _unsubscribeLive = DataService.subscribeLiveUpdates(resolvedDistrictId, _onLiveUpdate);
     MapCtrl.runArbitration();
 }
 

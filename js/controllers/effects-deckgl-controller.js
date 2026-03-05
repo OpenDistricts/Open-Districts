@@ -151,7 +151,7 @@ function _tick(ts) {
 
 function _renderFrame() {
     if (!_deck || !_map) return;
-    const { LineLayer, HexagonLayer, TripsLayer } = window.deck;
+    const { LineLayer, ScatterplotLayer, TripsLayer, TextLayer } = window.deck;
     const focused = _ctx?.state?.focusedEventId || null;
     const layers = [];
 
@@ -179,27 +179,49 @@ function _renderFrame() {
         if (fx.type === "GAS_PLUME_3D") {
             const plumeData = _plumePointsForEffect(fx, intensity);
             if (plumeData.length) {
-                layers.push(new HexagonLayer({
+                layers.push(new ScatterplotLayer({
                     id: `fx-plume-${fx.id}`,
                     data: plumeData,
                     opacity,
-                    extruded: true,
                     pickable: false,
-                    radius: 220,
-                    elevationScale: 14 + intensity * 22,
-                    coverage: 0.9,
                     getPosition: (d) => [d.lng, d.lat],
-                    getColorWeight: (d) => d.weight,
-                    getElevationWeight: (d) => d.weight,
-                    colorAggregation: "MEAN",
-                    elevationAggregation: "SUM",
-                    colorRange: [
-                        [90, 86, 56],
-                        [140, 122, 74],
-                        [182, 155, 88],
-                        [220, 188, 108],
-                        [249, 220, 138],
-                    ],
+                    getFillColor: (d) => [167, 145, 86, Math.floor(140 + d.weight * 65)],
+                    getRadius: (d) => d.radius,
+                    radiusUnits: "meters",
+                }));
+            }
+            continue;
+        }
+        if (fx.type === "DISEASE_SMOG") {
+            const smogData = _smogPointsForEffect(fx, intensity);
+            if (smogData.length) {
+                layers.push(new ScatterplotLayer({
+                    id: `fx-disease-smog-${fx.id}`,
+                    data: smogData,
+                    opacity,
+                    pickable: false,
+                    getPosition: (d) => [d.lng, d.lat],
+                    getFillColor: (d) => [64, 220, 118, Math.floor(120 + d.weight * 90)],
+                    getRadius: (d) => d.radius,
+                    radiusUnits: "meters",
+                }));
+            }
+            continue;
+        }
+        if (fx.type === "SKULL_SIGNS") {
+            const skullData = _skullPointsForEffect(fx, intensity);
+            if (skullData.length) {
+                layers.push(new TextLayer({
+                    id: `fx-skull-${fx.id}`,
+                    data: skullData,
+                    opacity,
+                    pickable: false,
+                    billboard: true,
+                    sizeUnits: "pixels",
+                    getPosition: (d) => [d.lng, d.lat],
+                    getText: () => "\u2620",
+                    getColor: () => [106, 255, 130, 230],
+                    getSize: (d) => d.size,
                 }));
             }
             continue;
@@ -250,13 +272,57 @@ function _plumePointsForEffect(effect, intensity) {
     const centers = _effectCenters(effect);
     const out = [];
     centers.forEach((c) => {
-        for (let i = 0; i < 40; i++) {
-            const ang = (i / 40) * Math.PI * 2;
+        for (let i = 0; i < 54; i++) {
+            const ang = (i / 54) * Math.PI * 2;
             const drift = 0.0018 + intensity * 0.0032;
             const wobble = Math.sin((_timeMs / 1200) + i) * 0.0009;
             const lng = c.lng + (Math.cos(ang) * drift * 1.3) + wobble;
             const lat = c.lat + (Math.sin(ang) * drift * 0.8) + (Math.cos(_timeMs / 1600) * 0.0006);
-            out.push({ lng, lat, weight: 0.6 + Math.random() * 0.5 });
+            out.push({
+                lng,
+                lat,
+                weight: 0.55 + Math.random() * 0.45,
+                radius: 150 + Math.random() * 240,
+            });
+        }
+    });
+    return out;
+}
+
+function _smogPointsForEffect(effect, intensity) {
+    const centers = _effectCenters(effect);
+    const out = [];
+    centers.forEach((c) => {
+        for (let i = 0; i < 70; i++) {
+            const ang = (i / 70) * Math.PI * 2;
+            const drift = 0.0014 + intensity * 0.0028;
+            const wobble = Math.cos((_timeMs / 1000) + i * 0.6) * 0.0007;
+            const lng = c.lng + (Math.cos(ang) * drift) + wobble;
+            const lat = c.lat + (Math.sin(ang) * drift) + (Math.sin(_timeMs / 1300) * 0.0004);
+            out.push({
+                lng,
+                lat,
+                weight: 0.45 + Math.random() * 0.55,
+                radius: 120 + Math.random() * 220,
+            });
+        }
+    });
+    return out;
+}
+
+function _skullPointsForEffect(effect, intensity) {
+    const centers = _effectCenters(effect);
+    const out = [];
+    centers.forEach((c) => {
+        const count = Math.max(2, Math.floor(4 + intensity * 6));
+        for (let i = 0; i < count; i++) {
+            const ang = ((i + 1) / (count + 1)) * Math.PI * 2;
+            const drift = 0.0007 + intensity * 0.0012;
+            out.push({
+                lng: c.lng + Math.cos(ang) * drift,
+                lat: c.lat + Math.sin(ang) * drift,
+                size: 14 + Math.round(intensity * 10),
+            });
         }
     });
     return out;
@@ -322,4 +388,3 @@ function _leafletViewState() {
 function _onMapMove() {
     _renderFrame();
 }
-

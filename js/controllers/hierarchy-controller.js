@@ -426,6 +426,16 @@ function _renderSVGMap(districts, stateGeo) {
     const svg = document.getElementById("hs-district-svg");
     svg.innerHTML = "";
 
+    const normalizeDistrictKey = (value) => String(value ?? "")
+        .toLowerCase()
+        .trim()
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[_\s]+/g, "-")
+        .replace(/[^a-z0-9-]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+
     // Hide stats initially on fresh render
     const statsPanel = document.getElementById("hs-district-stats");
     statsPanel.classList.remove("open");
@@ -445,10 +455,17 @@ function _renderSVGMap(districts, stateGeo) {
 
         // Pre-build lookup structures once, outside the per-feature loop
         const districtById = new Map(districts.map(d => [d.id, d]));
+        const districtByNormKey = new Map();
+        const districtKeysById = new Map();
         let allCandidates = [];
         let candToDist = new Map();
         districts.forEach(d => {
-            const candidates = [d.name, ...(d.aliases || [])];
+            const candidates = [d.name, d.id, ...(d.aliases || [])];
+            const keys = new Set(candidates.map(normalizeDistrictKey).filter(Boolean));
+            districtKeysById.set(d.id, keys);
+            keys.forEach((key) => {
+                if (!districtByNormKey.has(key)) districtByNormKey.set(key, d);
+            });
             candidates.forEach(c => {
                 allCandidates.push(c);
                 candToDist.set(c, d);
@@ -459,22 +476,26 @@ function _renderSVGMap(districts, stateGeo) {
         stateGeo.features.forEach(feature => {
             const name = feature.properties.name || feature.properties.NAME_2 || feature.properties.dtname || "";
             const geoId = (feature.properties.id || "").toLowerCase().trim();
+            const geoKey = normalizeDistrictKey(feature.properties.id || "");
+            const nameKey = normalizeDistrictKey(name);
             const pathStr = pathGen(feature);
             const centroid = pathGen.centroid(feature);
 
             // Match strategy: exact ID first (avoids Levenshtein false-positives between
             // similarly spelled districts, e.g. Jaipur/Udaipur which have edit-distance 2),
             // then fall back to fuzzy name matching for legacy/alias name variations.
-            let matchedDistrict = districtById.get(geoId) || null;
+            let matchedDistrict = districtById.get(geoId)
+                || districtByNormKey.get(geoKey)
+                || districtByNormKey.get(nameKey)
+                || null;
             if (!matchedDistrict) {
                 const bestMatchString = fuzzyMatch(name, allCandidates, 2);
                 const fuzzyResult = bestMatchString ? candToDist.get(bestMatchString) : null;
-                // Guard: if this GeoJSON feature has an explicit `id`, only accept the fuzzy
-                // result when the matched district's id equals the GeoJSON id. This prevents
-                // cross-assignment between similarly-named districts (e.g. Udaipur → Jaipur
-                // edit-distance 2) when the GeoJSON's own id makes the correct district clear.
-                if (fuzzyResult && geoId && fuzzyResult.id !== geoId) {
-                    matchedDistrict = null; // GeoJSON id disagrees - treat as unregistered
+                // Guard: for fuzzy fallback with explicit feature IDs, only accept when
+                // the feature ID is a known key (id/name/alias) of the candidate district.
+                if (fuzzyResult && geoId) {
+                    const keys = districtKeysById.get(fuzzyResult.id) || new Set();
+                    matchedDistrict = keys.has(geoKey) ? fuzzyResult : null;
                 } else {
                     matchedDistrict = fuzzyResult;
                 }

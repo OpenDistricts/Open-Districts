@@ -273,8 +273,21 @@ export const DataService = {
         const { districts, events } = await _loadLiveData();
         const filtered = _filterByDateRange(events, dateRange);
         const targetStateId = typeof stateId === "string" ? stateId.toUpperCase() : null;
-        const raw = districts.find(d => d.id === districtId && (!targetStateId || d.stateId === targetStateId))
-            ?? districts.find(d => d.id === districtId);
+        const requestKey = _normalizeDistrictKey(districtId);
+        const inScope = targetStateId
+            ? districts.filter(d => d.stateId === targetStateId)
+            : districts;
+        const matchesDistrictKey = (d) => {
+            const keys = [d.id, d.name, ...(d.aliases || [])]
+                .map(_normalizeDistrictKey)
+                .filter(Boolean);
+            return keys.includes(requestKey);
+        };
+
+        const raw = inScope.find(d => d.id === districtId)
+            ?? inScope.find(matchesDistrictKey)
+            ?? districts.find(d => d.id === districtId)
+            ?? districts.find(matchesDistrictKey);
         const found = raw ? { ...raw, dataPoints: filtered.filter(e => e.districtId === raw.id).length } : null;
         if (found) return found;
 

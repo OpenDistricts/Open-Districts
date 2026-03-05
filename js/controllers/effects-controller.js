@@ -7,6 +7,7 @@ let _ctx;
 let _backend = "off";
 let _lastReason = null;
 let _debugBadge;
+let _debugVisible = false;
 
 export function init(ctx) {
     _ctx = ctx;
@@ -63,6 +64,13 @@ export function suspendForHistorical() {
     _syncStatus();
 }
 
+export function setDebugVisibility(enabled) {
+    _debugVisible = !!enabled;
+    if (_debugBadge) {
+        _debugBadge.style.display = _debugVisible ? "block" : "none";
+    }
+}
+
 function _syncStatus() {
     let stats = { active: false, layers: 0, qualityTier: "high", degradedReason: _lastReason };
     if (_backend === "deckgl") stats = DeckBackend.getStats();
@@ -88,6 +96,7 @@ function _mountDebugBadge(mapInstance) {
         _debugBadge = document.createElement("div");
         _debugBadge.className = "advanced-effects-debug-badge";
         container.appendChild(_debugBadge);
+        _debugBadge.style.display = _debugVisible ? "block" : "none";
         _updateDebugBadge({
             active: false,
             backend: "off",
