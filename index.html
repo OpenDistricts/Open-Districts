@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./css/tailwind.css">
 </head>
 
-<body class="m-0 box-border min-h-screen overflow-x-hidden bg-[#020204] px-5 py-[60px] text-[#E5E7EB] [font-family:'Atkinson_Hyperlegible',sans-serif]">
+<body class="m-0 box-border min-h-screen overflow-x-hidden bg-[#020204] px-5 py-12 text-[#E5E7EB] [font-family:'Atkinson_Hyperlegible',sans-serif] sm:py-14">
     <div class="blackhole-bg" aria-hidden="true">
         <div class="blackhole-noise"></div>
         <div class="blackhole-disc"></div>
@@ -21,11 +21,11 @@
         <div class="blackhole-vignette"></div>
     </div>
 
-    <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-[1040px] flex-col items-center">
-    <header class="mb-12 text-center">
+    <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-[1040px] flex-col items-center justify-start pt-6">
+    <header class="mb-10 text-center sm:mb-12">
         <h1
-            class="shimmering-text mb-3 text-4xl font-semibold [font-family:'Outfit',sans-serif] sm:text-5xl">Open Districts</h1>
-        <p class="mx-auto max-w-[600px] text-center text-lg leading-relaxed text-slate-300 sm:text-xl">Browse the latest
+            class="shimmering-text mb-3 text-4xl font-semibold tracking-tight [font-family:'Outfit',sans-serif] sm:text-6xl">Open Districts</h1>
+        <p class="mx-auto max-w-[640px] text-center text-lg leading-relaxed text-slate-300/95 sm:text-xl">Browse the latest
             interface and earlier iterations.</p>
         <div class="mt-6 flex justify-center">
             <div class="group relative">
@@ -51,28 +51,28 @@
     <div class="grid w-full max-w-[1000px] grid-cols-1 gap-6 md:grid-cols-2">
         <!-- Archive Card -->
         <a href="Archive/index.html"
-            class="group flex cursor-pointer flex-col rounded-2xl border-2 border-[#E5E7EB] bg-white p-6 text-inherit no-underline shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition duration-200 hover:-translate-y-1 hover:border-[#2B6CB0] hover:shadow-[0_12px_20px_rgba(0,0,0,0.05)]">
+            class="group flex min-h-[320px] cursor-pointer flex-col rounded-3xl border border-white/18 bg-white/9 p-6 text-inherit no-underline backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[#60A5FA]/70 hover:bg-white/13 hover:shadow-[0_20px_70px_rgba(2,6,23,0.58)] sm:p-7">
             <div class="mb-3 flex items-center justify-between">
-                <h2 class="m-0 text-2xl font-semibold [font-family:'Outfit',sans-serif]">Archive</h2>
+                <h2 class="m-0 text-[2rem] font-semibold text-slate-100/95 [font-family:'Outfit',sans-serif]">Archive</h2>
             </div>
-            <p class="mt-0 mb-6 grow text-[1.05rem] leading-normal text-[#4B5563]">Contains V1 to V3 snapshots for
+            <p class="mt-0 mb-8 grow text-[1.05rem] leading-relaxed text-slate-200/85">Contains V1 to V3 snapshots for
                 historical reference.</p>
             <span
-                class="inline-block w-fit rounded-lg border-2 border-[#2B6CB0] bg-[#FDFBF7] px-5 py-2.5 text-center font-medium text-[#2B6CB0] transition-colors duration-200 [font-family:'Outfit',sans-serif] group-hover:bg-[#2B6CB0] group-hover:text-white">View
+                class="inline-block w-fit rounded-xl border border-[#60A5FA] bg-[#60A5FA]/8 px-5 py-2.5 text-center font-semibold text-[#93C5FD] transition-colors duration-200 [font-family:'Outfit',sans-serif] group-hover:bg-[#60A5FA]/22 group-hover:text-white">View
                 Archive</span>
         </a>
 
         <!-- V4 Card -->
         <a href="OpenDistricts-v4.html"
-            class="group flex cursor-pointer flex-col rounded-2xl border-2 border-[#E5E7EB] bg-white p-6 text-inherit no-underline shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition duration-200 hover:-translate-y-1 hover:border-[#2B6CB0] hover:shadow-[0_12px_20px_rgba(0,0,0,0.05)]">
+            class="group flex min-h-[320px] cursor-pointer flex-col rounded-3xl border border-white/18 bg-white/9 p-6 text-inherit no-underline backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[#60A5FA]/70 hover:bg-white/13 hover:shadow-[0_20px_70px_rgba(2,6,23,0.58)] sm:p-7">
             <div class="mb-3 flex items-center justify-between">
-                <h2 class="m-0 text-2xl font-semibold [font-family:'Outfit',sans-serif]">Version 4</h2>
+                <h2 class="m-0 text-[2rem] font-semibold text-slate-100/95 [font-family:'Outfit',sans-serif]">Version 4</h2>
             </div>
-            <p class="mt-0 mb-6 grow text-[1.05rem] leading-normal text-[#4B5563]">Advanced community health and civic
+            <p class="mt-0 mb-8 grow text-[1.05rem] leading-relaxed text-slate-200/85">Advanced community health and civic
                 intelligence kiosk with guidance, dynamic temporal analysis, and seamless district-level geospatial
                 intelligence.</p>
             <span
-                class="inline-block w-fit rounded-lg border-2 border-[#2B6CB0] bg-[#FDFBF7] px-5 py-2.5 text-center font-medium text-[#2B6CB0] transition-colors duration-200 [font-family:'Outfit',sans-serif] group-hover:bg-[#2B6CB0] group-hover:text-white">View
+                class="inline-block w-fit rounded-xl border border-[#60A5FA] bg-[#60A5FA]/8 px-5 py-2.5 text-center font-semibold text-[#93C5FD] transition-colors duration-200 [font-family:'Outfit',sans-serif] group-hover:bg-[#60A5FA]/22 group-hover:text-white">View
                 V4</span>
         </a>
     </div>
