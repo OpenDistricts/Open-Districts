@@ -16,6 +16,8 @@ let _ctx;
 let _map;
 let _boundaryLayer, _regionsLayer, _markersLayer, _maskLayer;
 const _regionLayerMap = new Map(); // regionId → Leaflet layer
+const MARKER_ICON_SIZE = 36;
+const MARKER_ICON_ANCHOR = 18;
 
 // ═══════════════════════════════════════════════════════════════════
 // INIT - called ONCE at boot
@@ -52,6 +54,12 @@ function _initLeaflet() {
     _pane('radialPane',      404);
     _pane('corridorPane',    450);
     _pane('eventMarkerPane', 460);
+    // maskClipPane sits above all event panes so that events whose geoPoint
+    // falls outside the district polygon hole are correctly hidden by the gray
+    // exterior mask.  boundaryPane sits just above it so the district outline
+    // ring is always visible on top of the mask.
+    _pane('maskClipPane',    590);
+    _pane('boundaryPane',    595);
 
     // Custom zoom buttons (Continuous zooming on hold)
     const setupSmoothZoom = (id, delta) => {
@@ -183,11 +191,32 @@ function setLockState(isLocked) {
 /** Load geography for a district. Clears previous layers. */
 export async function loadDistrictGeo(district, events) {
     // Tear down previous layers
-    if (_boundaryLayer) _map.removeLayer(_boundaryLayer);
-    if (_regionsLayer) _map.removeLayer(_regionsLayer);
-    if (_markersLayer) _map.removeLayer(_markersLayer);
-    if (_maskLayer) _map.removeLayer(_maskLayer);
+    if (_boundaryLayer) {
+        _map.removeLayer(_boundaryLayer);
+        _boundaryLayer = null;
+    }
+    if (_regionsLayer) {
+        _map.removeLayer(_regionsLayer);
+        _regionsLayer = null;
+    }
+    if (_markersLayer) {
+        _map.removeLayer(_markersLayer);
+        _markersLayer = null;
+    }
+    if (_maskLayer) {
+        _map.removeLayer(_maskLayer);
+        _maskLayer = null;
+    }
     _regionLayerMap.clear();
+
+    const lockCheckbox = document.getElementById("lock-map-focus");
+    const shouldLockFocus = lockCheckbox ? lockCheckbox.checked : false;
+
+    // Important: release previous district constraints first, otherwise fitBounds
+    // can get clamped to the old district and land in the wrong location.
+    _map.setMaxBounds(null);
+    _map.setMinZoom(2);
+    _map.setMaxZoom(20);
 
     // Fit to bounds and strictly cage the user
     // Convert array structure to L.LatLngBounds so we can pad it
@@ -279,12 +308,13 @@ export async function loadDistrictGeo(district, events) {
         fillOpacity: 0.8,
         stroke: false,
         className: 'focus-mask-layer',
-        interactive: false
+        interactive: false,
+        pane: 'maskClipPane',   // above all event panes (460) — clips visual bleed
     }); // Do not add to map by default
 
     // District boundary ring (using unified outer border if available)
     _boundaryLayer = L.geoJSON(punchData, {
-        style: districtBoundaryStyle(),
+        style: { ...districtBoundaryStyle(), pane: 'boundaryPane' },
         interactive: false,
     }).addTo(_map);
 
@@ -293,7 +323,8 @@ export async function loadDistrictGeo(district, events) {
         style: feature => {
             const regionId = feature.properties?.id ?? feature.id ?? "";
             const entry = categoryMap[regionId];
-            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
+            const isRegionFill = entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill");
+            const cat = isRegionFill ? entry.category : "none";
             return categoryPolygonStyle(cat, false);
         },
         onEachFeature: (feature, layer) => {
@@ -312,7 +343,7 @@ export async function loadDistrictGeo(district, events) {
             const regionId = _idFromLayer(layer);
             if (!regionId || !layer._path) return;
             const entry = categoryMap[regionId];
-            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
+            const cat = (entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill")) ? entry.category : "none";
             if (cat !== "none") {
                 _applyCatClass(layer._path, cat);
             }
@@ -351,9 +382,9 @@ export async function loadDistrictGeo(district, events) {
             icon: L.divIcon({
                 html: buildMarkerIconHtml(ev, dimmed),
                 className: '',
-                iconSize: [30, 30],
-                iconAnchor: [15, 15],
-                tooltipAnchor: [15, -15],
+                iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
+                iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
+                tooltipAnchor: [MARKER_ICON_ANCHOR, -MARKER_ICON_ANCHOR],
             }),
             pane: 'eventMarkerPane',
         });
@@ -461,33 +492,17 @@ export async function loadDistrictGeo(district, events) {
             }
 
             case 'corridor': {
+                // Basic map mode: the raw polyline conveys no meaningful direction
+                // to a general audience. Render only the icon marker at the path
+                // start (or at geoPoint if coords are absent). The advanced
+                // effects controller applies the ROAD_BUILD/corridor overlays
+                // separately in advanced mode.
                 const coords = ev.meta?.pathCoords;
-                if (!coords?.length) {
-                    if (ev.geoPoint) group.addLayer(_makeIconMarker(ev, [ev.geoPoint.lat, ev.geoPoint.lng]));
-                    break;
+                if (coords?.length) {
+                    group.addLayer(_makeIconMarker(ev, [coords[0].lat, coords[0].lng]));
+                } else if (ev.geoPoint) {
+                    group.addLayer(_makeIconMarker(ev, [ev.geoPoint.lat, ev.geoPoint.lng]));
                 }
-                const latLngs = coords.map(c => [c.lat, c.lng]);
-                const line = L.polyline(latLngs, {
-                    color, weight: 5, opacity: 0.6, pane: 'corridorPane',
-                });
-                line.bindTooltip(ev.title, { sticky: true });
-                line.on('click', () => _ctx.emit('map:regionClick', { eventId: ev.id }));
-                line.eventId = ev.id; line.category = ev.category;
-                line.impactScale = ev.impactScale; line.renderAs = renderAs;
-                group.addLayer(line);
-                if (ev.meta.pathWidthMetres) {
-                    coords.forEach(c => {
-                        const buf = L.circle([c.lat, c.lng], {
-                            radius: ev.meta.pathWidthMetres / 2,
-                            color, fillColor: color, fillOpacity: 0.05,
-                            weight: 0, pane: 'corridorPane', interactive: false,
-                        });
-                        buf.eventId = ev.id;
-                        group.addLayer(buf);
-                    });
-                }
-                // Icon at path start
-                group.addLayer(_makeIconMarker(ev, latLngs[0]));
                 break;
             }
 
@@ -527,9 +542,11 @@ export async function loadDistrictGeo(district, events) {
     });
     _markersLayer = group.addTo(_map);
 
-    // Sync lock state with UI toggle
-    const lockCheckbox = document.getElementById("lock-map-focus");
-    setLockState(lockCheckbox ? lockCheckbox.checked : false);
+    // Re-apply lock after rebuilding layers/mask for the new district.
+    setLockState(shouldLockFocus);
+    if (shouldLockFocus) {
+        _map.fitBounds(bounds, { padding: [20, 20] });
+    }
 }
 
 /** Highlight focused polygon, dim others, fly to bounds. */
@@ -539,7 +556,7 @@ export function syncFocus(focusedEventId, events) {
     if (!focusedEventId) {
         _regionLayerMap.forEach((layer, regionId) => {
             const entry = categoryMap[regionId];
-            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
+            const cat = (entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill")) ? entry.category : "none";
             layer.setStyle(categoryPolygonStyle(cat, false, false));
         });
         if (_markersLayer) {
@@ -547,7 +564,12 @@ export function syncFocus(focusedEventId, events) {
                 const markerEv = events.find(e => e.id === layer.eventId);
                 if (!markerEv) return;
                 if (layer instanceof L.Marker) {
-                    layer.setIcon(L.divIcon({ html: buildMarkerIconHtml(markerEv, false), className: '', iconSize: [30, 30], iconAnchor: [15, 15] }));
+                    layer.setIcon(L.divIcon({
+                        html: buildMarkerIconHtml(markerEv, false),
+                        className: '',
+                        iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
+                        iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
+                    }));
                 } else {
                     layer.setStyle(categoryMarkerOptions(markerEv.category, false));
                 }
@@ -562,7 +584,7 @@ export function syncFocus(focusedEventId, events) {
         // Resetting focus
         _regionLayerMap.forEach((layer, regionId) => {
             const entry = categoryMap[regionId];
-            const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
+            const cat = (entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill")) ? entry.category : "none";
             layer.setStyle(categoryPolygonStyle(cat, false, false));
         });
         if (_markersLayer) {
@@ -570,7 +592,12 @@ export function syncFocus(focusedEventId, events) {
                 const markerEv = events.find(e => e.id === layer.eventId);
                 if (!markerEv) return;
                 if (layer instanceof L.Marker) {
-                    layer.setIcon(L.divIcon({ html: buildMarkerIconHtml(markerEv, false), className: '', iconSize: [30, 30], iconAnchor: [15, 15] }));
+                    layer.setIcon(L.divIcon({
+                        html: buildMarkerIconHtml(markerEv, false),
+                        className: '',
+                        iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
+                        iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
+                    }));
                 } else {
                     layer.setStyle(categoryMarkerOptions(markerEv.category, false));
                 }
@@ -610,11 +637,11 @@ export function syncFocus(focusedEventId, events) {
         let isFocusedPoly = false;
         let isDimmed = true;
 
-        if (ev.impactScale === "WIDE" && regionId === ev.regionId) {
+        if ((ev.impactScale === "WIDE" || ev.renderAs === "polygon_fill") && regionId === ev.regionId) {
             cat = ev.category;
             isFocusedPoly = true;
             isDimmed = false;
-        } else if (entry && entry.impactScale === "WIDE") {
+        } else if (entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill")) {
             cat = entry.category;
         }
 
@@ -627,7 +654,12 @@ export function syncFocus(focusedEventId, events) {
             const markerEv = events.find(e => e.id === layer.eventId);
             if (!markerEv) return;
             if (layer instanceof L.Marker) {
-                layer.setIcon(L.divIcon({ html: buildMarkerIconHtml(markerEv, !isFocused), className: '', iconSize: [30, 30], iconAnchor: [15, 15] }));
+                layer.setIcon(L.divIcon({
+                    html: buildMarkerIconHtml(markerEv, !isFocused),
+                    className: '',
+                    iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
+                    iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
+                }));
             } else {
                 const opts = categoryMarkerOptions(markerEv.category, !isFocused);
                 layer.setStyle(opts);
@@ -682,12 +714,12 @@ export function applyHistoricalSnapshot(bucketIndex, timeBuckets, events) {
         const current = currentCatMap[regionId];
         const historical = historicalCatMap[regionId];
 
-        if (current && current.impactScale === "WIDE") {
+        if (current && (current.impactScale === "WIDE" || current.renderAs === "polygon_fill")) {
             // Active in this bucket - full highlight
             const cat = current.category;
             layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 1, fillOpacity: 0.55 });
             if (layer._path) _applyCatClass(layer._path, cat);
-        } else if (historical && historical.impactScale === "WIDE") {
+        } else if (historical && (historical.impactScale === "WIDE" || historical.renderAs === "polygon_fill")) {
             // Past event - keep but dim
             const cat = historical.category;
             layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 0.25, fillOpacity: 0.12 });
@@ -740,7 +772,7 @@ export function clearHistoricalSnapshot(events) {
     // Polygons
     _regionLayerMap.forEach((layer, regionId) => {
         const entry = categoryMap[regionId];
-        const cat = (entry && entry.impactScale === "WIDE") ? entry.category : "none";
+        const cat = (entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill")) ? entry.category : "none";
 
         layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 1, fillOpacity: 0.55 });
         if (layer._path && cat !== "none") {
@@ -785,7 +817,7 @@ export function runArbitration() {
         const center = layer.getBounds?.().getCenter();
         if (!center || !mapBounds.contains(center)) return;
         const entry = categoryMap[regionId];
-        if (entry && entry.impactScale === "WIDE") {
+        if (entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill")) {
             const priority = getCategoryDisplayPriority(entry.category, entry.displayPriority);
             visibleItems.push({ layer, category: entry.category, priority, timestamp: entry.timestamp });
         }
@@ -882,6 +914,7 @@ function _buildCategoryByRegion(events) {
                     category: ev.category,
                     timestamp: ev.timestamp,
                     impactScale: ev.impactScale,
+                    renderAs: ev.renderAs,
                     displayPriority: ev.displayPriority,
                     eventId: ev.id
                 };

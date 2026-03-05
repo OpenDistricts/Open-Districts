@@ -114,6 +114,19 @@ function _filterByDateRange(events, dateRange) {
     });
 }
 
+function _normalizeDistrictKey(value) {
+    return String(value ?? "")
+        .toLowerCase()
+        .trim()
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/&/g, " and ")
+        .replace(/[_\s]+/g, "-")
+        .replace(/[^a-z0-9-]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+}
+
 // ── LIVE UPDATE STUB ──────────────────────────────────────────────────────────
 // V4: polling no-op. V5: opens WebSocket for the district channel.
 // v4-app.js calls subscribe and receives an unsubscribe fn. Transport is opaque.
@@ -259,22 +272,34 @@ export const DataService = {
     async getDistrictById(districtId, stateId = null, dateRange) {
         const { districts, events } = await _loadLiveData();
         const filtered = _filterByDateRange(events, dateRange);
-        const raw = districts.find(d => d.id === districtId);
+        const targetStateId = typeof stateId === "string" ? stateId.toUpperCase() : null;
+        const raw = districts.find(d => d.id === districtId && (!targetStateId || d.stateId === targetStateId))
+            ?? districts.find(d => d.id === districtId);
         const found = raw ? { ...raw, dataPoints: filtered.filter(e => e.districtId === raw.id).length } : null;
         if (found) return found;
 
         // Stub unsupported districts
         let bbox = { north: 28, south: 8, east: 97, west: 68 }; // Fallback India
         let geoUrl = `mock-geo-${districtId}`;
-        let actualName = districtId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        let actualName = districtId.replace(/[-_]+/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
-        if (stateId) {
+        if (targetStateId) {
             try {
-                const stateGeo = await this.getStateGeoJSON(stateId.toUpperCase());
+                const stateGeo = await this.getStateGeoJSON(targetStateId);
                 if (stateGeo && stateGeo.features) {
+                    const targetKey = _normalizeDistrictKey(districtId);
                     const feature = stateGeo.features.find(f => {
-                        const n = String(f.properties.id || f.properties.name || f.properties.district || f.properties.NAME_2 || f.properties.dtname || "").toLowerCase().replace(/\s+/g, '-');
-                        return n === districtId;
+                        const p = f.properties || {};
+                        const keys = [
+                            p.id,
+                            p.name,
+                            p.district,
+                            p.NAME_2,
+                            p.NAME_3,
+                            p.dtname,
+                            p.DISTRICT,
+                        ].map(_normalizeDistrictKey).filter(Boolean);
+                        return keys.includes(targetKey);
                     });
 
                     if (feature) {
@@ -306,7 +331,7 @@ export const DataService = {
 
         return {
             id: districtId,
-            stateId: stateId || "UNKNOWN",
+            stateId: targetStateId || "UNKNOWN",
             name: actualName,
             geoJsonUrl: geoUrl,
             boundingBox: bbox,

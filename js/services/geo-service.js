@@ -213,7 +213,7 @@ export function getCategoryColor(category) {
 }
 
 // ── Category SVG icon templates ───────────────────────────────────────────────
-// All icons are 16×16 on a 20×20 viewBox, designed for a 30px circular host.
+// All icons are 16x16 on a 20x20 viewBox, rendered inside a 36px marker shell.
 
 function _flameSvg(color) {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="16" height="16"><path d="M10 2C8 5 6.5 7.5 6.5 10.2c0 .9.2 1.8.6 2.6-.6-.8-1-1.9-1-3-1.3 1.2-2 3-2 4.8C4.1 17.4 6.8 20 10 20s5.9-2.6 5.9-5.7c0-3.5-3.4-7-5.9-12.3zm0 15.2a3.2 3.2 0 01-3.2-3.2c0-.6.17-1.2.48-1.7.5.7 1.3 1 1.3 2 .3-1.1 1-1.9 2.2-2.3-.4.7-.1 1.8.7 2.5.2.2.5.6.5 1A1.5 1.5 0 0110 17.2z" fill="${color}"/></svg>`;
@@ -257,17 +257,15 @@ const CATEGORY_SVG_FNS = {
  *
  * @param {object}  event   Event object - must have `.category`
  * @param {boolean} dimmed  True when the marker is unfocused / dimmed
- * @returns {string} HTML string (self-contained, no external CSS dependency)
+ * @returns {string} HTML string (styled by css/v4.css .od-marker classes)
  */
 export function buildMarkerIconHtml(event, dimmed = false) {
     const h = CAT_HUES[event.category] ?? CAT_HUES.safety;
-    const color  = dimmed ? `rgba(${h.r},${h.g},${h.b},0.22)` : h.hex;
-    const bg     = `rgba(${h.r},${h.g},${h.b},${dimmed ? 0.04 : 0.13})`;
-    const border = `rgba(${h.r},${h.g},${h.b},${dimmed ? 0.12 : 0.5})`;
-    const shadow = dimmed ? 'none' : '0 1px 4px rgba(0,0,0,0.22)';
-    const pe     = dimmed ? 'none' : 'auto';
-    const svgFn  = CATEGORY_SVG_FNS[event.category] ?? _warningSvg;
-    return `<div style="width:30px;height:30px;background:${bg};border:1.5px solid ${border};border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:${shadow};pointer-events:${pe}">${svgFn(color)}</div>`;
+    const color = dimmed ? `rgba(${h.r},${h.g},${h.b},0.32)` : h.hex;
+    const svgFn = CATEGORY_SVG_FNS[event.category] ?? _warningSvg;
+    const stateClass = dimmed ? ' is-dimmed' : '';
+    const pe = dimmed ? 'none' : 'auto';
+    return `<div class="od-marker${stateClass}" style="--od-r:${h.r};--od-g:${h.g};--od-b:${h.b};pointer-events:${pe};"><span class="od-marker-glow"></span><span class="od-marker-shell">${svgFn(color)}</span><span class="od-marker-ring od-marker-ring-a"></span><span class="od-marker-ring od-marker-ring-b"></span></div>`;
 }
 
 // ── MOCK GEOMETRY FALLBACK ────────────────────────────────────────────────────

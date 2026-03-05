@@ -56,7 +56,13 @@ const AppState = {
     autoPlayBucketIndex: 0,
     consecutiveSlowFrames: 0,
     envOverlaysEnabled: true,
-    advancedEffectsStatus: { active: false, layers: 0, quality: "high" },
+    advancedEffectsStatus: {
+        active: false,
+        backend: "off",
+        qualityTier: "high",
+        layers: 0,
+        degradedReason: null,
+    },
     districtScopeLocked: true, // Default to limiting events to district boundary
     timelineRange: null,  // { from: ISO string, to: ISO string } or null for live mode
 };
@@ -322,19 +328,27 @@ async function loadDistrict(districtId, stateId) {
     // AND if the event has coordinates.
     let events = rawEvents;
     if (AppState.districtScopeLocked && geoData && window.turf) {
-        // Build an array of unified polygons for the district to test against
-        // Just use the bounding box to do a cheaper clip filter.
-        events = rawEvents.filter(e => {
-            if (e.districtId === districtId && (!e.location || !e.location.lat)) return true; // keep non-spatial region events
-            if (e.location && e.location.lat && e.location.lng) {
-                const pt = [e.location.lng, e.location.lat];
-                let isInside = false;
+        // Strict clip: prefer geoPoint (new schema), fallback to legacy location.
+        events = rawEvents.filter((e) => {
+            const lat = Number(e?.geoPoint?.lat ?? e?.location?.lat);
+            const lng = Number(e?.geoPoint?.lng ?? e?.location?.lng);
+            const hasPoint = Number.isFinite(lat) && Number.isFinite(lng);
+
+            if (hasPoint) {
+                const pt = window.turf.point([lng, lat]);
                 for (const f of geoData.features) {
-                    if (turf.booleanPointInPolygon(pt, f)) {
-                        isInside = true; break;
-                    }
+                    if (window.turf.booleanPointInPolygon(pt, f)) return true;
                 }
-                return isInside;
+                return false;
+            }
+
+            // Keep only district-linked non-point events (region-wide alerts, etc.)
+            if (e?.districtId === districtId) return true;
+            if (Array.isArray(e?.regionIds) && e.regionIds.length) {
+                return e.regionIds.some((rid) => typeof rid === "string" && rid.startsWith(`${districtId}:`));
+            }
+            if (typeof e?.regionId === "string") {
+                return e.regionId.startsWith(`${districtId}:`);
             }
             return false;
         });
