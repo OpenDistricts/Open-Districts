@@ -29,12 +29,17 @@ node_modules/
 maps/
 INDIAN-SHAPEFILES/
 test-results/
-scripts/
+scripts/*
+!scripts/promote-dataset.js
+!scripts/update-live-manifest-hash.js
+!scripts/migrate-v1.js
+!scripts/build-registry-from-geojson.js
 package.json
 package-lock.json
 components.json
 jsconfig.json
-docs/
+docs/*
+!docs/DATA_SCHEMA_REFERENCE.md
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.

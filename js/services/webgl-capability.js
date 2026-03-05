@@ -3,7 +3,6 @@ export function detectAdvancedEffectsSupport() {
         hasWebGL2: false,
         hasWebGL1: false,
         has2D: false,
-        deckGlobal: !!window?.deck,
         pixiGlobal: !!window?.PIXI,
         webgl: false,
         canvas2d: false,

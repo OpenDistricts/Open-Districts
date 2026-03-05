@@ -1165,10 +1165,6 @@ button:focus-visible {
   opacity: 0.92;
 }
 
-.advanced-effects-host--deck canvas {
-  pointer-events: none !important;
-}
-
 .advanced-effects-debug-badge {
   position: absolute;
   top: 54px;
