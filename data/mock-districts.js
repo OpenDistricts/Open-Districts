@@ -124,7 +124,7 @@ const _rawDistricts = [
         aliases: ["Gurgaon"],
         nameLocal: "गुरुग्राम",
         geoJsonUrl: "./data/geo/HR/gurugram.geojson?v=2",
-        boundingBox: { north: 28.56, south: 28.17, east: 77.26, west: 76.61 },
+        boundingBox: { north: 28.37909, south: 28.2239, east: 76.83812, west: 76.65111 },
         population: 1514432,
         dataPoints: 5
     },
@@ -136,7 +136,7 @@ const _rawDistricts = [
         name: "Surat",
         nameLocal: "સુરત",
         geoJsonUrl: "./data/geo/GJ/surat.geojson?v=2",
-        boundingBox: { north: 21.43, south: 21.05, east: 73.20, west: 72.63 },
+        boundingBox: { north: 21.4747, south: 21.203, east: 72.9505, west: 72.5976 },
         population: 6081322,
         dataPoints: 15
     },
@@ -146,7 +146,7 @@ const _rawDistricts = [
         name: "Pune",
         nameLocal: "",
         geoJsonUrl: "./data/geo/MH/pune.geojson?v=2",
-        boundingBox: { north: 19.42, south: 18.18, east: 74.60, west: 73.50 },
+        boundingBox: { north: 19.3952, south: 19.0044, east: 74.3111, west: 73.6302 },
         population: 9429408
     },
     // Punjab
@@ -156,7 +156,7 @@ const _rawDistricts = [
         name: "Jalandhar",
         nameLocal: "ਜਲੰਧਰ",
         geoJsonUrl: "./data/geo/PB/jalandhar.geojson?v=2",
-        boundingBox: { north: 31.62, south: 30.97, east: 75.96, west: 75.08 },
+        boundingBox: { north: 31.232, south: 30.9879, east: 75.4282, west: 75.0771 },
         population: 2193590,
         dataPoints: 8
     },
@@ -167,7 +167,7 @@ const _rawDistricts = [
         name: "Ujjain",
         nameLocal: "उज्जैन",
         geoJsonUrl: "./data/geo/MP/ujjain.geojson?v=2",
-        boundingBox: { north: 23.76, south: 22.83, east: 76.25, west: 75.13 },
+        boundingBox: { north: 23.6228, south: 23.2833, east: 75.4503, west: 75.1346 },
         population: 1986864,
         dataPoints: 7
     },
@@ -178,7 +178,7 @@ const _rawDistricts = [
         name: "Khordha",
         nameLocal: "ଖୋର୍ଦ୍ଧା",
         geoJsonUrl: "./data/geo/OD/khordha.geojson?v=2",
-        boundingBox: { north: 20.43, south: 19.67, east: 86.08, west: 84.94 },
+        boundingBox: { north: 20.2796, south: 20.1159, east: 85.3891, west: 85.1992 },
         population: 2251673,
         dataPoints: 9
     },
@@ -189,7 +189,7 @@ const _rawDistricts = [
         name: "Gaya",
         nameLocal: "गया",
         geoJsonUrl: "./data/geo/BR/gaya.geojson?v=2",
-        boundingBox: { north: 25.07, south: 24.29, east: 85.40, west: 84.29 },
+        boundingBox: { north: 25.0591, south: 24.8197, east: 84.855, west: 84.6413 },
         population: 4391418,
         dataPoints: 11
     },
@@ -201,7 +201,7 @@ const _rawDistricts = [
         name: "Sitapur",
         nameLocal: "सीतापुर",
         geoJsonUrl: "./data/geo/UP/sitapur.geojson?v=2",
-        boundingBox: { north: 27.91, south: 27.10, east: 81.41, west: 80.30 },
+        boundingBox: { north: 27.8104, south: 27.2551, east: 80.8005, west: 80.299 },
         population: 4483992
     },
     // Karnataka - Batch 2
@@ -221,7 +221,7 @@ const _rawDistricts = [
         name: "Hugli",
         nameLocal: "হুগলী",
         geoJsonUrl: "./data/geo/WB/hugli.geojson?v=2",
-        boundingBox: { north: 23.22, south: 22.60, east: 88.50, west: 87.51 },
+        boundingBox: { north: 22.9724, south: 22.7743, east: 87.7894, west: 87.6605 },
         population: 5519145
     },
     // Chhattisgarh - Batch 2
@@ -231,7 +231,7 @@ const _rawDistricts = [
         name: "Raipur",
         nameLocal: "रायपुर",
         geoJsonUrl: "./data/geo/CT.geojson?v=2",
-        boundingBox: { north: 21.88, south: 19.77, east: 82.98, west: 81.53 },
+        boundingBox: { north: 21.6, south: 20.95, east: 82, west: 81.5 },
         population: 4063872
     },
     // Tamil Nadu - Batch 2
@@ -241,7 +241,7 @@ const _rawDistricts = [
         name: "Vellore",
         nameLocal: "வேலூர்",
         geoJsonUrl: "./data/geo/TN.geojson?v=2",
-        boundingBox: { north: 13.20, south: 12.25, east: 79.77, west: 78.40 },
+        boundingBox: { north: 13.1, south: 12.55, east: 79.6, west: 78.5 },
         population: 3936331
     },
 
@@ -252,7 +252,7 @@ const _rawDistricts = [
         name: "New Delhi",
         nameLocal: "नई दिल्ली",
         geoJsonUrl: "./data/geo/DL/new_delhi.geojson?v=2",
-        boundingBox: { north: 28.6376, south: 28.5273, east: 77.2566, west: 77.1682 },
+        boundingBox: { north: 28.6456842, south: 28.4812209, east: 77.2551392, west: 77.0503708 },
         population: 142004
     },
     {
@@ -261,7 +261,7 @@ const _rawDistricts = [
         name: "Central",
         nameLocal: "मध्य दिल्ली",
         geoJsonUrl: "./data/geo/DL/central.geojson?v=2",
-        boundingBox: { north: 28.7884, south: 28.6136, east: 77.2683, west: 76.9534 },
+        boundingBox: { north: 28.7861601, south: 28.612357, east: 77.2642707, west: 77.1651635 },
         population: 582320
     },
     {
@@ -270,7 +270,7 @@ const _rawDistricts = [
         name: "East",
         nameLocal: "पूर्वी दिल्ली",
         geoJsonUrl: "./data/geo/DL/east.geojson?v=2",
-        boundingBox: { north: 28.7111, south: 28.6225, east: 77.3426, west: 77.2292 },
+        boundingBox: { north: 28.6558204, south: 28.5695146, east: 77.3420594, west: 77.2525549 },
         population: 1709346
     },
     {
@@ -279,7 +279,7 @@ const _rawDistricts = [
         name: "North",
         nameLocal: "उत्तरी दिल्ली",
         geoJsonUrl: "./data/geo/DL/north.geojson?v=2",
-        boundingBox: { north: 28.8838, south: 28.6845, east: 77.2244, west: 76.9618 },
+        boundingBox: { north: 28.8834464, south: 28.6909168, east: 77.2236692, west: 76.9617014 },
         population: 887978
     },
     {
@@ -288,7 +288,7 @@ const _rawDistricts = [
         name: "North East",
         nameLocal: "उत्तर-पूर्वी दिल्ली",
         geoJsonUrl: "./data/geo/DL/north_east.geojson?v=2",
-        boundingBox: { north: 28.7711, south: 28.6709, east: 77.298, west: 77.2179 },
+        boundingBox: { north: 28.7866961, south: 28.6602286, east: 77.2990534, west: 77.2062264 },
         population: 2241624
     },
     {
@@ -297,7 +297,7 @@ const _rawDistricts = [
         name: "North West",
         nameLocal: "उत्तर-पश्चिमी दिल्ली",
         geoJsonUrl: "./data/geo/DL/north_west.geojson?v=2",
-        boundingBox: { north: 28.8183, south: 28.6672, east: 77.1923, west: 76.9421 },
+        boundingBox: { north: 28.8182528, south: 28.6575238, east: 77.1896579, west: 76.9418975 },
         population: 3645184
     },
     {
@@ -306,7 +306,7 @@ const _rawDistricts = [
         name: "Shahdara",
         nameLocal: "शाहदरा",
         geoJsonUrl: "./data/geo/DL/shahdara.geojson?v=2",
-        boundingBox: { north: 28.7141, south: 28.6394, east: 77.3329, west: 77.267 },
+        boundingBox: { north: 28.7141043, south: 28.6377479, east: 77.3329522, west: 77.254148 },
         population: 322931
     },
     {
@@ -315,7 +315,7 @@ const _rawDistricts = [
         name: "South",
         nameLocal: "दक्षिणी दिल्ली",
         geoJsonUrl: "./data/geo/DL/south.geojson?v=2",
-        boundingBox: { north: 28.5699, south: 28.4047, east: 77.2715, west: 77.1109 },
+        boundingBox: { north: 28.5659457, south: 28.4046285, east: 77.248358, west: 77.1124725 },
         population: 2731929
     },
     {
@@ -324,7 +324,7 @@ const _rawDistricts = [
         name: "South East",
         nameLocal: "दक्षिण-पूर्वी दिल्ली",
         geoJsonUrl: "./data/geo/DL/south_east.geojson?v=2",
-        boundingBox: { north: 28.6082, south: 28.4836, east: 77.3476, west: 77.2059 },
+        boundingBox: { north: 28.6098577, south: 28.4797533, east: 77.3452524, west: 77.1988383 },
         population: 1500636
     },
     {
@@ -333,7 +333,7 @@ const _rawDistricts = [
         name: "South West",
         nameLocal: "दक्षिण-पश्चिमी दिल्ली",
         geoJsonUrl: "./data/geo/DL/south_west.geojson?v=2",
-        boundingBox: { north: 28.6698, south: 28.5007, east: 77.1039, west: 76.8389 },
+        boundingBox: { north: 28.6716072, south: 28.5008314, east: 77.1025691, west: 76.8388351 },
         population: 2292958
     },
     {
@@ -342,7 +342,7 @@ const _rawDistricts = [
         name: "West",
         nameLocal: "पश्चिमी दिल्ली",
         geoJsonUrl: "./data/geo/DL/west.geojson?v=2",
-        boundingBox: { north: 28.7021, south: 28.5962, east: 77.1789, west: 76.9534 },
+        boundingBox: { north: 28.700791, south: 28.608213, east: 77.1969405, west: 76.9506701 },
         population: 2543243
     }
 ];
