@@ -181,11 +181,12 @@ function _mountTooltip(host) {
 
 function _showTooltip(hit, containerPoint, pinned) {
     if (!_tooltipEl || !hit || !containerPoint) return;
+    const effectLabel = _effectDisplayName(hit.effectType);
     const summary = hit.summary ? `<div class="fx-tip-summary">${_escapeHtml(hit.summary)}</div>` : "";
     const pin = pinned ? `<span class="fx-tip-pin">Pinned</span>` : "";
     _tooltipEl.innerHTML = `
         <div class="fx-tip-title">${_escapeHtml(hit.title)} ${pin}</div>
-        <div class="fx-tip-meta">${_escapeHtml(hit.effectType)} • ${_escapeHtml(hit.category)}</div>
+        <div class="fx-tip-meta">${_escapeHtml(effectLabel)} • ${_escapeHtml(hit.category)}</div>
         ${summary}
     `;
     _tooltipEl.style.display = "block";
@@ -212,4 +213,24 @@ function _escapeHtml(value) {
         .replace(/>/g, "&gt;")
         .replace(/\"/g, "&quot;")
         .replace(/'/g, "&#39;");
+}
+
+function _effectDisplayName(effectType) {
+    const map = {
+        GAS_PLUME_3D: "Gas Plume",
+        HOTSPOT_GPU: "Hotspot",
+        CORRIDOR_FLOW: "Corridor Flow",
+        ROAD_BUILD: "Road Build",
+        RADIAL_ZONE: "Radial Zone",
+        HAZARD_ZONE: "Hazard Zone",
+        EVENT_MARKER_3D: "Event Marker",
+        FIRE_INCIDENT: "Fire",
+        RAIN_3D: "Rainfall",
+        THUNDERSTORM: "Thunderstorm",
+        DISEASE_SMOG: "Disease Smog",
+        SKULL_SIGNS: "Disease Warning",
+        TEMP_RISE: "Temperature Rise",
+        TEMP_DROP: "Temperature Drop",
+    };
+    return map[effectType] || effectType || "Effect";
 }
