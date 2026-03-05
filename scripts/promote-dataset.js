@@ -198,6 +198,9 @@ function validateDatasetConsistency(versionPath) {
         if (evt.renderAs === "corridor" && Array.isArray(evt.meta?.pathCoords) && evt.meta.pathCoords.length && !hasAnyRegionAnchor) {
             schemaWarnings.push({ eventId, reason: "corridor has pathCoords but no region anchor; set regionId to corridor start region" });
         }
+        if (!hasAnyRegionAnchor && evt.geoPoint && typeof evt.geoPoint.lat === "number" && typeof evt.geoPoint.lng === "number") {
+            schemaWarnings.push({ eventId, reason: "missing regionId/regionIds despite geoPoint; prefer nearest regionId anchor" });
+        }
     });
 
     return {

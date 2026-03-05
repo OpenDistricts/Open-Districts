@@ -278,7 +278,7 @@
   {
     "id": "evt_DL_south_delhi_20260125_009",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "saket-tehsil",
     "category": "infrastructure",
     "impactScale": "WIDE",
@@ -327,7 +327,7 @@
   {
     "id": "evt_DL_south_delhi_20260125_010",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "kalkaji-tehsil",
     "category": "infrastructure",
     "impactScale": "LOCAL",
@@ -385,7 +385,7 @@
   {
     "id": "evt_DL_south_delhi_20260125_011",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "saket-tehsil",
     "category": "infrastructure",
     "impactScale": "WIDE",
@@ -440,7 +440,7 @@
   {
     "id": "evt_DL_south_delhi_20260215_026",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "kalkaji-tehsil",
     "category": "health",
     "impactScale": "POINT",
@@ -475,7 +475,7 @@
   {
     "id": "evt_DL_south_delhi_20260220_024",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "hauz-khas-tehsil",
     "category": "health",
     "impactScale": "LOCAL",
@@ -543,7 +543,7 @@
   {
     "id": "evt_DL_south_delhi_20260222_028",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "hauz-khas-tehsil",
     "category": "mobility",
     "impactScale": "LOCAL",
@@ -598,7 +598,7 @@
   {
     "id": "evt_DL_south_delhi_20260226_030",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "hauz-khas-tehsil",
     "category": "health",
     "impactScale": "LOCAL",
@@ -647,7 +647,7 @@
   {
     "id": "evt_DL_south_delhi_20260228_022",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "mehrauli-tehsil",
     "category": "weather",
     "impactScale": "LOCAL",
@@ -705,8 +705,8 @@
   {
     "id": "evt_DL_south_delhi_20260303_008",
     "stateId": "DL",
-    "districtId": "south_delhi",
-    "regionId": null,
+    "districtId": "south",
+    "regionId": "south",
     "category": "infrastructure",
     "impactScale": "WIDE",
     "renderAs": "corridor",
@@ -756,12 +756,15 @@
       "enrichedAt": "2026-03-05T13:20:00Z",
       "confidence": 0.85,
       "notes": "Mapped drainage work to ROAD_BUILD template on corridor."
-    }
+    },
+    "regionIds": [
+      "south"
+    ]
   },
   {
     "id": "evt_DL_south_delhi_20260304_005",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "kalkaji-tehsil",
     "category": "emergency",
     "impactScale": "LOCAL",
@@ -813,7 +816,7 @@
   {
     "id": "evt_DL_south_delhi_20260305_002",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "mehrauli-tehsil",
     "category": "emergency",
     "impactScale": "LOCAL",
@@ -865,8 +868,8 @@
   {
     "id": "evt_DL_south_delhi_20260305_004",
     "stateId": "DL",
-    "districtId": "south_delhi",
-    "regionId": null,
+    "districtId": "south",
+    "regionId": "south",
     "category": "safety",
     "impactScale": "WIDE",
     "renderAs": "hotspot",
@@ -910,12 +913,15 @@
       "enrichedAt": "2026-03-05T13:20:00Z",
       "confidence": 0.95,
       "notes": "Verified hotspot layer params."
-    }
+    },
+    "regionIds": [
+      "south"
+    ]
   },
   {
     "id": "evt_DL_south_delhi_20260305_013",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "defence-colony-tehsil",
     "category": "emergency",
     "impactScale": "POINT",
@@ -964,7 +970,7 @@
   {
     "id": "evt_DL_south_delhi_20260305_014",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "saket-tehsil",
     "category": "safety",
     "impactScale": "POINT",
@@ -999,7 +1005,7 @@
   {
     "id": "evt_DL_south_delhi_20260305_018",
     "stateId": "DL",
-    "districtId": "south_delhi",
+    "districtId": "south",
     "regionId": "mehrauli-tehsil",
     "category": "safety",
     "impactScale": "POINT",
@@ -1099,7 +1105,7 @@
     "id": "evt_GJ_surat_20260114_002",
     "stateId": "GJ",
     "districtId": "surat",
-    "regionId": null,
+    "regionId": "surat-city",
     "category": "mobility",
     "title": "BRTS Shutdown for Uttarayan",
     "summary": "All BRTS bus services were suspended to prevent kite string accidents across multiple city corridors.",
@@ -1117,7 +1123,10 @@
     "meta": {
       "serviceStatus": "Suspended",
       "reason": "Public Safety"
-    }
+    },
+    "regionIds": [
+      "surat-city"
+    ]
   },
   {
     "id": "evt_GJ_surat_20260223_001",
@@ -1185,7 +1194,7 @@
     "id": "evt_GJ_surat_20260301_003",
     "stateId": "GJ",
     "districtId": "surat",
-    "regionId": null,
+    "regionId": "surat-city",
     "category": "health",
     "impactScale": "LOCAL",
     "title": "HPV Vaccine Drive Launch Planned",
@@ -1214,7 +1223,12 @@
           "lng": 72.7758
         }
       ]
-    }
+    },
+    "regionIds": [
+      "surat-city",
+      "chorasi"
+    ],
+    "spansMultipleRegions": true
   },
   {
     "id": "evt_GJ_surat_20260301_006",
@@ -1244,7 +1258,7 @@
     "id": "evt_HR_gurugram_20251214_001",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": null,
+    "regionId": "gurugram-sadar",
     "category": "weather",
     "impactScale": "WIDE",
     "title": "Dense Fog - Massive Pile-up Advisory",
@@ -1265,7 +1279,10 @@
       "visibilityMeters": 50,
       "alertLevel": "orange",
       "impact": "Highway pile-ups"
-    }
+    },
+    "regionIds": [
+      "gurugram-sadar"
+    ]
   },
   {
     "id": "evt_HR_gurugram_20260131_001",
@@ -1330,7 +1347,7 @@
     "id": "evt_HR_gurugram_20260210_016",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": null,
+    "regionId": "gurugram-sadar",
     "category": "mobility",
     "impactScale": "WIDE",
     "renderAs": "multi_marker",
@@ -1387,13 +1404,16 @@
       "enrichedAt": "2026-03-05T13:20:00Z",
       "confidence": 0.85,
       "notes": "Added localized grey smog to multi-marker locations to visualize vehicular pollution hotspots."
-    }
+    },
+    "regionIds": [
+      "gurugram-sadar"
+    ]
   },
   {
     "id": "evt_HR_gurugram_20260210_020",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "infrastructure",
     "impactScale": "LOCAL",
     "renderAs": "multi_marker",
@@ -1451,7 +1471,7 @@
     "id": "evt_HR_gurugram_20260215_021",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "infrastructure",
     "impactScale": "LOCAL",
     "renderAs": "multi_marker",
@@ -1538,7 +1558,7 @@
     "id": "evt_HR_gurugram_20260218_027",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "infrastructure",
     "impactScale": "WIDE",
     "renderAs": "polygon_fill",
@@ -1573,7 +1593,7 @@
     "id": "evt_HR_gurugram_20260221_012",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": null,
+    "regionId": "gurugram-sadar",
     "category": "weather",
     "impactScale": "WIDE",
     "renderAs": "polygon_fill",
@@ -1618,13 +1638,16 @@
       "enrichedAt": "2026-03-05T13:20:00Z",
       "confidence": 0.9,
       "notes": "Repurposed DISEASE_SMOG with white color to accurately represent dense fog across the district layer."
-    }
+    },
+    "regionIds": [
+      "gurugram-sadar"
+    ]
   },
   {
     "id": "evt_HR_gurugram_20260222_001",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "badshahpur",
+    "regionId": "gurugram-sadar",
     "category": "safety",
     "title": "Serious Assault - Badshahpur Police Area",
     "summary": "19-year-old student assaulted. Accused arrested under serious criminal charges. Investigation active.",
@@ -1644,13 +1667,16 @@
       "arrestStatus": "Accused in custody",
       "incidentType": "Criminal Assault",
       "station": "Badshahpur"
-    }
+    },
+    "regionIds": [
+      "gurugram-sadar"
+    ]
   },
   {
     "id": "evt_HR_gurugram_20260225_025",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "weather",
     "impactScale": "WIDE",
     "renderAs": "corridor",
@@ -1707,7 +1733,7 @@
     "id": "evt_HR_gurugram_20260228_007",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": null,
+    "regionId": "gurugram-sadar",
     "category": "weather",
     "impactScale": "WIDE",
     "renderAs": "hotspot",
@@ -1768,13 +1794,16 @@
       "enrichedAt": "2026-03-05T13:20:00Z",
       "confidence": 0.92,
       "notes": "Added DISEASE_SMOG bound to heatPoints to simulate heavy particulate matter / AQI levels. Set advancedProfile to desktop due to wide spread."
-    }
+    },
+    "regionIds": [
+      "gurugram-sadar"
+    ]
   },
   {
     "id": "evt_HR_gurugram_20260301_023",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "infrastructure",
     "impactScale": "LOCAL",
     "renderAs": "radial",
@@ -1823,7 +1852,7 @@
     "id": "evt_HR_gurugram_20260302_029",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "emergency",
     "impactScale": "LOCAL",
     "renderAs": "diffusion",
@@ -1874,7 +1903,7 @@
     "id": "evt_HR_gurugram_20260303_006",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "infrastructure",
     "impactScale": "WIDE",
     "renderAs": "corridor",
@@ -1934,7 +1963,7 @@
     "id": "evt_HR_gurugram_20260303_015",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "infrastructure",
     "impactScale": "LOCAL",
     "renderAs": "polygon_fill",
@@ -1981,7 +2010,7 @@
     "id": "evt_HR_gurugram_20260303_019",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": null,
+    "regionId": "gurugram-sadar",
     "category": "mobility",
     "impactScale": "WIDE",
     "renderAs": "corridor",
@@ -2035,13 +2064,16 @@
       "enrichedAt": "2026-03-05T13:20:00Z",
       "confidence": 0.95,
       "notes": "Added robust ROAD_BUILD effect to NH48 corridor stretch."
-    }
+    },
+    "regionIds": [
+      "gurugram-sadar"
+    ]
   },
   {
     "id": "evt_HR_gurugram_20260305_001",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "safety",
     "impactScale": "POINT",
     "renderAs": "marker",
@@ -2084,7 +2116,7 @@
     "id": "evt_HR_gurugram_20260305_003",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "mobility",
     "impactScale": "LOCAL",
     "renderAs": "multi_marker",
@@ -2131,7 +2163,7 @@
     "id": "evt_HR_gurugram_20260305_017",
     "stateId": "HR",
     "districtId": "gurugram",
-    "regionId": "gurugram-tehsil",
+    "regionId": "gurugram-sadar",
     "category": "mobility",
     "impactScale": "LOCAL",
     "renderAs": "corridor",
@@ -2336,7 +2368,7 @@
     "id": "evt_MH_pune_20260120_001",
     "stateId": "MH",
     "districtId": "pune",
-    "regionId": null,
+    "regionId": "haveli",
     "category": "infrastructure",
     "title": "Outer Ring Road Work Progresses",
     "summary": "Major groundwork for the Pune Outer Ring Road has been completed in the Sangrun and Davaje segments.",
@@ -2354,7 +2386,10 @@
     "meta": {
       "project": "Outer Ring Road",
       "status": "Construction Underway"
-    }
+    },
+    "regionIds": [
+      "haveli"
+    ]
   },
   {
     "id": "evt_MH_pune_20260125_001",
@@ -2430,7 +2465,7 @@
     "id": "evt_MH_pune_20260204_001",
     "stateId": "MH",
     "districtId": "pune",
-    "regionId": null,
+    "regionId": "mawal",
     "category": "mobility",
     "title": "Gas Tanker Overturns Near Tunnel",
     "summary": "A gas tanker overturned near Aadoshi tunnel, causing a 50km traffic jam on the Mumbai-Pune Expressway for 20 hours.",
@@ -2448,7 +2483,10 @@
     "meta": {
       "jamLengthKm": 50,
       "blockageHours": 20
-    }
+    },
+    "regionIds": [
+      "mawal"
+    ]
   },
   {
     "id": "evt_MH_pune_20260210_001",
@@ -2500,7 +2538,7 @@
     "id": "evt_MH_pune_20260222_001",
     "stateId": "MH",
     "districtId": "pune",
-    "regionId": null,
+    "regionId": "pune-city",
     "category": "health",
     "title": "High Chikungunya Infection Rates",
     "summary": "Pune district logged the highest chikungunya infections and second-highest dengue cases in Maharashtra for the 2025 season.",
@@ -2518,7 +2556,10 @@
     "meta": {
       "chikungunyaCases": 22,
       "dengueCases": 44
-    }
+    },
+    "regionIds": [
+      "pune-city"
+    ]
   },
   {
     "id": "evt_MH_pune_20260223_001",
@@ -2621,7 +2662,7 @@
     "id": "evt_MH_pune_20260301_002",
     "stateId": "MH",
     "districtId": "pune",
-    "regionId": null,
+    "regionId": "mawal",
     "category": "safety",
     "title": "Propylene Tanker Overturns on Expressway",
     "summary": "An inflammable gas tanker overturned near Khopoli, resulting in a 33-hour traffic halt on the Mumbai-Pune Expressway.",
@@ -2639,7 +2680,10 @@
     "meta": {
       "disruptionDurationHours": 33,
       "chemical": "Propylene"
-    }
+    },
+    "regionIds": [
+      "mawal"
+    ]
   },
   {
     "id": "evt_MP_ujjain_20260123_001",
@@ -2715,7 +2759,7 @@
     "id": "evt_PB_jalandhar_20260101_001",
     "stateId": "PB",
     "districtId": "jalandhar",
-    "regionId": null,
+    "regionId": "jalandhar---i",
     "category": "safety",
     "title": "National Road Safety Month",
     "summary": "State government launched a month-long awareness campaign focusing on drunk driving and over-speeding enforcement district-wide.",
@@ -2735,7 +2779,10 @@
         "Drunk driving",
         "Wrong-side driving"
       ]
-    }
+    },
+    "regionIds": [
+      "jalandhar---i"
+    ]
   },
   {
     "id": "evt_RJ_jaipur_20260223_001",
@@ -3017,7 +3064,7 @@
     "id": "evt_WB_hugli_20260225_001",
     "stateId": "WB",
     "districtId": "hugli",
-    "regionId": null,
+    "regionId": "chinsurah---magra",
     "category": "emergency",
     "title": "Mild Tremors Felt District-Wide",
     "summary": "A 4.2 magnitude earthquake with epicenter in neighboring district triggered minor tremors in Chinsurah, Serampore and Singur.",
@@ -3034,6 +3081,9 @@
     "verified": true,
     "meta": {
       "magnitude": 4.2
-    }
+    },
+    "regionIds": [
+      "chinsurah---magra"
+    ]
   }
 ]
