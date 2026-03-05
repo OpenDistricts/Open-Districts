@@ -1,5 +1,5 @@
 // ─── EVENTS - OpenDistricts V4 ────────────────────────────────────────────────
-// Data contract: id, stateId, districtId, regionId, category,
+// Data contract: id, stateId, districtId, regionId, regionIds?, spansMultipleRegions?, category,
 //   impactScale, renderAs, displayPriority,
 //   title, summary, timestamp, expiresAt, geoPoint, source,
 //   verified, verifiedAt, location, meta, [translations]
@@ -8,8 +8,12 @@
 // `severity` and `severityScore` are NOT part of this schema.
 // DO NOT reintroduce them.
 //
-// regionId must exactly match a properties.id in the district's .geojson file,
-// or be null if the location cannot be confidently mapped to a sub-region.
+// regionId is the primary anchor and should exactly match a properties.id in the
+// district's .geojson file.
+// regionIds is optional and lists all affected regions when an event spans multiple
+// polygons (e.g. corridor closures, flood spread).
+// spansMultipleRegions is optional and should be true when regionIds covers 2+ regions.
+// regionId may be null only when location is truly unknown.
 //
 // impactScale: POINT | LOCAL | WIDE | STATE  (geographic scope)
 // renderAs:    marker | multi_marker | radial | diffusion | hotspot | corridor | polygon_fill

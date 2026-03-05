@@ -163,7 +163,8 @@ export function clearHistoricalSnapshot() {
 function _buildCard(ev) {
     const catClass = `cat-${ev.category}`;
     const timeStr = formatCardTime(ev.timestamp);
-    const regionLabel = _getRegionName(ev.regionId, ev.location?.block);
+    const primaryRegionId = _primaryRegionId(ev);
+    const regionLabel = _getRegionName(primaryRegionId, ev.location?.block);
 
     // Get translated title and summary if available
     const currentLocale = _ctx.state.locale;
@@ -185,7 +186,7 @@ function _buildCard(ev) {
     card.innerHTML = `
     <div class="tl-card-inner">
       <div class="tl-card-head">
-        <div class="tl-thumb" aria-hidden="true">${_buildThumb(ev.regionId)}</div>
+                <div class="tl-thumb" aria-hidden="true">${_buildThumb(primaryRegionId)}</div>
         <div class="tl-meta">
           <div class="tl-loc-name">${regionLabel}</div>
           <div class="tl-time">${timeStr}</div>
@@ -213,6 +214,15 @@ function _buildCard(ev) {
     });
 
     return card;
+}
+
+function _primaryRegionId(ev) {
+    if (typeof ev?.regionId === "string" && ev.regionId.trim()) return ev.regionId.trim();
+    if (Array.isArray(ev?.regionIds) && ev.regionIds.length) {
+        const fallback = ev.regionIds.find((rid) => typeof rid === "string" && rid.trim());
+        return fallback ? fallback.trim() : null;
+    }
+    return null;
 }
 
 function _buildDetailRows(ev) {

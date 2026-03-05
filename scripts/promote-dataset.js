@@ -111,10 +111,16 @@ function listVersions() {
 /**
  * Cross-check every event.districtId against the district registry in the
  * same version folder. Blocks promotion if any districtId is unregistered.
+ * Also validates multi-region schema fields so malformed events do not reach live.
  * This is the final safety gate before a dataset goes live.
  *
  * @param {string} versionPath  Absolute path to the version folder
- * @returns {{ valid: boolean, orphans: Array<{eventId, districtId, stateId}> }}
+ * @returns {{
+ *   valid: boolean,
+ *   orphans: Array<{eventId, districtId, stateId}>,
+ *   schemaErrors: Array<{eventId: string, reason: string}>,
+ *   schemaWarnings: Array<{eventId: string, reason: string}>
+ * }}
  */
 function validateDatasetConsistency(versionPath) {
     const eventsPath = path.join(versionPath, "events.json");
@@ -122,7 +128,7 @@ function validateDatasetConsistency(versionPath) {
 
     if (!fs.existsSync(eventsPath) || !fs.existsSync(districtsPath)) {
         console.warn("   Warning: events.json or districts.json missing — skipping referential integrity check.");
-        return { valid: true, orphans: [] };
+        return { valid: true, orphans: [], schemaErrors: [], schemaWarnings: [] };
     }
 
     const events = JSON.parse(fs.readFileSync(eventsPath, "utf-8"));
@@ -130,13 +136,76 @@ function validateDatasetConsistency(versionPath) {
     const knownDistrictIds = new Set(districts.map(d => d.id));
 
     const orphans = [];
-    events.forEach(evt => {
+    const schemaErrors = [];
+    const schemaWarnings = [];
+
+    events.forEach((evt, idx) => {
+        const eventId = evt?.id || `index:${idx}`;
+
         if (!knownDistrictIds.has(evt.districtId)) {
             orphans.push({ eventId: evt.id, districtId: evt.districtId, stateId: evt.stateId });
         }
+
+        if (evt.regionId === "pending") {
+            schemaErrors.push({ eventId, reason: "regionId cannot be 'pending'" });
+        }
+        if (evt.regionId !== undefined && evt.regionId !== null && typeof evt.regionId !== "string") {
+            schemaErrors.push({ eventId, reason: "regionId must be a string or null" });
+        }
+        if (typeof evt.regionId === "string" && !evt.regionId.trim()) {
+            schemaErrors.push({ eventId, reason: "regionId cannot be an empty string" });
+        }
+
+        let uniqueRegionIds = [];
+        if (evt.regionIds !== undefined) {
+            if (!Array.isArray(evt.regionIds)) {
+                schemaErrors.push({ eventId, reason: "regionIds must be an array when provided" });
+            } else {
+                const seen = new Set();
+                evt.regionIds.forEach((rid, ridx) => {
+                    if (typeof rid !== "string" || !rid.trim()) {
+                        schemaErrors.push({ eventId, reason: `regionIds[${ridx}] must be a non-empty string` });
+                        return;
+                    }
+                    const clean = rid.trim();
+                    if (clean === "pending") {
+                        schemaErrors.push({ eventId, reason: `regionIds[${ridx}] cannot be 'pending'` });
+                        return;
+                    }
+                    seen.add(clean);
+                });
+                uniqueRegionIds = Array.from(seen);
+                if (Array.isArray(evt.regionIds) && uniqueRegionIds.length !== evt.regionIds.length) {
+                    schemaWarnings.push({ eventId, reason: "regionIds contains duplicates; keep unique values only" });
+                }
+            }
+        }
+
+        const hasPrimaryRegion = typeof evt.regionId === "string" && evt.regionId.trim().length > 0;
+        const hasRegionIds = uniqueRegionIds.length > 0;
+        const hasAnyRegionAnchor = hasPrimaryRegion || hasRegionIds;
+
+        if (evt.spansMultipleRegions !== undefined && typeof evt.spansMultipleRegions !== "boolean") {
+            schemaErrors.push({ eventId, reason: "spansMultipleRegions must be a boolean when provided" });
+        }
+        if (evt.spansMultipleRegions === true && uniqueRegionIds.length < 2) {
+            schemaWarnings.push({ eventId, reason: "spansMultipleRegions is true but regionIds has fewer than 2 regions" });
+        }
+
+        if (evt.renderAs === "polygon_fill" && !hasAnyRegionAnchor) {
+            schemaErrors.push({ eventId, reason: "polygon_fill requires regionId or regionIds[]" });
+        }
+        if (evt.renderAs === "corridor" && Array.isArray(evt.meta?.pathCoords) && evt.meta.pathCoords.length && !hasAnyRegionAnchor) {
+            schemaWarnings.push({ eventId, reason: "corridor has pathCoords but no region anchor; set regionId to corridor start region" });
+        }
     });
 
-    return { valid: orphans.length === 0, orphans };
+    return {
+        valid: orphans.length === 0 && schemaErrors.length === 0,
+        orphans,
+        schemaErrors,
+        schemaWarnings
+    };
 }
 
 // ── STRATEGIES ─────────────────────────────────────────────────────────────
@@ -152,7 +221,7 @@ function promoteImmutable(versionName) {
     // ── PRE-FLIGHT: referential integrity ──────────────────────────────────
     console.log(`\n🔗 Pre-flight: checking referential integrity in ${versionName}...`);
     const integrity = validateDatasetConsistency(versionPath);
-    if (!integrity.valid) {
+    if (integrity.orphans.length > 0) {
         console.error(`\n❌ Promotion BLOCKED — ${integrity.orphans.length} event(s) reference unregistered districtId(s):`);
         const byDistrict = {};
         integrity.orphans.forEach(o => {
@@ -165,7 +234,24 @@ function promoteImmutable(versionName) {
         console.error("\n   Fix: add the missing district(s) to districts.json and re-run.");
         process.exit(1);
     }
-    console.log(`   ✅ All event districtIds are registered (${integrity.orphans.length} orphans found: none).`);
+
+    if (integrity.schemaErrors.length > 0) {
+        console.error(`\n❌ Promotion BLOCKED — ${integrity.schemaErrors.length} schema error(s) found:`);
+        integrity.schemaErrors.forEach((issue) => {
+            console.error(`   Event ${issue.eventId}: ${issue.reason}`);
+        });
+        console.error("\n   Fix schema errors in events.json and re-run promotion.");
+        process.exit(1);
+    }
+
+    if (integrity.schemaWarnings.length > 0) {
+        console.warn(`\n⚠️  Schema warnings (${integrity.schemaWarnings.length}):`);
+        integrity.schemaWarnings.forEach((issue) => {
+            console.warn(`   Event ${issue.eventId}: ${issue.reason}`);
+        });
+    }
+
+    console.log(`   ✅ Dataset consistency checks passed (district references + region schema).`);
     console.log(`   Promoting ${versionName} to /data/live/...`);
 
     // Backup current live to history
@@ -212,7 +298,7 @@ function promoteUpdate(versionName) {
     // ── PRE-FLIGHT: referential integrity ──────────────────────────────────
     console.log(`\n🔗 Pre-flight: checking referential integrity in ${versionName}...`);
     const integrity = validateDatasetConsistency(versionPath);
-    if (!integrity.valid) {
+    if (integrity.orphans.length > 0) {
         console.error(`\n❌ Promotion BLOCKED — ${integrity.orphans.length} event(s) reference unregistered districtId(s):`);
         const byDistrict = {};
         integrity.orphans.forEach(o => {
@@ -225,7 +311,24 @@ function promoteUpdate(versionName) {
         console.error("\n   Fix: add the missing district(s) to districts.json and re-run.");
         process.exit(1);
     }
-    console.log(`   ✅ All event districtIds are registered.`);
+
+    if (integrity.schemaErrors.length > 0) {
+        console.error(`\n❌ Promotion BLOCKED — ${integrity.schemaErrors.length} schema error(s) found:`);
+        integrity.schemaErrors.forEach((issue) => {
+            console.error(`   Event ${issue.eventId}: ${issue.reason}`);
+        });
+        console.error("\n   Fix schema errors in events.json and re-run promotion.");
+        process.exit(1);
+    }
+
+    if (integrity.schemaWarnings.length > 0) {
+        console.warn(`\n⚠️  Schema warnings (${integrity.schemaWarnings.length}):`);
+        integrity.schemaWarnings.forEach((issue) => {
+            console.warn(`   Event ${issue.eventId}: ${issue.reason}`);
+        });
+    }
+
+    console.log(`   ✅ Dataset consistency checks passed (district references + region schema).`);
 
     console.log(`\n🔄 Strategy: UPDATE (in-place with backup)`);
     console.log(`   Backing up current live...`);

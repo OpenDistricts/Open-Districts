@@ -22,6 +22,12 @@ function alphaFromIntensity(i, base = 0.25, span = 0.5) {
     return clamp(base + (clamp(i, 0, 1) * span), 0.04, 0.95);
 }
 
+function gaussianAlpha(distanceNorm, sigma = 0.42) {
+    const d = clamp(distanceNorm, 0, 1.5);
+    const s = Math.max(0.08, sigma);
+    return Math.exp(-((d * d) / (2 * s * s)));
+}
+
 function metresToPixels(map, latLng, metres) {
     const c = map.latLngToContainerPoint([latLng.lat, latLng.lng]);
     const n = map.latLngToContainerPoint([latLng.lat + (metres / 111320), latLng.lng]);
@@ -131,6 +137,110 @@ function loadShaderSource() {
         .catch(() => fallback);
 }
 
+function buildRainStreakTexture(app) {
+    const g = new window.PIXI.Graphics();
+    g.lineStyle(2, 0xd2e5ff, 1);
+    g.moveTo(1, 0);
+    g.lineTo(10, 20);
+    const tex = app.renderer.generateTexture(g, {
+        resolution: 1,
+        scaleMode: window.PIXI.SCALE_MODES.LINEAR,
+    });
+    g.destroy();
+    return tex;
+}
+
+function createRainStreakLayer({ app }) {
+    const container = new window.PIXI.Container();
+    container.name = "rain-streaks";
+    container.blendMode = window.PIXI.BLEND_MODES.SCREEN;
+    const texture = buildRainStreakTexture(app);
+    const streaks = [];
+
+    function _spawn(streak, width, height, fromTop = false) {
+        streak.x = Math.random() * width;
+        streak.y = fromTop ? (-18 - Math.random() * 32) : (Math.random() * height);
+    }
+
+    function _ensureCount(target, width, height) {
+        while (streaks.length < target) {
+            const sprite = new window.PIXI.Sprite(texture);
+            sprite.anchor.set(0.5);
+            sprite.blendMode = window.PIXI.BLEND_MODES.SCREEN;
+            sprite.alpha = 0.14;
+            const streak = {
+                sprite,
+                alphaJitter: Math.random(),
+                scaleJitter: 0.82 + (Math.random() * 0.45),
+            };
+            _spawn(streak, width, height, false);
+            sprite.scale.set(streak.scaleJitter, streak.scaleJitter);
+            container.addChild(sprite);
+            streaks.push(streak);
+        }
+        while (streaks.length > target) {
+            const removed = streaks.pop();
+            if (!removed) break;
+            container.removeChild(removed.sprite);
+            removed.sprite.destroy();
+        }
+    }
+
+    function update(rainEffects, dtSec) {
+        const width = Math.max(1, app.renderer.width);
+        const height = Math.max(1, app.renderer.height);
+
+        if (!rainEffects.length) {
+            _ensureCount(0, width, height);
+            container.visible = false;
+            return;
+        }
+
+        container.visible = true;
+        let maxIntensity = 0.45;
+        let maxRain = 0;
+        rainEffects.forEach((e) => {
+            maxIntensity = Math.max(maxIntensity, clamp(Number(e.intensity ?? 0.5), 0.1, 1));
+            maxRain = Math.max(maxRain, Number(e.expectedRainfallMm ?? 0));
+        });
+
+        const targetCount = clamp(
+            Math.round(40 + (maxIntensity * 85) + Math.min(26, maxRain * 1.2)),
+            40,
+            170
+        );
+        _ensureCount(targetCount, width, height);
+
+        const downSpeed = 280 + (maxIntensity * 160); // px/s, constant downward velocity
+        const driftX = 54;
+
+        for (let i = 0; i < streaks.length; i += 1) {
+            const s = streaks[i];
+            s.y += downSpeed * dtSec;
+            s.x += driftX * dtSec;
+            if (s.y > height + 24 || s.x > width + 24) {
+                _spawn(s, width, height, true);
+            }
+
+            s.sprite.x = s.x;
+            s.sprite.y = s.y;
+            s.sprite.alpha = clamp(0.1 + (s.alphaJitter * 0.1), 0.1, 0.2);
+        }
+    }
+
+    function destroy() {
+        _ensureCount(0, 1, 1);
+        container.destroy({ children: true });
+        texture.destroy(true);
+    }
+
+    return {
+        container,
+        update,
+        destroy,
+    };
+}
+
 export function createEffectsEngine({ map, app }) {
     const stage = app.stage;
     stage.sortableChildren = true;
@@ -155,7 +265,10 @@ export function createEffectsEngine({ map, app }) {
         basemap: true, admin: true, corridor: true, diffusion: true, particles: true, markers: true, alerts: true,
     };
 
+    layers.diffusion.blendMode = window.PIXI.BLEND_MODES.SCREEN;
+
     const gHazard = new window.PIXI.Graphics();
+    const gHazardGlow = new window.PIXI.Graphics();
     const gHotspot = new window.PIXI.Graphics();
     const gCorridor = new window.PIXI.Graphics();
     const gRadial = new window.PIXI.Graphics();
@@ -165,15 +278,26 @@ export function createEffectsEngine({ map, app }) {
     const gMarkers = new window.PIXI.Graphics();
     const gSkulls = new window.PIXI.Graphics();
     const gAlerts = new window.PIXI.Graphics();
-    const gRain = new window.PIXI.Graphics();
     const gFire = new window.PIXI.Graphics();
 
-    layers.admin.addChild(gHazard);
+    gHotspot.blendMode = window.PIXI.BLEND_MODES.SCREEN;
+    gSmog.blendMode = window.PIXI.BLEND_MODES.SCREEN;
+
+    if (window.PIXI.filters?.BlurFilter) {
+        const blur = new window.PIXI.filters.BlurFilter(8);
+        blur.quality = 2;
+        gHazardGlow.filters = [blur];
+    }
+    gHazardGlow.blendMode = window.PIXI.BLEND_MODES.SCREEN;
+
+    layers.admin.addChild(gHazardGlow, gHazard);
     layers.diffusion.addChild(gSmog, gHotspot, gTemp, gStorm);
     layers.corridor.addChild(gCorridor, gRadial);
-    layers.particles.addChild(gRain, gFire);
     layers.markers.addChild(gMarkers, gSkulls);
     layers.alerts.addChild(gAlerts);
+
+    const rainLayer = createRainStreakLayer({ app });
+    layers.particles.addChild(rainLayer.container, gFire);
 
     const diffusion = createDiffusionLayer({ app, map, layerName: "diffusion-plume" });
     layers.particles.addChild(diffusion.container);
@@ -282,6 +406,7 @@ export function createEffectsEngine({ map, app }) {
 
     function _drawHazardZones() {
         gHazard.clear();
+        gHazardGlow.clear();
         activeEffects.filter((e) => e.effectType === "HAZARD_ZONE").forEach((e) => {
             const ids = [...new Set([e.regionId, ...(e.regionIds || [])].filter(Boolean))];
             const color = categoryColor(e.category);
@@ -289,8 +414,10 @@ export function createEffectsEngine({ map, app }) {
                 _regionRings(id).forEach((ring) => {
                     if (!ring.length) return;
                     const first = map.latLngToContainerPoint([ring[0].lat, ring[0].lng]);
-                    gHazard.beginFill(color, alphaFromIntensity(e.intensity, 0.08, 0.16));
-                    gHazard.lineStyle(2, color, 0.28);
+
+                    // UX tuning: soft region tint + edge glow to keep city labels readable.
+                    gHazard.beginFill(color, 0.12);
+                    gHazard.lineStyle(1.5, color, 0.25);
                     gHazard.moveTo(first.x, first.y);
                     for (let i = 1; i < ring.length; i += 1) {
                         const p = map.latLngToContainerPoint([ring[i].lat, ring[i].lng]);
@@ -298,6 +425,14 @@ export function createEffectsEngine({ map, app }) {
                     }
                     gHazard.closePath();
                     gHazard.endFill();
+
+                    gHazardGlow.lineStyle(6, color, 0.25);
+                    gHazardGlow.moveTo(first.x, first.y);
+                    for (let i = 1; i < ring.length; i += 1) {
+                        const p = map.latLngToContainerPoint([ring[i].lat, ring[i].lng]);
+                        gHazardGlow.lineTo(p.x, p.y);
+                    }
+                    gHazardGlow.closePath();
                 });
             });
         });
@@ -307,18 +442,27 @@ export function createEffectsEngine({ map, app }) {
         gHotspot.clear();
         activeEffects.filter((e) => e.effectType === "HOTSPOT_GPU").forEach((e) => {
             const pts = e.heatPoints.length ? e.heatPoints : (e.geoPoint ? [e.geoPoint] : []);
+            const color = categoryColor(e.category);
+            const baseAlpha = alphaFromIntensity(e.intensity, 0.08, 0.2);
             pts.forEach((p, idx) => {
                 const pp = map.latLngToContainerPoint([p.lat, p.lng]);
                 const r = metresToPixels(map, p, e.radiusMetres || 650) * (0.7 + (idx % 3) * 0.15);
                 const pulse = 1 + (Math.sin((timeSec * 1.3) + idx) * 0.06);
-                gHotspot.beginFill(0xff3d2e, alphaFromIntensity(e.intensity, 0.07, 0.25));
-                gHotspot.drawCircle(pp.x, pp.y, r * pulse);
-                gHotspot.endFill();
-                gHotspot.beginFill(0xffc52f, alphaFromIntensity(e.intensity, 0.06, 0.2));
-                gHotspot.drawCircle(pp.x, pp.y, r * 0.62 * pulse);
-                gHotspot.endFill();
-                gHotspot.beginFill(0x43cf6a, alphaFromIntensity(e.intensity, 0.04, 0.18));
-                gHotspot.drawCircle(pp.x, pp.y, r * 0.35 * pulse);
+
+                // Gaussian rings provide smoother density blending than linear gradients.
+                const rings = 8;
+                for (let i = rings; i >= 1; i -= 1) {
+                    const norm = i / rings;
+                    const ringRadius = r * norm * pulse;
+                    const gauss = gaussianAlpha(norm, 0.45);
+                    const ringAlpha = clamp(baseAlpha * gauss * 0.45, 0.008, 0.16);
+                    gHotspot.beginFill(color, ringAlpha);
+                    gHotspot.drawCircle(pp.x, pp.y, ringRadius);
+                    gHotspot.endFill();
+                }
+
+                gHotspot.beginFill(0xfff8db, clamp(baseAlpha * 0.32, 0.03, 0.12));
+                gHotspot.drawCircle(pp.x, pp.y, r * 0.13 * pulse);
                 gHotspot.endFill();
             });
         });
@@ -331,43 +475,62 @@ export function createEffectsEngine({ map, app }) {
             if (path.length < 2) return;
             const color = categoryColor(e.category);
             const pts = path.map((p) => map.latLngToContainerPoint([p.lat, p.lng]));
-            gCorridor.lineStyle(8, color, 0.2);
+            const metrics = _buildPathMetrics(pts);
+            if (!metrics.total) return;
+
+            gCorridor.lineStyle(8, color, 0.18);
             gCorridor.moveTo(pts[0].x, pts[0].y);
             for (let i = 1; i < pts.length; i += 1) gCorridor.lineTo(pts[i].x, pts[i].y);
-            gCorridor.lineStyle(3, color, 0.72);
+            gCorridor.lineStyle(3, color, 0.58);
             gCorridor.moveTo(pts[0].x, pts[0].y);
             for (let i = 1; i < pts.length; i += 1) gCorridor.lineTo(pts[i].x, pts[i].y);
 
-            const t = (timeSec * (0.28 + e.intensity * 0.52)) % 1;
-            const m = _pointAlongPath(pts, t);
-            if (m) {
-                gCorridor.beginFill(0xffe4a8, 0.9);
-                gCorridor.drawCircle(m.x, m.y, 4.4 + (e.intensity * 2));
-                gCorridor.endFill();
+            // Shader-like flow cues: multiple moving light segments along the corridor direction.
+            const segmentCount = 4;
+            const trailNorm = 0.1;
+            const speed = 0.16 + (clamp(e.intensity, 0, 1) * 0.28);
+
+            for (let seg = 0; seg < segmentCount; seg += 1) {
+                const headT = ((timeSec * speed) + (seg / segmentCount)) % 1;
+                const samples = 8;
+                for (let s = 0; s < samples; s += 1) {
+                    const fade = 1 - (s / (samples - 1));
+                    let t = headT - ((s / (samples - 1)) * trailNorm);
+                    if (t < 0) t += 1;
+                    const pt = _pointAtDistance(pts, metrics, metrics.total * t);
+                    if (!pt) continue;
+                    gCorridor.beginFill(0xfff0bf, 0.12 + (fade * 0.4));
+                    gCorridor.drawCircle(pt.x, pt.y, 1.5 + (fade * (2.6 + e.intensity * 1.4)));
+                    gCorridor.endFill();
+                }
             }
         });
     }
 
-    function _pointAlongPath(path, t) {
-        if (path.length < 2) return null;
-        const segLen = [];
+    function _buildPathMetrics(path) {
+        const cumulative = [0];
         let total = 0;
         for (let i = 1; i < path.length; i += 1) {
-            const len = Math.hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y);
-            segLen.push(len);
-            total += len;
+            total += Math.hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y);
+            cumulative.push(total);
         }
-        if (!total) return path[0];
-        let target = total * clamp(t, 0, 1);
+        return { cumulative, total };
+    }
+
+    function _pointAtDistance(path, metrics, distancePx) {
+        if (path.length < 2 || !metrics.total) return path[0] || null;
+        const d = clamp(distancePx, 0, metrics.total);
         for (let i = 1; i < path.length; i += 1) {
-            if (target <= segLen[i - 1]) {
-                const r = target / (segLen[i - 1] || 1);
+            const start = metrics.cumulative[i - 1];
+            const end = metrics.cumulative[i];
+            if (d <= end) {
+                const segLen = Math.max(0.0001, end - start);
+                const r = (d - start) / segLen;
                 return {
                     x: path[i - 1].x + ((path[i].x - path[i - 1].x) * r),
                     y: path[i - 1].y + ((path[i].y - path[i - 1].y) * r),
                 };
             }
-            target -= segLen[i - 1];
         }
         return path[path.length - 1];
     }
@@ -472,25 +635,12 @@ export function createEffectsEngine({ map, app }) {
         });
     }
 
-    function _drawRainAndFire(timeSec) {
-        gRain.clear();
+    function _drawRainAndFire(timeSec, dtSec) {
+        const rainFx = activeEffects.filter((e) => e.effectType === "RAIN_3D");
+        rainLayer.update(rainFx, dtSec);
+
         gFire.clear();
-        activeEffects.filter((e) => e.effectType === "RAIN_3D").forEach((e, ei) => {
-            const p = e.geoPoint;
-            if (!p) return;
-            const c = map.latLngToContainerPoint([p.lat, p.lng]);
-            const r = metresToPixels(map, p, e.radiusMetres || 1200);
-            const density = Math.max(28, Math.floor(38 + e.expectedRainfallMm + (e.intensity * 72)));
-            gRain.lineStyle(1, 0x9cc9ff, 0.5);
-            for (let i = 0; i < density; i += 1) {
-                const ang = ((i * 0.37) + (timeSec * 1.6) + ei) % (Math.PI * 2);
-                const rr = (i % 2 === 0 ? r : r * 0.78) * ((i % 11) / 11);
-                const x = c.x + (Math.cos(ang) * rr);
-                const y = c.y + (Math.sin(ang) * rr);
-                gRain.moveTo(x, y);
-                gRain.lineTo(x + 3.2, y + 10);
-            }
-        });
+
         activeEffects.filter((e) => e.effectType === "FIRE_INCIDENT").forEach((e, ei) => {
             if (!e.geoPoint) return;
             const c = map.latLngToContainerPoint([e.geoPoint.lat, e.geoPoint.lng]);
@@ -524,7 +674,7 @@ export function createEffectsEngine({ map, app }) {
         _drawDiseaseAndTemp(t);
         _drawThunder(t);
         _drawMarkersAndSkulls(t);
-        _drawRainAndFire(t);
+        _drawRainAndFire(t, dtSec);
         diffusion.update(dtSec);
     }
 
@@ -583,6 +733,10 @@ export function createEffectsEngine({ map, app }) {
 
     function destroy() {
         diffusion.destroy();
+        if (rainLayer.container.parent) {
+            rainLayer.container.parent.removeChild(rainLayer.container);
+        }
+        rainLayer.destroy();
         Object.values(layers).forEach((l) => l.destroy({ children: true }));
     }
 

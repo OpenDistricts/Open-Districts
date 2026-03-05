@@ -57,10 +57,24 @@ function _normalizeEvent(event) {
         ev.meta.multiPoints = ev.meta.clusterPoints;
     }
 
-    if (!Array.isArray(ev.regionIds) && ev.regionId) {
+    if (Array.isArray(ev.regionIds)) {
+        ev.regionIds = [...new Set(
+            ev.regionIds
+                .map((rid) => (typeof rid === "string" ? rid.trim() : ""))
+                .filter(Boolean)
+        )];
+    } else if (ev.regionId) {
         ev.regionIds = [ev.regionId];
-    } else if (Array.isArray(ev.regionIds)) {
-        ev.regionIds = ev.regionIds.filter(Boolean);
+    }
+
+    // Backward-compatible anchor normalization:
+    // if regionId is absent but regionIds is present, use the first region as the primary anchor.
+    if ((!ev.regionId || typeof ev.regionId !== "string") && Array.isArray(ev.regionIds) && ev.regionIds.length > 0) {
+        ev.regionId = ev.regionIds[0];
+    }
+
+    if (ev.spansMultipleRegions === undefined && Array.isArray(ev.regionIds) && ev.regionIds.length > 1) {
+        ev.spansMultipleRegions = true;
     }
 
     if (!VALID_RENDER_AS.has(ev.renderAs)) {

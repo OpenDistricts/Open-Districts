@@ -155,13 +155,13 @@ export function categoryPolygonStyle(category, focused = false, dimmed = false) 
     }
     const h = CAT_HUES[category] ?? CAT_HUES.safety;
     const tier = CAT_TIER[category] ?? 3;
-    // Tier-1 gets slightly more fill/stroke weight to signal urgency
+    // Keep fills readable while preserving area context.
     return {
         color: h.hex,
         fillColor: h.hex,
-        fillOpacity: tier === 1 ? 0.06 : tier === 2 ? 0.05 : 0.03,
-        weight: focused ? (tier === 1 ? 2.5 : 2.0) : (tier === 1 ? 1.5 : 1),
-        opacity: focused ? (tier === 1 ? 0.55 : 0.44) : (tier === 1 ? 0.22 : 0.15)
+        fillOpacity: 0.12,
+        weight: focused ? (tier === 1 ? 2.6 : 2.2) : (tier === 1 ? 2 : 1.6),
+        opacity: focused ? 0.32 : 0.25
     };
 }
 

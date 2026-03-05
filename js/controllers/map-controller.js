@@ -467,15 +467,24 @@ export async function loadDistrictGeo(district, events) {
                     break;
                 }
                 const r = ev.meta.radiusMetres;
-                // Three concentric translucent circles simulate a gradient plume
-                [[r, 0.10], [r * 0.6, 0.17], [r * 0.3, 0.24]].forEach(([radius, fillOpacity]) => {
+                // Soft tint + glow avoids the hard red-disc look.
+                [[r, 0.12], [r * 0.62, 0.08]].forEach(([radius, fillOpacity]) => {
                     const c = L.circle([ev.geoPoint.lat, ev.geoPoint.lng], {
                         color: 'transparent', fillColor: color, fillOpacity,
                         weight: 0, radius, pane: 'diffusionPane', interactive: false,
+                        className: 'od-soft-diffusion',
                     });
                     c.eventId = ev.id;
                     group.addLayer(c);
                 });
+                const edgeGlow = L.circle([ev.geoPoint.lat, ev.geoPoint.lng], {
+                    color, fillColor: 'transparent', fillOpacity: 0,
+                    weight: 3, opacity: 0.25,
+                    radius: r, pane: 'diffusionPane', interactive: false,
+                    className: 'od-soft-diffusion-edge',
+                });
+                edgeGlow.eventId = ev.id;
+                group.addLayer(edgeGlow);
                 // Outer dashed boundary ring (clickable / tooltip)
                 const outerRing = L.circle([ev.geoPoint.lat, ev.geoPoint.lng], {
                     color, fillColor: 'transparent', fillOpacity: 0,
@@ -514,14 +523,21 @@ export async function loadDistrictGeo(district, events) {
                 }
                 const radius = ev.meta?.heatRadius ?? 1000;
                 pts.forEach(pt => {
-                    const intensity = pt.intensity ?? 0.5;
-                    const c = L.circle([pt.lat, pt.lng], {
-                        radius, color: 'transparent', fillColor: color,
-                        fillOpacity: intensity * 0.35,
-                        weight: 0, pane: 'hotspotPane', interactive: false,
+                    const intensity = Math.max(0.05, Math.min(1, pt.intensity ?? 0.5));
+                    // Approximate gaussian falloff using stacked circles.
+                    [[1.0, 0.08], [0.74, 0.11], [0.5, 0.14], [0.28, 0.17]].forEach(([m, baseAlpha]) => {
+                        const c = L.circle([pt.lat, pt.lng], {
+                            radius: radius * m,
+                            color: 'transparent',
+                            fillColor: color,
+                            fillOpacity: Math.min(0.22, intensity * baseAlpha),
+                            weight: 0,
+                            pane: 'hotspotPane',
+                            interactive: false,
+                        });
+                        c.eventId = ev.id;
+                        group.addLayer(c);
                     });
-                    c.eventId = ev.id;
-                    group.addLayer(c);
                 });
                 if (ev.geoPoint) group.addLayer(_makeIconMarker(ev, [ev.geoPoint.lat, ev.geoPoint.lng]));
                 break;
@@ -607,8 +623,16 @@ export function syncFocus(focusedEventId, events) {
         return;
     }
 
+    const focusedRegionIds = [...new Set(
+        (Array.isArray(ev.regionIds) && ev.regionIds.length ? ev.regionIds : (ev.regionId ? [ev.regionId] : []))
+            .filter((regionId) => typeof regionId === "string" && regionId)
+    )];
+    const focusedRegionSet = new Set(focusedRegionIds);
+
     // Fly to event
-    const targetLayer = ev.regionId ? _regionLayerMap.get(ev.regionId) : null;
+    const targetLayer = focusedRegionIds
+        .map((regionId) => _regionLayerMap.get(regionId))
+        .find(Boolean) ?? null;
 
     if (ev.meta?.multiPoints && ev.meta.multiPoints.length > 0) {
         const bounds = L.latLngBounds(ev.meta.multiPoints.map(pt => [pt.lat, pt.lng]));
@@ -626,6 +650,22 @@ export function syncFocus(focusedEventId, events) {
     else if (ev.geoPoint) {
         _map.flyTo([ev.geoPoint.lat, ev.geoPoint.lng], 14, { duration: 0.8 });
     }
+    else if (focusedRegionIds.length > 1) {
+        let unionBounds = null;
+        focusedRegionIds.forEach((regionId) => {
+            const layer = _regionLayerMap.get(regionId);
+            if (!layer?.getBounds) return;
+            const b = layer.getBounds();
+            if (!unionBounds) {
+                unionBounds = L.latLngBounds(b.getSouthWest(), b.getNorthEast());
+            } else {
+                unionBounds.extend(b);
+            }
+        });
+        if (unionBounds?.isValid?.()) {
+            _map.fitBounds(unionBounds, { padding: [30, 30] });
+        }
+    }
     else if (targetLayer?.getBounds) {
         _map.fitBounds(targetLayer.getBounds(), { padding: [30, 30] });
     }
@@ -637,7 +677,7 @@ export function syncFocus(focusedEventId, events) {
         let isFocusedPoly = false;
         let isDimmed = true;
 
-        if ((ev.impactScale === "WIDE" || ev.renderAs === "polygon_fill") && regionId === ev.regionId) {
+        if ((ev.impactScale === "WIDE" || ev.renderAs === "polygon_fill") && focusedRegionSet.has(regionId)) {
             cat = ev.category;
             isFocusedPoly = true;
             isDimmed = false;
@@ -724,12 +764,12 @@ export function applyHistoricalSnapshot(bucketIndex, timeBuckets, events) {
         if (current && (current.impactScale === "WIDE" || current.renderAs === "polygon_fill")) {
             // Active in this bucket - full highlight
             const cat = current.category;
-            layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 1, fillOpacity: 0.55 });
+            layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 0.25, fillOpacity: 0.12 });
             if (layer._path) _applyCatClass(layer._path, cat);
         } else if (historical && (historical.impactScale === "WIDE" || historical.renderAs === "polygon_fill")) {
             // Past event - keep but dim
             const cat = historical.category;
-            layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 0.25, fillOpacity: 0.12 });
+            layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 0.18, fillOpacity: 0.07 });
             if (layer._path) _applyCatClass(layer._path, cat);
         } else {
             // No event or future event - clear
@@ -781,7 +821,7 @@ export function clearHistoricalSnapshot(events) {
         const entry = categoryMap[regionId];
         const cat = (entry && (entry.impactScale === "WIDE" || entry.renderAs === "polygon_fill")) ? entry.category : "none";
 
-        layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 1, fillOpacity: 0.55 });
+        layer.setStyle({ ...categoryPolygonStyle(cat, false), opacity: 0.25, fillOpacity: 0.12 });
         if (layer._path && cat !== "none") {
             _applyCatClass(layer._path, cat);
         } else if (layer._path) {

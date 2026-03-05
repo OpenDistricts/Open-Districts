@@ -1,5 +1,5 @@
-const DEFAULT_PARTICLES = 180;
-const MAX_PARTICLES = 500;
+const MIN_FOG_SPRITES = 10;
+const MAX_FOG_SPRITES = 30;
 
 function toRad(deg) {
     return (deg * Math.PI) / 180;
@@ -18,140 +18,191 @@ function metresToPixels(map, latLng, metres) {
     return Math.max(0.2, Math.hypot(north.x - center.x, north.y - center.y));
 }
 
-function buildParticleTexture(app) {
-    const g = new window.PIXI.Graphics();
-    g.beginFill(0xf4d992, 1);
-    g.drawCircle(0, 0, 8);
-    g.endFill();
-    const tex = app.renderer.generateTexture(g, {
-        resolution: 1,
-        scaleMode: window.PIXI.SCALE_MODES.LINEAR,
-    });
-    g.destroy();
-    return tex;
+function buildFogTexture() {
+    const size = 128;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+        return window.PIXI.Texture.WHITE;
+    }
+
+    ctx.clearRect(0, 0, size, size);
+    const grad = ctx.createRadialGradient(size * 0.5, size * 0.5, size * 0.08, size * 0.5, size * 0.5, size * 0.5);
+    grad.addColorStop(0, "rgba(255,255,255,0.95)");
+    grad.addColorStop(0.34, "rgba(255,255,255,0.56)");
+    grad.addColorStop(0.72, "rgba(255,255,255,0.16)");
+    grad.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+
+    // Stamp low-alpha blobs to avoid a perfect radial look.
+    for (let i = 0; i < 26; i += 1) {
+        const r = 6 + (Math.random() * 18);
+        const x = (size * 0.2) + (Math.random() * size * 0.6);
+        const y = (size * 0.2) + (Math.random() * size * 0.6);
+        ctx.fillStyle = `rgba(255,255,255,${(0.03 + Math.random() * 0.06).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    return window.PIXI.Texture.from(canvas);
 }
 
-export function createDiffusionLayer({ app, map, layerName = "diffusion-particles" }) {
-    const container = new window.PIXI.ParticleContainer(MAX_PARTICLES, {
-        position: true,
-        scale: true,
-        alpha: true,
-        rotation: false,
-        uvs: false,
-        tint: true,
-    });
+export function createDiffusionLayer({ map, layerName = "diffusion-particles" }) {
+    const container = new window.PIXI.Container();
     container.name = layerName;
     container.sortableChildren = false;
+    container.blendMode = window.PIXI.BLEND_MODES.SCREEN;
 
-    const texture = buildParticleTexture(app);
+    const texture = buildFogTexture();
     const states = new Map();
+
+    function createFogState() {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.sqrt(Math.random()) * 0.95;
+        return {
+            xNorm: Math.cos(angle) * radius,
+            yNorm: Math.sin(angle) * radius,
+            sizeFactor: 0.3 + (Math.random() * 0.5), // radius * [0.3, 0.8]
+            aspect: 0.72 + (Math.random() * 0.5),
+            baseAlpha: 0.08 + (Math.random() * 0.1), // [0.08, 0.18]
+            wobblePhase: Math.random() * Math.PI * 2,
+            wobbleSpeed: 0.45 + (Math.random() * 1.1),
+        };
+    }
+
+    function createFogSprite() {
+        const sprite = new window.PIXI.Sprite(texture);
+        sprite.anchor.set(0.5);
+        sprite.tint = 0xcdb182;
+        sprite.blendMode = Math.random() > 0.35 ? window.PIXI.BLEND_MODES.SCREEN : window.PIXI.BLEND_MODES.ADD;
+        container.addChild(sprite);
+        return {
+            sprite,
+            fog: createFogState(),
+        };
+    }
+
+    function targetFogCount(intensity) {
+        const i = clamp(Number(intensity ?? 0.6), 0, 1);
+        return Math.round(MIN_FOG_SPRITES + (i * (MAX_FOG_SPRITES - MIN_FOG_SPRITES)));
+    }
+
+    function alignCount(entry, targetCount) {
+        while (entry.items.length < targetCount) {
+            entry.items.push(createFogSprite());
+        }
+        while (entry.items.length > targetCount) {
+            const removed = entry.items.pop();
+            if (!removed) break;
+            container.removeChild(removed.sprite);
+            removed.sprite.destroy();
+        }
+    }
+
+    function respawnOppositeWind(fog, windRad) {
+        const dirX = Math.cos(windRad);
+        const dirY = -Math.sin(windRad);
+        const perpX = -dirY;
+        const perpY = dirX;
+
+        const depth = 0.68 + (Math.random() * 0.28);
+        const lateral = (Math.random() - 0.5) * 0.9;
+        fog.xNorm = (-dirX * depth) + (perpX * lateral);
+        fog.yNorm = (-dirY * depth) + (perpY * lateral);
+
+        const n = Math.max(0.0001, Math.hypot(fog.xNorm, fog.yNorm));
+        if (n > 0.98) {
+            fog.xNorm = (fog.xNorm / n) * 0.98;
+            fog.yNorm = (fog.yNorm / n) * 0.98;
+        }
+    }
 
     function upsertEvent(event) {
         const key = event.id;
         const current = states.get(key);
         if (current) {
             current.event = event;
+            alignCount(current, targetFogCount(event.intensity));
             return;
         }
-        const intensity = clamp(Number(event.intensity ?? 0.65), 0.15, 1);
-        const count = Math.min(
-            MAX_PARTICLES,
-            Math.max(80, Math.floor(DEFAULT_PARTICLES + intensity * 160))
-        );
-        const sprites = [];
-        const particles = [];
-        for (let i = 0; i < count; i += 1) {
-            const s = new window.PIXI.Sprite(texture);
-            s.anchor.set(0.5);
-            s.alpha = 0.15 + Math.random() * 0.35;
-            s.tint = 0xbaa060;
-            s.blendMode = window.PIXI.BLEND_MODES.SCREEN;
-            container.addChild(s);
-            sprites.push(s);
-            particles.push({
-                x: 0,
-                y: 0,
-                vx: 0,
-                vy: 0,
-                age: Math.random(),
-                life: 2.2 + Math.random() * 3.6,
-                spread: 0.6 + Math.random() * 1.2,
-                rseed: Math.random(),
-            });
-        }
-        states.set(key, { event, sprites, particles });
+
+        const entry = { event, items: [] };
+        alignCount(entry, targetFogCount(event.intensity));
+        states.set(key, entry);
     }
 
     function removeMissing(activeIds) {
         states.forEach((entry, id) => {
             if (activeIds.has(id)) return;
-            entry.sprites.forEach((s) => {
-                container.removeChild(s);
-                s.destroy();
+            entry.items.forEach((item) => {
+                container.removeChild(item.sprite);
+                item.sprite.destroy();
             });
             states.delete(id);
         });
     }
 
     function update(dt) {
+        const now = performance.now() * 0.001;
         states.forEach((entry) => {
             const event = entry.event;
             if (!event?.geoPoint) return;
+
+            alignCount(entry, targetFogCount(event.intensity));
+
             const center = map.latLngToContainerPoint([event.geoPoint.lat, event.geoPoint.lng]);
             const radiusMetres = clamp(Number(event.radiusMetres ?? 900), 100, 5000);
             const radiusPx = metresToPixels(map, event.geoPoint, radiusMetres);
             const windBearing = Number(event.windBearing ?? 25);
-            const windSpeedKmh = clamp(Number(event.windSpeedKmh ?? 8), 0, 80);
+            const windSpeedKmh = clamp(Number(event.windSpeedKmh ?? 8), 0, 120);
             const windRad = toRad(windBearing);
-            const windPx = metresToPixels(map, event.geoPoint, (windSpeedKmh * 1000) / 3600) * 0.35;
-            const wx = Math.cos(windRad) * windPx;
-            const wy = -Math.sin(windRad) * windPx;
-            const profile = String(event.diffusionProfile || "gaussian");
-            const spreadFactor = profile === "anisotropic" ? 1.6 : 1;
-            const radialSpeed = Math.max(2, radiusPx * 0.08) * spreadFactor;
+            const windStepNorm = ((windSpeedKmh * 0.02) * dt) / Math.max(1, radiusPx);
+            const windXNorm = Math.cos(windRad) * windStepNorm;
+            const windYNorm = -Math.sin(windRad) * windStepNorm;
+            const intensityBoost = 0.85 + (clamp(Number(event.intensity ?? 0.6), 0, 1) * 0.35);
 
-            for (let i = 0; i < entry.sprites.length; i += 1) {
-                const p = entry.particles[i];
-                const s = entry.sprites[i];
-                p.age += dt;
-                if (p.age >= p.life) {
-                    const a = Math.random() * Math.PI * 2;
-                    const rr = Math.random() * radiusPx * 0.18;
-                    p.x = Math.cos(a) * rr;
-                    p.y = Math.sin(a) * rr;
-                    p.vx = Math.cos(a) * radialSpeed * p.spread;
-                    p.vy = Math.sin(a) * radialSpeed * p.spread;
-                    p.age = 0;
-                    p.life = 2.2 + Math.random() * 3.6;
-                    p.rseed = Math.random();
-                }
-                const wobbleX = Math.sin((p.age + p.rseed) * 2.4) * 2.4;
-                const wobbleY = Math.cos((p.age + p.rseed) * 2.1) * 1.8;
-                p.x += (p.vx + wx + wobbleX) * dt;
-                p.y += (p.vy + wy + wobbleY) * dt;
+            for (let i = 0; i < entry.items.length; i += 1) {
+                const { fog, sprite } = entry.items[i];
+                const swirlX = Math.cos((now * fog.wobbleSpeed) + fog.wobblePhase) * 0.008 * dt;
+                const swirlY = Math.sin((now * (fog.wobbleSpeed * 0.92)) + fog.wobblePhase) * 0.008 * dt;
 
-                const dist = Math.hypot(p.x, p.y);
-                const norm = dist / Math.max(1, radiusPx);
-                if (norm > 1.2) {
-                    p.age = p.life + 1;
+                fog.xNorm += windXNorm + swirlX;
+                fog.yNorm += windYNorm + swirlY;
+
+                const distNorm = Math.hypot(fog.xNorm, fog.yNorm);
+                if (distNorm > 1.08) {
+                    respawnOppositeWind(fog, windRad);
                 }
-                const opacity = Math.exp(-norm);
-                s.x = center.x + p.x;
-                s.y = center.y + p.y;
-                s.alpha = clamp(opacity * 0.58, 0.04, 0.65);
-                const scale = 0.12 + (1 - norm) * 0.42;
-                s.scale.set(scale, scale);
+
+                const d = Math.hypot(fog.xNorm, fog.yNorm);
+                const edgeFade = clamp(1 - d, 0, 1); // opacity *= (1 - distance / radius)
+                const breathe = 0.94 + (Math.sin((now * 0.4) + fog.wobblePhase) * 0.08);
+                const widthPx = Math.max(8, radiusPx * fog.sizeFactor * breathe);
+                const heightPx = Math.max(6, widthPx * fog.aspect);
+
+                sprite.x = center.x + (fog.xNorm * radiusPx);
+                sprite.y = center.y + (fog.yNorm * radiusPx);
+                sprite.width = widthPx;
+                sprite.height = heightPx;
+                sprite.alpha = clamp(fog.baseAlpha * edgeFade * intensityBoost, 0.02, 0.18);
             }
         });
     }
 
     function destroy() {
         states.forEach((entry) => {
-            entry.sprites.forEach((s) => s.destroy());
+            entry.items.forEach((item) => item.sprite.destroy());
         });
         states.clear();
         container.destroy({ children: true });
-        texture.destroy(true);
+        if (texture !== window.PIXI.Texture.WHITE) {
+            texture.destroy(true);
+        }
     }
 
     return {
