@@ -2692,7 +2692,7 @@
     "id": "evt_OD_khordha_20260224_002",
     "stateId": "OD",
     "districtId": "khordha",
-    "regionId": "bhubaneswar",
+    "regionId": "bhubaneswar-(m.corp.)",
     "category": "emergency",
     "title": "Billboard Collapse Kills One",
     "summary": "Gusty winds caused a large hoarding to collapse in Aiginia, killing a 38-year-old man taking shelter.",
@@ -3037,5 +3037,3 @@
     }
   }
 ]
-
-

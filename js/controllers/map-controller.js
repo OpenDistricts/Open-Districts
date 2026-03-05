@@ -381,7 +381,7 @@ export async function loadDistrictGeo(district, events) {
         const m = L.marker(latLng, {
             icon: L.divIcon({
                 html: buildMarkerIconHtml(ev, dimmed),
-                className: '',
+                className: 'od-event-marker-host',
                 iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
                 iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
                 tooltipAnchor: [MARKER_ICON_ANCHOR, -MARKER_ICON_ANCHOR],
@@ -566,7 +566,7 @@ export function syncFocus(focusedEventId, events) {
                 if (layer instanceof L.Marker) {
                     layer.setIcon(L.divIcon({
                         html: buildMarkerIconHtml(markerEv, false),
-                        className: '',
+                        className: 'od-event-marker-host',
                         iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
                         iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
                     }));
@@ -594,7 +594,7 @@ export function syncFocus(focusedEventId, events) {
                 if (layer instanceof L.Marker) {
                     layer.setIcon(L.divIcon({
                         html: buildMarkerIconHtml(markerEv, false),
-                        className: '',
+                        className: 'od-event-marker-host',
                         iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
                         iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
                     }));
@@ -656,7 +656,7 @@ export function syncFocus(focusedEventId, events) {
             if (layer instanceof L.Marker) {
                 layer.setIcon(L.divIcon({
                     html: buildMarkerIconHtml(markerEv, !isFocused),
-                    className: '',
+                    className: 'od-event-marker-host',
                     iconSize: [MARKER_ICON_SIZE, MARKER_ICON_SIZE],
                     iconAnchor: [MARKER_ICON_ANCHOR, MARKER_ICON_ANCHOR],
                 }));
@@ -683,6 +683,13 @@ export function syncModeClass(mode, isHistorical, connectionStatus, envEnabled) 
 
 export function getMapInstance() {
     return _map;
+}
+
+/** Recenter map to district bounds (used after district-switch focus resets). */
+export function recenterToDistrict(district, padding = [20, 20]) {
+    if (!district?.boundingBox) return;
+    const bounds = L.latLngBounds(boundingBoxToLeaflet(district.boundingBox));
+    _map.fitBounds(bounds, { padding });
 }
 
 /** Update map layers to reflect a historical snapshot up to bucketIndex. */

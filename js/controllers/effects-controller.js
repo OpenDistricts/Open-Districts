@@ -8,6 +8,7 @@ let _backend = "off";
 let _lastReason = null;
 let _debugBadge;
 let _debugVisible = false;
+let _mapContainer;
 
 export function init(ctx) {
     _ctx = ctx;
@@ -18,6 +19,7 @@ export function init(ctx) {
 export function setMap(mapInstance) {
     CanvasBackend.setMap(mapInstance);
     DeckBackend.setMap(mapInstance);
+    _mapContainer = mapInstance?.getContainer?.() || null;
     _mountDebugBadge(mapInstance);
 }
 
@@ -83,6 +85,9 @@ function _syncStatus() {
             layers: stats.layers || 0,
             degradedReason: stats.degradedReason ?? _lastReason,
         };
+    }
+    if (_mapContainer) {
+        _mapContainer.classList.toggle("fx-backend-deckgl", _backend === "deckgl");
     }
     _updateDebugBadge(_ctx?.state?.advancedEffectsStatus);
 }

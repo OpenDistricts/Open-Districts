@@ -1186,6 +1186,10 @@ button:focus-visible {
   pointer-events: none;
 }
 
+#map.live-mode.fx-backend-deckgl .od-event-marker-host {
+  display: none !important;
+}
+
 .env-scanner {
   position: absolute;
   top: -50%;

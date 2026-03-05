@@ -702,13 +702,9 @@ function _showStatsPanel(district) {
 }
 
 function _selectDistrict(district) {
-    // Prevent re-loading the same district (would reset temporal slate)
-    if (district.id === _ctx.state.currentDistrictId) {
-        close();
-        return;
-    }
     close();
-    // Emit district change - orchestrator owns the data reload
+    // Emit district selection every time, including same-district reselection,
+    // so users can recenter/reset from a previously focused sub-region.
     _ctx.emit("hierarchy:districtSelected", { districtId: district.id, stateId: district.stateId });
 }
 

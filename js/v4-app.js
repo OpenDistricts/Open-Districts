@@ -27,6 +27,7 @@ const STORAGE_KEY = "opendistricts_savedDistrict";
 const APP_SESSION_START_TS = Date.now();
 const BRANDING_FX_INTERVAL_MS = 5 * 60 * 1000;
 const BRANDING_FX_DURATION_MS = 1700;
+const DISTRICT_SWITCH_FOCUS_SUPPRESSION_MS = 1100;
 let _brandingFxTimeoutId = null;
 let _brandingFxIntervalId = null;
 let _brandingFxRunning = false;
@@ -48,6 +49,7 @@ const AppState = {
     events: [],
     timeBuckets: [],
     focusedEventId: null,
+    suppressFocusUntilTs: 0,
     manuallyCollapsed: false,
     autoHideTimer: null,
     isPanning: false,
@@ -100,6 +102,14 @@ function on(event, fn) {
     (_listeners[event] = _listeners[event] ?? []).push(fn);
 }
 
+function _isFocusSuppressed() {
+    return Date.now() < AppState.suppressFocusUntilTs;
+}
+
+function _suppressFocusFor(ms = DISTRICT_SWITCH_FOCUS_SUPPRESSION_MS) {
+    AppState.suppressFocusUntilTs = Date.now() + Math.max(0, ms);
+}
+
 // ── Cross-controller wiring ───────────────────────────────────────
 function _wireEvents() {
     // Top bar: unlock district scope toggle
@@ -122,13 +132,26 @@ function _wireEvents() {
     }
 
     // Map region click → focus event
-    on("map:regionClick", ({ eventId }) => setFocusedEvent(eventId));
+    on("map:regionClick", ({ eventId }) => {
+        if (_isFocusSuppressed()) {
+            console.log(`[V4] map:regionClick suppressed (focus suppressed until ${new Date(AppState.suppressFocusUntilTs).toISOString()}), eventId: ${eventId}`);
+            return;
+        }
+        console.log(`[V4] map:regionClick allowed, setting focus to eventId: ${eventId}`);
+        setFocusedEvent(eventId);
+    });
 
     // Timeline card tap → focus event
-    on("timeline:cardTap", ({ eventId }) => setFocusedEvent(eventId));
+    on("timeline:cardTap", ({ eventId }) => {
+        if (eventId && _isFocusSuppressed()) return;
+        setFocusedEvent(eventId);
+    });
 
     // Hierarchy: district selected → reload + SAVE to localStorage (Option C)
     on("hierarchy:districtSelected", ({ districtId, stateId }) => {
+        console.log(`[V4] hierarchy:districtSelected: ${districtId} (${stateId}) - suppressing focus and clearing`);
+        _suppressFocusFor();
+        setFocusedEvent(null);
         AICtrl.close();
         loadDistrict(districtId, stateId);
         try {
@@ -259,6 +282,7 @@ function _wireEvents() {
 // ═══════════════════════════════════════════════════════════════════
 
 function setFocusedEvent(eventId) {
+    if (eventId && _isFocusSuppressed()) return;
     if (AppState.focusedEventId === eventId) return;
     AppState.focusedEventId = eventId;
     TimelineCtrl.renderFocusState(eventId);
@@ -314,7 +338,8 @@ async function loadDistrict(districtId, stateId) {
     TimeCtrl.stopAutoPlay();
 
     AppState.currentStateId = stateId ?? AppState.currentStateId;
-    AppState.focusedEventId = null;
+    _suppressFocusFor();
+    setFocusedEvent(null);
     // Preserve isHistorical and timelineRange - district change should not reset temporal state
     AppState.connectionStatus = "live"; // Phase 2 fix: always "live" in mock
 
@@ -393,6 +418,13 @@ async function loadDistrict(districtId, stateId) {
 
     // Load geo (async - non-blocking to timeline)
     await MapCtrl.loadDistrictGeo(district, events);
+    // Defensive reset: clear any latent focus style and force district framing.
+    console.log(`[V4] Post-load reset for ${district.name}: clearingFocus + recentering to bounds [${district.boundingBox.north}, ${district.boundingBox.south}, ${district.boundingBox.east}, ${district.boundingBox.west}]`);
+    MapCtrl.syncFocus(null, events);
+    MapCtrl.recenterToDistrict(district);
+    _suppressFocusFor(600);
+    console.log(`[V4] Focus suppressed until ${new Date(AppState.suppressFocusUntilTs).toISOString()}`);
+
     EffectsCtrl.setMap(MapCtrl.getMapInstance());
     EffectsCtrl.syncMode({
         mode: AppState.mode,
@@ -837,6 +869,10 @@ function _applyPermanentTranslations() {
 
     _setText("st-lock-focus-label", t("settings.lockMapFocus"));
     _setText("st-unlock-scope-label", t("settings.unlockDistrictScope"));
+    const fxInfoLabel = AppState.translations["settings.showMapInfoWindow"]
+        ?? AppState.fallbackTranslations["settings.showMapInfoWindow"]
+        ?? "Show Map Info Window";
+    _setText("st-fx-debug-label", fxInfoLabel);
     _setText("hs-title", t("ui.selectState"));
     _setText("hs-popup-title", t("ui.stateSelector"));
     _setText("hs-panel-open", t("ui.statePanel"));
