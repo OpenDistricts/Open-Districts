@@ -34,6 +34,7 @@ scripts/*
 !scripts/update-live-manifest-hash.js
 !scripts/migrate-v1.js
 !scripts/build-registry-from-geojson.js
+!scripts/publish_live_atomic.py
 package.json
 package-lock.json
 components.json
