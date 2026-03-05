@@ -5,153 +5,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Districts</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@400;500;600&display=swap');
-
-        :root {
-            --bg-color: #FDFBF7;
-            --text-main: #1F2937;
-            --text-muted: #4B5563;
-            --card-bg: #FFFFFF;
-            --accent: #2B6CB0;
-            --border: #E5E7EB;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Atkinson Hyperlegible', sans-serif;
-            margin: 0;
-            padding: 60px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--text-main);
-        }
-
-        p {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            text-align: center;
-            line-height: 1.6;
-            margin: 0 auto;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            text-decoration: none;
-            color: inherit;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.05);
-            border-color: var(--accent);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .card-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin: 0;
-        }
-
-        .card-desc {
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            flex-grow: 1;
-            margin-bottom: 24px;
-            line-height: 1.5;
-            margin-top: 0;
-        }
-
-        .card-button {
-            display: inline-block;
-            background-color: var(--bg-color);
-            color: var(--accent);
-            border: 2px solid var(--accent);
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-align: center;
-            width: fit-content;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .card:hover .card-button {
-            background-color: var(--accent);
-            color: #FFFFFF;
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/tailwind.css">
 </head>
 
-<body>
+<body class="m-0 box-border min-h-screen overflow-x-hidden bg-[#020204] px-5 py-[60px] text-[#E5E7EB] [font-family:'Atkinson_Hyperlegible',sans-serif]">
+    <div class="blackhole-bg" aria-hidden="true">
+        <div class="blackhole-noise"></div>
+        <div class="blackhole-disc"></div>
+        <div class="blackhole-core"></div>
+        <div class="blackhole-vignette"></div>
+    </div>
 
-    <header>
-        <h1>Open Districts</h1>
-        <p>Browse the latest interface and earlier iterations.</p>
+    <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-[1040px] flex-col items-center">
+    <header class="mb-12 text-center">
+        <h1
+            class="shimmering-text mb-3 text-4xl font-semibold [font-family:'Outfit',sans-serif] sm:text-5xl">Open Districts</h1>
+        <p class="mx-auto max-w-[600px] text-center text-lg leading-relaxed text-slate-300 sm:text-xl">Browse the latest
+            interface and earlier iterations.</p>
+        <div class="mt-6 flex justify-center">
+            <div class="group relative">
+                <a id="github-stars-link" href="https://github.com/OpenDistricts/Open-Districts" target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 rounded-md px-2 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93C5FD]"
+                    aria-describedby="github-stars-tooltip" data-repo="OpenDistricts/Open-Districts">
+                    <svg class="size-4 -translate-y-px" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                            fill="currentColor" />
+                    </svg>
+                    <span id="github-stars-count" class="tabular-nums text-[0.8125rem] text-slate-400">...</span>
+                </a>
+                <div id="github-stars-tooltip" role="tooltip"
+                    class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 hidden -translate-x-1/2 rounded-md bg-slate-100 px-3 py-1.5 text-xs text-[#111827] shadow-md group-hover:block group-focus-within:block">
+                    Loading stars...
+                </div>
+            </div>
+        </div>
     </header>
 
-    <div class="container">
+    <div class="grid w-full max-w-[1000px] grid-cols-1 gap-6 md:grid-cols-2">
         <!-- Archive Card -->
-        <a href="Archive/index.html" class="card">
-            <div class="card-header">
-                <h2 class="card-title">Archive</h2>
+        <a href="Archive/index.html"
+            class="group flex cursor-pointer flex-col rounded-2xl border-2 border-[#E5E7EB] bg-white p-6 text-inherit no-underline shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition duration-200 hover:-translate-y-1 hover:border-[#2B6CB0] hover:shadow-[0_12px_20px_rgba(0,0,0,0.05)]">
+            <div class="mb-3 flex items-center justify-between">
+                <h2 class="m-0 text-2xl font-semibold [font-family:'Outfit',sans-serif]">Archive</h2>
             </div>
-            <p class="card-desc">Contains V1 to V3 snapshots for historical reference.</p>
-            <span class="card-button">View Archive</span>
+            <p class="mt-0 mb-6 grow text-[1.05rem] leading-normal text-[#4B5563]">Contains V1 to V3 snapshots for
+                historical reference.</p>
+            <span
+                class="inline-block w-fit rounded-lg border-2 border-[#2B6CB0] bg-[#FDFBF7] px-5 py-2.5 text-center font-medium text-[#2B6CB0] transition-colors duration-200 [font-family:'Outfit',sans-serif] group-hover:bg-[#2B6CB0] group-hover:text-white">View
+                Archive</span>
         </a>
 
         <!-- V4 Card -->
-        <a href="OpenDistricts-v4.html" class="card">
-            <div class="card-header">
-                <h2 class="card-title">Version 4</h2>
+        <a href="OpenDistricts-v4.html"
+            class="group flex cursor-pointer flex-col rounded-2xl border-2 border-[#E5E7EB] bg-white p-6 text-inherit no-underline shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition duration-200 hover:-translate-y-1 hover:border-[#2B6CB0] hover:shadow-[0_12px_20px_rgba(0,0,0,0.05)]">
+            <div class="mb-3 flex items-center justify-between">
+                <h2 class="m-0 text-2xl font-semibold [font-family:'Outfit',sans-serif]">Version 4</h2>
             </div>
-            <p class="card-desc">Advanced community health and civic intelligence kiosk with guidance, dynamic temporal
-                analysis, and seamless district-level geospatial intelligence.</p>
-            <span class="card-button">View V4</span>
+            <p class="mt-0 mb-6 grow text-[1.05rem] leading-normal text-[#4B5563]">Advanced community health and civic
+                intelligence kiosk with guidance, dynamic temporal analysis, and seamless district-level geospatial
+                intelligence.</p>
+            <span
+                class="inline-block w-fit rounded-lg border-2 border-[#2B6CB0] bg-[#FDFBF7] px-5 py-2.5 text-center font-medium text-[#2B6CB0] transition-colors duration-200 [font-family:'Outfit',sans-serif] group-hover:bg-[#2B6CB0] group-hover:text-white">View
+                V4</span>
         </a>
     </div>
+
+    <script>
+        (async function initGithubStars() {
+            const link = document.getElementById("github-stars-link");
+            const countEl = document.getElementById("github-stars-count");
+            const tooltipEl = document.getElementById("github-stars-tooltip");
+            if (!link || !countEl || !tooltipEl) return;
+
+            const repo = link.dataset.repo;
+            if (!repo) return;
+
+            const compactFmt = new Intl.NumberFormat("en-US", { notation: "compact", compactDisplay: "short" });
+            const fullFmt = new Intl.NumberFormat("en-US");
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${repo}`);
+                if (!res.ok) throw new Error("GitHub API request failed");
+                const data = await res.json();
+                const stars = Number(data.stargazers_count);
+                if (!Number.isFinite(stars)) throw new Error("Invalid star count");
+
+                countEl.textContent = compactFmt.format(stars).toLowerCase();
+                tooltipEl.textContent = `${fullFmt.format(stars)} stars`;
+                link.href = `https://github.com/${repo}`;
+            } catch (err) {
+                countEl.textContent = "n/a";
+                tooltipEl.textContent = "Unable to load stars";
+            }
+        })();
+    </script>
+    </main>
 
 </body>
 
