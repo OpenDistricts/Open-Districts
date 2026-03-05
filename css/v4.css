@@ -1186,8 +1186,53 @@ button:focus-visible {
   pointer-events: none;
 }
 
-#map.live-mode.fx-backend-deckgl .od-event-marker-host {
+#map.live-mode.fx-backend-pixi .od-event-marker-host {
   display: none !important;
+}
+
+.advanced-effects-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 720;
+  min-width: 180px;
+  max-width: 280px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  pointer-events: none;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  color: rgba(232, 245, 235, 0.95);
+  background: rgba(8, 22, 16, 0.88);
+  border: 1px solid rgba(106, 224, 178, 0.38);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transform: translate(-9999px, -9999px);
+}
+
+.advanced-effects-tooltip .fx-tip-title {
+  font-weight: 600;
+  color: rgba(233, 255, 244, 0.98);
+}
+
+.advanced-effects-tooltip .fx-tip-meta {
+  margin-top: 2px;
+  opacity: 0.85;
+}
+
+.advanced-effects-tooltip .fx-tip-summary {
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+.advanced-effects-tooltip .fx-tip-pin {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 9px;
+  font-size: 10px;
+  color: rgba(214, 252, 227, 0.95);
+  background: rgba(34, 141, 102, 0.45);
+  border: 1px solid rgba(95, 220, 169, 0.4);
 }
 
 .env-scanner {

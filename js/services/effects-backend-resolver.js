@@ -11,15 +11,14 @@ export function resolveEffectsBackend({ mode, isHistorical, connectionStatus, ca
     if (!capabilities?.supported) {
         return { backend: "off", degradedReason: "no_render_backend_available" };
     }
-    if (capabilities.webgl && capabilities.deckGlobal) {
-        return { backend: "deckgl", degradedReason: null };
+    if (capabilities.webgl && capabilities.pixiGlobal) {
+        return { backend: "pixi", degradedReason: null };
     }
     if (capabilities.canvas2d) {
         return {
             backend: "canvas2d",
-            degradedReason: capabilities.webgl ? "deckgl_global_missing" : "webgl_unavailable",
+            degradedReason: capabilities.webgl ? "pixi_global_missing" : "webgl_unavailable",
         };
     }
     return { backend: "off", degradedReason: "no_render_backend_available" };
 }
-

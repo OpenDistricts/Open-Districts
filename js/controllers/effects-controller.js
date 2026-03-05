@@ -1,5 +1,5 @@
 import * as CanvasBackend from "./effects-canvas2d-controller.js";
-import * as DeckBackend from "./effects-deckgl-controller.js";
+import * as PixiBackend from "./effects-pixi-controller.js";
 import { detectAdvancedEffectsSupport } from "../services/webgl-capability.js";
 import { resolveEffectsBackend } from "../services/effects-backend-resolver.js";
 
@@ -13,12 +13,12 @@ let _mapContainer;
 export function init(ctx) {
     _ctx = ctx;
     CanvasBackend.init(ctx);
-    DeckBackend.init(ctx);
+    PixiBackend.init(ctx);
 }
 
 export function setMap(mapInstance) {
     CanvasBackend.setMap(mapInstance);
-    DeckBackend.setMap(mapInstance);
+    PixiBackend.setMap(mapInstance);
     _mapContainer = mapInstance?.getContainer?.() || null;
     _mountDebugBadge(mapInstance);
 }
@@ -29,38 +29,38 @@ export function syncMode({ mode, isHistorical, connectionStatus, envEnabled }) {
 
     if (selected.backend !== _backend) {
         CanvasBackend.suspendForHistorical();
-        DeckBackend.suspendForHistorical();
+        PixiBackend.suspendForHistorical();
     }
 
     _backend = selected.backend;
     _lastReason = selected.degradedReason;
 
-    if (_backend === "deckgl") {
-        DeckBackend.syncMode({ mode, isHistorical, connectionStatus, envEnabled });
-        const deckStats = DeckBackend.getStats();
-        if (!deckStats.active && capabilities.canvas2d) {
+    if (_backend === "pixi") {
+        PixiBackend.syncMode({ mode, isHistorical, connectionStatus, envEnabled });
+        const pixiStats = PixiBackend.getStats();
+        if (!pixiStats.active && capabilities.canvas2d) {
             _backend = "canvas2d";
-            _lastReason = deckStats.degradedReason || "deckgl_runtime_failed";
+            _lastReason = pixiStats.degradedReason || "pixi_runtime_failed";
             CanvasBackend.syncMode({ mode, isHistorical, connectionStatus, envEnabled });
         }
     } else if (_backend === "canvas2d") {
         CanvasBackend.syncMode({ mode, isHistorical, connectionStatus, envEnabled });
     } else {
         CanvasBackend.suspendForHistorical();
-        DeckBackend.suspendForHistorical();
+        PixiBackend.suspendForHistorical();
     }
     _syncStatus();
 }
 
 export function renderForEvents(events) {
-    if (_backend === "deckgl") DeckBackend.renderForEvents(events);
+    if (_backend === "pixi") PixiBackend.renderForEvents(events);
     if (_backend === "canvas2d") CanvasBackend.renderForEvents(events);
     _syncStatus();
 }
 
 export function suspendForHistorical() {
     CanvasBackend.suspendForHistorical();
-    DeckBackend.suspendForHistorical();
+    PixiBackend.suspendForHistorical();
     _backend = "off";
     _lastReason = "historical_mode_disabled_v1";
     _syncStatus();
@@ -75,7 +75,7 @@ export function setDebugVisibility(enabled) {
 
 function _syncStatus() {
     let stats = { active: false, layers: 0, qualityTier: "high", degradedReason: _lastReason };
-    if (_backend === "deckgl") stats = DeckBackend.getStats();
+    if (_backend === "pixi") stats = PixiBackend.getStats();
     if (_backend === "canvas2d") stats = CanvasBackend.getStats();
     if (_ctx?.state) {
         _ctx.state.advancedEffectsStatus = {
@@ -87,7 +87,7 @@ function _syncStatus() {
         };
     }
     if (_mapContainer) {
-        _mapContainer.classList.toggle("fx-backend-deckgl", _backend === "deckgl");
+        _mapContainer.classList.toggle("fx-backend-pixi", _backend === "pixi");
     }
     _updateDebugBadge(_ctx?.state?.advancedEffectsStatus);
 }
