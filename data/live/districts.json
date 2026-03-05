@@ -6,15 +6,16 @@
     "nameLocal": "गुरुग्राम",
     "geoJsonUrl": "./data/geo/HR/gurugram.geojson?v=2",
     "boundingBox": {
-      "north": 28.55,
-      "south": 28.22,
-      "east": 77.2,
-      "west": 76.75
+      "north": 28.56,
+      "south": 28.17,
+      "east": 77.26,
+      "west": 76.61
     },
     "population": 1514432,
     "aliases": [
       "Gurgaon"
-    ]
+    ],
+    "dataPoints": 20
   },
   {
     "id": "surat",
@@ -28,7 +29,8 @@
       "east": 73.2,
       "west": 72.63
     },
-    "population": 6081322
+    "population": 6081322,
+    "dataPoints": 7
   },
   {
     "id": "pune",
@@ -42,7 +44,8 @@
       "east": 74.6,
       "west": 73.5
     },
-    "population": 9429408
+    "population": 9429408,
+    "dataPoints": 15
   },
   {
     "id": "khordha",
@@ -56,7 +59,8 @@
       "east": 86.08,
       "west": 84.94
     },
-    "population": 2251673
+    "population": 2251673,
+    "dataPoints": 1
   },
   {
     "id": "gaya",
@@ -70,7 +74,8 @@
       "east": 85.4,
       "west": 84.29
     },
-    "population": 4391418
+    "population": 4391418,
+    "dataPoints": 1
   },
   {
     "id": "central",
@@ -84,7 +89,8 @@
       "east": 77.2683,
       "west": 76.9534
     },
-    "population": 582320
+    "population": 582320,
+    "dataPoints": 1
   },
   {
     "id": "east",
@@ -98,7 +104,8 @@
       "east": 77.3426,
       "west": 77.2292
     },
-    "population": 1709346
+    "population": 1709346,
+    "dataPoints": 0
   },
   {
     "id": "new_delhi",
@@ -112,7 +119,8 @@
       "east": 77.2566,
       "west": 77.1682
     },
-    "population": 257803
+    "population": 257803,
+    "dataPoints": 6
   },
   {
     "id": "north",
@@ -126,7 +134,8 @@
       "east": 77.2244,
       "west": 76.9618
     },
-    "population": 887978
+    "population": 887978,
+    "dataPoints": 0
   },
   {
     "id": "north_east",
@@ -140,7 +149,8 @@
       "east": 77.298,
       "west": 77.2179
     },
-    "population": 2241624
+    "population": 2241624,
+    "dataPoints": 0
   },
   {
     "id": "north_west",
@@ -154,7 +164,8 @@
       "east": 77.1923,
       "west": 76.9421
     },
-    "population": 3645184
+    "population": 3645184,
+    "dataPoints": 1
   },
   {
     "id": "shahdara",
@@ -168,7 +179,8 @@
       "east": 77.3329,
       "west": 77.267
     },
-    "population": 322931
+    "population": 322931,
+    "dataPoints": 0
   },
   {
     "id": "south",
@@ -182,7 +194,8 @@
       "east": 77.2715,
       "west": 77.1109
     },
-    "population": 2731929
+    "population": 2731929,
+    "dataPoints": 15
   },
   {
     "id": "south_east",
@@ -196,7 +209,8 @@
       "east": 77.3476,
       "west": 77.2059
     },
-    "population": 637775
+    "population": 637775,
+    "dataPoints": 0
   },
   {
     "id": "south_west",
@@ -210,7 +224,8 @@
       "east": 77.1039,
       "west": 76.8389
     },
-    "population": 2292958
+    "population": 2292958,
+    "dataPoints": 0
   },
   {
     "id": "west",
@@ -224,7 +239,8 @@
       "east": 77.1789,
       "west": 76.9534
     },
-    "population": 2543243
+    "population": 2543243,
+    "dataPoints": 0
   },
   {
     "id": "jaipur",
@@ -238,7 +254,8 @@
       "east": 76.1,
       "west": 75.6
     },
-    "population": 6626178
+    "population": 6626178,
+    "dataPoints": 1
   },
   {
     "id": "jalandhar",
@@ -252,7 +269,8 @@
       "east": 75.7,
       "west": 75.4
     },
-    "population": 2193590
+    "population": 2193590,
+    "dataPoints": 1
   },
   {
     "id": "ujjain",
@@ -266,7 +284,8 @@
       "east": 75.85,
       "west": 75.5
     },
-    "population": 1986864
+    "population": 1986864,
+    "dataPoints": 2
   },
   {
     "id": "sitapur",
@@ -280,7 +299,8 @@
       "east": 81.05,
       "west": 80.45
     },
-    "population": 4474446
+    "population": 4474446,
+    "dataPoints": 5
   },
   {
     "id": "mysuru",
@@ -294,7 +314,8 @@
       "east": 77,
       "west": 76.1
     },
-    "population": 3001127
+    "population": 3001127,
+    "dataPoints": 5
   },
   {
     "id": "hugli",
@@ -308,7 +329,8 @@
       "east": 88.5,
       "west": 88
     },
-    "population": 5520389
+    "population": 5520389,
+    "dataPoints": 4
   },
   {
     "id": "raipur",
@@ -322,7 +344,8 @@
       "east": 82,
       "west": 81.5
     },
-    "population": 4063872
+    "population": 4063872,
+    "dataPoints": 3
   },
   {
     "id": "vellore",
@@ -336,6 +359,7 @@
       "east": 79.6,
       "west": 78.5
     },
-    "population": 3936331
+    "population": 3936331,
+    "dataPoints": 3
   }
 ]
