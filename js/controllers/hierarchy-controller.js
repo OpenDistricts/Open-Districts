@@ -50,6 +50,27 @@ export function init(ctx) {
             }
         });
     });
+
+    // District search filter (Tier 2)
+    document.getElementById("hs-t2-search").addEventListener("input", e => {
+        const q = e.target.value.toLowerCase().trim();
+        document.querySelectorAll(".hdist-poly").forEach(path => {
+            const dname = path.getAttribute("data-district-name") || "";
+            const lbl = document.querySelector(`.hdist-lbl[data-district-name="${dname}"]`);
+            if (q.length === 0) {
+                path.classList.remove("search-match", "search-dim");
+                if (lbl) { lbl.classList.remove("search-dim"); lbl.style.opacity = ""; }
+            } else if (dname.startsWith(q)) {
+                path.classList.add("search-match");
+                path.classList.remove("search-dim");
+                if (lbl) { lbl.classList.remove("search-dim"); lbl.style.opacity = "1"; }
+            } else {
+                path.classList.remove("search-match");
+                path.classList.add("search-dim");
+                if (lbl) { lbl.classList.add("search-dim"); lbl.style.opacity = "0.15"; }
+            }
+        });
+    });
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -379,6 +400,16 @@ async function _loadTierTwo(state) {
     tier2.classList.remove("hidden");
     document.getElementById("hs-t2-state-name").textContent = state.name;
 
+    // Clear district search on every state transition
+    const t2search = document.getElementById("hs-t2-search");
+    if (t2search) {
+        t2search.value = "";
+        // Remove any leftover dim classes from a previous state
+        document.querySelectorAll(".hdist-poly, .hdist-lbl").forEach(el => {
+            el.classList.remove("search-dim", "search-match");
+        });
+    }
+
     // Fetch districts with current timeline range to match hierarchy filtering
     const districts = await _ctx.ds.getDistrictsForState(state.id, _ctx.state.timelineRange);
     let stateGeo = null;
@@ -412,27 +443,45 @@ function _renderSVGMap(districts, stateGeo) {
 
         svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
 
+        // Pre-build lookup structures once, outside the per-feature loop
+        const districtById = new Map(districts.map(d => [d.id, d]));
+        let allCandidates = [];
+        let candToDist = new Map();
+        districts.forEach(d => {
+            const candidates = [d.name, ...(d.aliases || [])];
+            candidates.forEach(c => {
+                allCandidates.push(c);
+                candToDist.set(c, d);
+            });
+        });
+
         // Draw ALL features from the GeoJSON to form the complete state map
         stateGeo.features.forEach(feature => {
             const name = feature.properties.name || feature.properties.NAME_2 || feature.properties.dtname || "";
+            const geoId = (feature.properties.id || "").toLowerCase().trim();
             const pathStr = pathGen(feature);
             const centroid = pathGen.centroid(feature);
 
-            // Resilient matching tying 2011 census properties to live metadata aliases using Levenshtein distance
-            let allCandidates = [];
-            let candToDist = new Map();
-            districts.forEach(d => {
-                const candidates = [d.name, ...(d.aliases || [])];
-                candidates.forEach(c => {
-                    allCandidates.push(c);
-                    candToDist.set(c, d);
-                });
-            });
-            const bestMatchString = fuzzyMatch(name, allCandidates, 2);
-            const matchedDistrict = bestMatchString ? candToDist.get(bestMatchString) : null;
+            // Match strategy: exact ID first (avoids Levenshtein false-positives between
+            // similarly spelled districts, e.g. Jaipur/Udaipur which have edit-distance 2),
+            // then fall back to fuzzy name matching for legacy/alias name variations.
+            let matchedDistrict = districtById.get(geoId) || null;
+            if (!matchedDistrict) {
+                const bestMatchString = fuzzyMatch(name, allCandidates, 2);
+                const fuzzyResult = bestMatchString ? candToDist.get(bestMatchString) : null;
+                // Guard: if this GeoJSON feature has an explicit `id`, only accept the fuzzy
+                // result when the matched district's id equals the GeoJSON id. This prevents
+                // cross-assignment between similarly-named districts (e.g. Udaipur → Jaipur
+                // edit-distance 2) when the GeoJSON's own id makes the correct district clear.
+                if (fuzzyResult && geoId && fuzzyResult.id !== geoId) {
+                    matchedDistrict = null; // GeoJSON id disagrees — treat as unregistered
+                } else {
+                    matchedDistrict = fuzzyResult;
+                }
+            }
 
             const districtObj = matchedDistrict || {
-                id: name.toLowerCase().replace(/\s+/g, '-'),
+                id: geoId || name.toLowerCase().replace(/\s+/g, '-'),
                 name: name,
                 stateId: _tierTwoState.id,
                 dataPoints: 0
@@ -440,6 +489,7 @@ function _renderSVGMap(districts, stateGeo) {
 
             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
             path.setAttribute("d", pathStr);
+            path.setAttribute("data-district-name", name.toLowerCase());
             path.classList.add("hdist-poly");
 
             // Native tooltip for hover
@@ -468,6 +518,7 @@ function _renderSVGMap(districts, stateGeo) {
                 text.setAttribute("x", centroid[0]);
                 text.setAttribute("y", centroid[1] + 2.5); // optical center for 7.5px font
                 text.setAttribute("text-anchor", "middle");
+                text.setAttribute("data-district-name", name.toLowerCase());
                 text.classList.add("hdist-lbl");
                 text.setAttribute("font-size", "7.5px");
 

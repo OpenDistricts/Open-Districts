@@ -143,5 +143,77 @@
     "geoJsonUrl": "./data/geo/DL/west.geojson?v=2",
     "boundingBox": {"north": 28.7021, "south": 28.5962, "east": 77.1789, "west": 76.9534},
     "population": 2543243
+  },
+  {
+    "id": "jaipur",
+    "stateId": "RJ",
+    "name": "Jaipur",
+    "nameLocal": "जयपुर",
+    "geoJsonUrl": "./data/geo/RJ/jaipur.geojson?v=1",
+    "boundingBox": {"north": 27.20, "south": 26.75, "east": 76.10, "west": 75.60},
+    "population": 6626178
+  },
+  {
+    "id": "jalandhar",
+    "stateId": "PB",
+    "name": "Jalandhar",
+    "nameLocal": "ਜਲੰਧਰ",
+    "geoJsonUrl": "./data/geo/PB/jalandhar.geojson?v=1",
+    "boundingBox": {"north": 31.50, "south": 31.20, "east": 75.70, "west": 75.40},
+    "population": 2193590
+  },
+  {
+    "id": "ujjain",
+    "stateId": "MP",
+    "name": "Ujjain",
+    "nameLocal": "उज्जैन",
+    "geoJsonUrl": "./data/geo/MP/ujjain.geojson?v=1",
+    "boundingBox": {"north": 23.35, "south": 23.00, "east": 75.85, "west": 75.50},
+    "population": 1986864
+  },
+  {
+    "id": "sitapur",
+    "stateId": "UP",
+    "name": "Sitapur",
+    "nameLocal": "सीतापुर",
+    "geoJsonUrl": "./data/geo/UP/sitapur.geojson?v=1",
+    "boundingBox": {"north": 27.70, "south": 27.27, "east": 81.05, "west": 80.45},
+    "population": 4474446
+  },
+  {
+    "id": "mysuru",
+    "stateId": "KA",
+    "name": "Mysuru",
+    "nameLocal": "ಮೈಸೂರು",
+    "geoJsonUrl": "./data/geo/KA/mysuru.geojson?v=1",
+    "boundingBox": {"north": 12.55, "south": 11.90, "east": 77.00, "west": 76.10},
+    "population": 3001127
+  },
+  {
+    "id": "hugli",
+    "stateId": "WB",
+    "name": "Hugli",
+    "nameLocal": "হুগলি",
+    "geoJsonUrl": "./data/geo/WB/hugli.geojson?v=1",
+    "boundingBox": {"north": 23.10, "south": 22.60, "east": 88.50, "west": 88.00},
+    "population": 5520389
+  },
+  {
+    "id": "raipur",
+    "stateId": "CT",
+    "name": "Raipur",
+    "nameLocal": "रायपुर",
+    "geoJsonUrl": "./data/geo/CT/raipur.geojson?v=1",
+    "boundingBox": {"north": 21.60, "south": 20.95, "east": 82.00, "west": 81.50},
+    "population": 4063872
+  },
+  {
+    "id": "vellore",
+    "stateId": "TN",
+    "name": "Vellore",
+    "nameLocal": "வேலூர்",
+    "geoJsonUrl": "./data/geo/TN/vellore.geojson?v=1",
+    "boundingBox": {"north": 13.10, "south": 12.55, "east": 79.60, "west": 78.50},
+    "population": 3936331
   }
 ]
